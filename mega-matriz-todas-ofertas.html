@@ -60,6 +60,12 @@ h1 {
   gap: 10px;
 }
 
+.nav-links-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 .nav-link {
   color: #30d158;
   text-decoration: none;
@@ -77,6 +83,55 @@ h1 {
   box-shadow: 0 0 12px rgba(48, 209, 88, 0.3);
 }
 
+/* SISTEMA DE ABAS (TABS) */
+.tab-navigation {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  max-width: 1400px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 8px;
+}
+
+.tab-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.6);
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, rgba(48, 209, 88, 0.25) 0%, rgba(0, 0, 0, 0.6) 100%);
+  border-color: #30d158;
+  color: #30d158;
+  box-shadow: 0 0 14px rgba(48, 209, 88, 0.3);
+}
+
+.tab-content {
+  width: 100%;
+  max-width: 1400px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tab-content.hidden {
+  display: none !important;
+}
+
 /* PAINEL FILTRO DE FAIXA DE CUSTO MÉDIO MENSAL (€/MÊS) */
 .cost-filter-card {
   background: linear-gradient(135deg, rgba(48,209,88,0.08) 0%, rgba(0,0,0,0.5) 100%);
@@ -85,10 +140,112 @@ h1 {
   border-radius: 16px;
   padding: 14px 18px;
   width: 100%;
-  max-width: 1400px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+/* PAINEL HIGHLIGHT DE OFERTA ESPECÍFICA (ABA 2) */
+.highlight-panel-card {
+  background: linear-gradient(135deg, rgba(255,214,10,0.12) 0%, rgba(0,0,0,0.7) 100%);
+  border: 1px solid rgba(255, 214, 10, 0.4);
+  backdrop-filter: blur(24px);
+  border-radius: 16px;
+  padding: 18px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.highlight-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  align-items: end;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-group label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #ffd60a;
+  font-weight: 800;
+}
+
+.btn-highlight-submit {
+  background: linear-gradient(135deg, #ffd60a 0%, #ff9f0a 100%);
+  color: #000;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-highlight-submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 16px rgba(255, 214, 10, 0.6);
+}
+
+.btn-highlight-clear {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-highlight-clear:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+/* BANNER DE RESULTADO DA OFERTA DESTACADA */
+.highlight-result-banner {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid #ffd60a;
+  border-radius: 12px;
+  padding: 14px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.hr-cost-big {
+  font-size: 26px;
+  font-weight: 900;
+  color: #30d158;
+}
+
+.hr-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 11px;
 }
 
 .filter-row {
@@ -161,7 +318,6 @@ select:focus, input:focus {
   padding: 8px 14px;
   border-radius: 10px;
   width: 100%;
-  max-width: 1400px;
 }
 
 .v-item {
@@ -208,7 +364,6 @@ select:focus, input:focus {
   border-radius: 16px;
   padding: 16px;
   width: 100%;
-  max-width: 1400px;
   overflow-x: auto;
 }
 
@@ -286,13 +441,30 @@ table.mega-table td:first-child {
   font-size: 9px;
 }
 
+/* CLASSE DE DESTAQUE / HIGHLIGHT ANIMADO */
+.cell-target-highlight {
+  position: relative;
+  z-index: 99;
+  border: 2px solid #ffd60a !important;
+  box-shadow: 0 0 25px #ffd60a, inset 0 0 15px #ffd60a !important;
+  transform: scale(1.35) !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  animation: pulseGold 1.5s infinite ease-in-out;
+}
+
+@keyframes pulseGold {
+  0% { transform: scale(1.3); box-shadow: 0 0 20px #ffd60a; }
+  50% { transform: scale(1.45); box-shadow: 0 0 35px #ffd60a, 0 0 50px rgba(255,214,10,0.6); }
+  100% { transform: scale(1.3); box-shadow: 0 0 20px #ffd60a; }
+}
+
 /* FEED COMPLETO DE TODAS AS 12 MATRIZES GRANULARES INDIVIDUAIS */
 .all-cards-feed {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
   gap: 16px;
   width: 100%;
-  max-width: 1400px;
 }
 
 .granular-card {
@@ -343,32 +515,88 @@ footer {
     <h1>&#9889; Mega-Matriz Granular Reunida (Garantia Dupla: Tempo &amp; Km)</h1>
     <div class="sub">Avaliação Cruzada do Limite de 8 Anos (Tempo) e Limite de Km (160k km / 192k km Tesla)</div>
   </div>
-  <a href="mapa-calor-minimizacao-custo.html" class="nav-link">&rarr; Ver Mapa de Calor</a>
-</div>
-
-<!-- PAINEL DE FILTRO DE FAIXA DE CUSTO MÉDIO MENSAL (€/MÊS) -->
-<div class="cost-filter-card">
-  <div class="filter-row">
-    <span class="filter-label">&#128178; Faixa Custo Mensal:</span>
-    <button class="btn-pill active" onclick="setCostPreset(0, 9999, this)">Todos os Custos (€0 - €700+)</button>
-    <button class="btn-pill" onclick="setCostPreset(0, 200, this)">Super Económico (&lt; €200/mês)</button>
-    <button class="btn-pill" onclick="setCostPreset(200, 300, this)">Excelente (€200 - €300/mês)</button>
-    <button class="btn-pill" onclick="setCostPreset(300, 400, this)">Médio (€300 - €400/mês)</button>
-    <button class="btn-pill" onclick="setCostPreset(400, 9999, this)">Superior (&gt; €400/mês)</button>
-  </div>
-
-  <div class="filter-row">
-    <span class="filter-label">Personalizado (€/mês):</span>
-    <span>Mínimo:</span>
-    <input type="number" id="minCostInput" value="0" step="25" min="0" max="800" style="width:75px" oninput="onCustomCostChange()">
-    <span>€/mês &nbsp;&nbsp; Máximo:</span>
-    <input type="number" id="maxCostInput" value="800" step="25" min="0" max="800" style="width:75px" oninput="onCustomCostChange()">
-    <span>€/mês</span>
-    <span style="font-size:10px;color:#30d158;font-weight:700;margin-left:10px" id="activeCostLabel">Destacando todas as ofertas</span>
+  <div class="nav-links-row">
+    <a href="ranking-melhor-opcao.html" class="nav-link">&rarr; Ranking de Melhor Opção</a>
+    <a href="mapa-calor-minimizacao-custo.html" class="nav-link">&rarr; Mapa de Calor</a>
   </div>
 </div>
 
-<!-- LEGENDA PROGRESSIVA DE PROXIMIDADE DE EXPIRAÇÃO DA GARANTIA DA BATERIA (DUPLA: TEMPO & KM) -->
+<!-- NAVEGAÇÃO DE ABAS (TABS) -->
+<div class="tab-navigation">
+  <button class="tab-btn active" id="tabBtnFilter" onclick="switchTab('filter')">
+    <span>&#128202; Aba 1: Matriz Completa &amp; Filtro de Faixa</span>
+  </button>
+  <button class="tab-btn" id="tabBtnHighlight" onclick="switchTab('highlight')">
+    <span>&#127919; Aba 2: Simular &amp; Destacar Oferta Concreta</span>
+  </button>
+</div>
+
+<!-- CONTEÚDO DA ABA 1: FILTRO DE FAIXA DE CUSTO MENSAL -->
+<div class="tab-content" id="tabContentFilter">
+  <div class="cost-filter-card">
+    <div class="filter-row">
+      <span class="filter-label">&#128178; Faixa Custo Mensal:</span>
+      <button class="btn-pill active" onclick="setCostPreset(0, 9999, this)">Todos os Custos (€0 - €700+)</button>
+      <button class="btn-pill" onclick="setCostPreset(0, 200, this)">Super Económico (&lt; €200/mês)</button>
+      <button class="btn-pill" onclick="setCostPreset(200, 300, this)">Excelente (€200 - €300/mês)</button>
+      <button class="btn-pill" onclick="setCostPreset(300, 400, this)">Médio (€300 - €400/mês)</button>
+      <button class="btn-pill" onclick="setCostPreset(400, 9999, this)">Superior (&gt; €400/mês)</button>
+    </div>
+
+    <div class="filter-row">
+      <span class="filter-label">Personalizado (€/mês):</span>
+      <span>Mínimo:</span>
+      <input type="number" id="minCostInput" value="0" step="25" min="0" max="800" style="width:75px" oninput="onCustomCostChange()">
+      <span>€/mês &nbsp;&nbsp; Máximo:</span>
+      <input type="number" id="maxCostInput" value="800" step="25" min="0" max="800" style="width:75px" oninput="onCustomCostChange()">
+      <span>€/mês</span>
+      <span style="font-size:10px;color:#30d158;font-weight:700;margin-left:10px" id="activeCostLabel">Destacando todas as ofertas</span>
+    </div>
+  </div>
+</div>
+
+<!-- CONTEÚDO DA ABA 2: DESTAQUE DE OFERTA CONCRETA (SIMULADOR DE HIGHLIGHT) -->
+<div class="tab-content hidden" id="tabContentHighlight">
+  <div class="highlight-panel-card">
+    <div style="font-size:14px;font-weight:800;color:#ffd60a;display:flex;align-items:center;gap:6px">
+      <span>&#127919; Destacar Oferta Específica na Matriz</span>
+    </div>
+    <div style="font-size:10px;color:var(--text-muted)">
+      Selecione o modelo, ano, quilometragem de compra e preço para fazer o highlight imediato da oferta exata na tabela com contorno brilhante!
+    </div>
+
+    <div class="highlight-form-grid">
+      <div class="form-group">
+        <label>Veículo &amp; Ano:</label>
+        <select id="hlCarSelect"></select>
+      </div>
+
+      <div class="form-group">
+        <label>Km de Compra (Odómetro):</label>
+        <select id="hlKmSelect"></select>
+      </div>
+
+      <div class="form-group">
+        <label>Preço de Compra Anunciado (€):</label>
+        <select id="hlPriceSelect"></select>
+      </div>
+
+      <div style="display:flex;gap:8px">
+        <button class="btn-highlight-submit" onclick="executeHighlight()">
+          <span>&#9889; Destacar Oferta</span>
+        </button>
+        <button class="btn-highlight-clear" onclick="clearHighlight()">
+          <span>Limpar</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- BANNER DE RESULTADO DO HIGHLIGHT -->
+    <div id="highlightResultBanner" style="display:none" class="highlight-result-banner"></div>
+  </div>
+</div>
+
+<!-- LEGENDA PROGRESSIVA DE PROXIMIDADE DE EXPIRAÇÃO DA GARANTIA DA BATERIA -->
 <div class="visual-legend-bar">
   <span style="font-weight:800;color:#fff">Proximidade de Fim da Garantia da Bateria HV (O que ocorrer primeiro: Tempo ou Km):</span>
   <div class="v-item"><span class="w-badge-pill w-exp">&#9889; 0m</span> Expirada</div>
@@ -422,6 +650,7 @@ for (var pVal = 21000; pVal <= 35000; pVal += 1000) {
 
 var minCostFilter = 0;
 var maxCostFilter = 9999;
+var activeTargetCellId = null;
 
 var CARS = [
     // TESLA
@@ -442,6 +671,25 @@ var CARS = [
     { id: 'megane_2023', n: 'Megane E-Tech EV60', y: 2023, brand: 'megane', lfp: false, ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 18500, step: 500, jump: 500 },
     { id: 'megane_2024', n: 'Megane E-Tech EV60', y: 2024, brand: 'megane', lfp: false, ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 21000, step: 500, jump: 600 }
 ];
+
+window.switchTab = function(tabName) {
+    var btnFilter = document.getElementById('tabBtnFilter');
+    var btnHighlight = document.getElementById('tabBtnHighlight');
+    var contentFilter = document.getElementById('tabContentFilter');
+    var contentHighlight = document.getElementById('tabContentHighlight');
+
+    if (tabName === 'filter') {
+        btnFilter.classList.add('active');
+        btnHighlight.classList.remove('active');
+        contentFilter.classList.remove('hidden');
+        contentHighlight.classList.add('hidden');
+    } else {
+        btnHighlight.classList.add('active');
+        btnFilter.classList.remove('active');
+        contentHighlight.classList.remove('hidden');
+        contentFilter.classList.add('hidden');
+    }
+};
 
 window.setCostPreset = function(minC, maxC, btn) {
     minCostFilter = minC;
@@ -473,6 +721,105 @@ window.onCustomCostChange = function() {
     btns.forEach(function(b){ b.classList.remove('active'); });
 
     renderAll();
+};
+
+function populateHighlightForm() {
+    var carSel = document.getElementById('hlCarSelect');
+    var kmSel = document.getElementById('hlKmSelect');
+    var priceSel = document.getElementById('hlPriceSelect');
+
+    var carHtml = '';
+    CARS.forEach(function(c) {
+        carHtml += '<option value="' + c.id + '">' + c.n + ' (' + c.y + ')</option>';
+    });
+    carSel.innerHTML = carHtml;
+
+    var kmHtml = '';
+    KM.forEach(function(k) {
+        kmHtml += '<option value="' + k + '">' + k + '.000 km</option>';
+    });
+    kmSel.innerHTML = kmHtml;
+
+    var priceHtml = '';
+    ALL_PRICES.forEach(function(p) {
+        priceHtml += '<option value="' + p + '">€' + p.toLocaleString('pt-PT') + '</option>';
+    });
+    priceSel.innerHTML = priceHtml;
+}
+
+window.executeHighlight = function() {
+    var carId = document.getElementById('hlCarSelect').value;
+    var buyKm = Number(document.getElementById('hlKmSelect').value);
+    var buyPrice = Number(document.getElementById('hlPriceSelect').value);
+
+    var car = CARS.find(function(c){ return c.id === carId; });
+    if (!car) return;
+
+    var r = aResale(car, buyKm);
+    var m = moVal(buyPrice, r);
+    var wObj = getEffectiveWarranty(car, buyKm);
+
+    var banner = document.getElementById('highlightResultBanner');
+    var html = '';
+
+    if (m !== null) {
+        var evalText = m < 250 ? '🟢 Excelente Oportunidade (<250€/mês)' : (m < 350 ? '🟡 Custo Moderado (250-350€/mês)' : '🟠 Custo Elevado (>350€/mês)');
+
+        html += '<div style="display:flex;align-items:center;gap:16px">';
+        html += '<div class="hr-cost-big">€' + m + '<span style="font-size:12px;color:#fff;font-weight:400"> / mês</span></div>';
+        html += '<div class="hr-details">';
+        html += '<div><b>' + car.n + ' (' + car.y + ')</b> &middot; Compra: <b>€' + buyPrice.toLocaleString('pt-PT') + '</b> &middot; Odómetro: <b>' + buyKm + '.000 km</b></div>';
+        html += '<div>Revenda Estimada (Dez/2028): <b>€' + r.toLocaleString('pt-PT') + '</b> (Venda com ' + (buyKm*1000+TKM)/1000 + 'k km)</div>';
+        html += '<div style="color:#ffd60a">Garantia Bateria HV: <b>' + wObj.effMonths + 'm restantes</b> (' + (wObj.kmLeft/1000).toFixed(0) + 'k km de margem)</div>';
+        html += '</div>';
+        html += '</div>';
+
+        html += '<div>';
+        html += '<div style="font-size:11px;font-weight:800;color:#30d158">' + evalText + '</div>';
+        html += '<button onclick="scrollToHighlightedCell()" style="margin-top:6px;background:#30d158;color:#000;border:none;padding:5px 12px;border-radius:6px;font-size:10px;font-weight:900;cursor:pointer">&darr; Ir para a Oferta Destacada</button>';
+        html += '</div>';
+    } else {
+        html += '<div style="color:#ff453a;font-weight:800;font-size:14px">⚠️ Combinação Irrealista</div>';
+        html += '<div style="font-size:11px;color:var(--text-muted)">O preço de compra (€' + buyPrice.toLocaleString('pt-PT') + ') é igual ou inferior ao valor estimado de revenda (€' + r.toLocaleString('pt-PT') + ').</div>';
+    }
+
+    banner.innerHTML = html;
+    banner.style.display = 'flex';
+
+    // Highlight target cell in matrix
+    activeTargetCellId = 'cell_' + carId + '_' + buyPrice + '_' + buyKm;
+    applyTargetHighlight();
+};
+
+window.clearHighlight = function() {
+    activeTargetCellId = null;
+    document.getElementById('highlightResultBanner').style.display = 'none';
+    renderAll();
+};
+
+function applyTargetHighlight() {
+    // Dim all cells
+    var allPills = document.querySelectorAll('.cell-pill');
+    allPills.forEach(function(pill){
+        pill.classList.remove('cell-target-highlight');
+        pill.classList.add('cell-dimmed');
+    });
+
+    if (activeTargetCellId) {
+        var targetEl = document.getElementById(activeTargetCellId);
+        if (targetEl) {
+            targetEl.classList.remove('cell-dimmed');
+            targetEl.classList.add('cell-target-highlight');
+        }
+    }
+}
+
+window.scrollToHighlightedCell = function() {
+    if (!activeTargetCellId) return;
+    var targetEl = document.getElementById(activeTargetCellId);
+    if (targetEl) {
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
 };
 
 function wMonths(c) {
@@ -529,12 +876,11 @@ function isCostInFilter(m) {
     return (m >= minCostFilter && m <= maxCostFilter);
 }
 
-// AVALIAÇÃO DE PROXIMIDADE COMBINADA DE GARANTIA (TEMPO & KM - O QUE OCORRER PRIMEIRAMENTE)
 function getEffectiveWarranty(c, buyKm) {
     var mTime = wMonths(c);
     var saleKm = buyKm * 1000 + TKM;
     var kmLeft = c.wk - saleKm;
-    var mKm = Math.floor(kmLeft / 750); // meses equivalentes a 750 km/mês
+    var mKm = Math.floor(kmLeft / 750);
     var effMonths = Math.min(mTime, mKm);
     
     return {
@@ -586,7 +932,8 @@ function renderMegaTable() {
                 var r = aResale(c, KM[ki]);
                 var m = moVal(price, r);
                 var wObj = getEffectiveWarranty(c, KM[ki]);
-                var pen = wPenalty(c);
+
+                var cellId = 'cell_' + c.id + '_' + price + '_' + KM[ki];
 
                 if (m !== null) {
                     var match = isCostInFilter(m);
@@ -600,7 +947,7 @@ function renderMegaTable() {
 
                     var titleText = 'Revenda 2028: €' + r + ' | Garantia Bateria HV: ' + wObj.mTime + 'm (tempo) & ' + (wObj.kmLeft/1000).toFixed(0) + 'k km (odómetro) | Factor Limite: ' + wObj.limitingFactor;
 
-                    html += '<td><span class="cell-pill ' + dimCls + '" style="background:' + col(m) + ';color:#000" title="' + titleText + '">' + m + '€' + wTagSubtle + '</span></td>';
+                    html += '<td><span id="' + cellId + '" class="cell-pill ' + dimCls + '" style="background:' + col(m) + ';color:#000" title="' + titleText + '">' + m + '€' + wTagSubtle + '</span></td>';
                 } else {
                     html += '<td><span class="cell-na">&mdash;</span></td>';
                 }
@@ -683,8 +1030,12 @@ function renderAll() {
     document.getElementById('activeCostLabel').textContent = 'Foco em Custo Mensal entre €' + minCostFilter + ' e ' + maxDisp + '/mês';
     renderMegaTable();
     renderAllCardsFeed();
+    if (activeTargetCellId) {
+        applyTargetHighlight();
+    }
 }
 
+populateHighlightForm();
 renderAll();
 
 })();

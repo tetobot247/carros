@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Comparativo Geral — Custo Mensal de Elétricos</title>
+
+<style>
+:root {
+  --bg: #090a0f;
+  --card-bg: rgba(255, 255, 255, 0.04);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --accent: #30d158;
+  --text: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.5);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+header {
+  text-align: center;
+  max-width: 900px;
+}
+
+h1 {
+  font-size: 22px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #fff 0%, #a1a1a1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 4px;
+}
+
+.sub {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1100px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.nav-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(48, 209, 88, 0.1);
+  border: 1px solid rgba(48, 209, 88, 0.2);
+  padding: 6px 12px;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  background: rgba(48, 209, 88, 0.2);
+  box-shadow: 0 0 12px rgba(48, 209, 88, 0.3);
+}
+
+/* Painel de Filtros e Controlos */
+.controls-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  padding: 14px 18px;
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.control-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  font-weight: 700;
+  min-width: 130px;
+}
+
+.btn-pill {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-pill:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.btn-pill.active {
+  background: var(--accent);
+  color: #000;
+  border-color: var(--accent);
+  font-weight: 700;
+  box-shadow: 0 0 12px rgba(48, 209, 88, 0.3);
+}
+
+/* Grelha Visual de Ranges de Custo */
+.grid-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 12px;
+  width: 100%;
+  max-width: 1100px;
+}
+
+.model-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.model-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.model-title {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.year-badge {
+  font-size: 9px;
+  font-weight: 800;
+  background: #ffd60a;
+  color: #000;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.range-box {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.range-values {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.val-min {
+  color: #30d158;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.val-mid {
+  color: #ffd60a;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.val-max {
+  color: #ff453a;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+/* Barra de Progresso Visual do Range */
+.bar-track {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #30d158 0%, #ffd60a 50%, #ff453a 100%);
+}
+
+.card-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: var(--text-muted);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 6px;
+}
+
+/* Tabela Comparativa Master */
+.master-table-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 16px;
+  width: 100%;
+  max-width: 1100px;
+  overflow-x: auto;
+}
+
+.master-table-card h2 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10px;
+  min-width: 700px;
+}
+
+th {
+  color: var(--text-muted);
+  padding: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+  font-weight: 600;
+  font-size: 9px;
+}
+
+th:first-child { text-align: left; }
+
+td {
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-weight: 600;
+}
+
+td:first-child {
+  text-align: left;
+  font-weight: 700;
+  color: #fff;
+}
+
+.badge-lfp {
+  font-size: 8px;
+  background: rgba(48, 209, 88, 0.15);
+  color: #30d158;
+  padding: 1px 4px;
+  border-radius: 3px;
+  margin-left: 4px;
+}
+
+.cell-pill {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+  min-width: 48px;
+}
+
+footer {
+  font-size: 9px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 12px;
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div>
+    <h1>&#9889; Comparativo Geral de Custo Mensal</h1>
+    <div class="sub">Visão Consolidada: Ranges de Custo (€/mês) para Todos os Modelos (2021–2024)</div>
+  </div>
+  <a href="matrizes-km-granular-v3.html" class="nav-link">&rarr; Ver Matrizes Granulares (v3)</a>
+</div>
+
+<!-- Controlos de Filtro e Benchmark -->
+<div class="controls-card">
+  <div class="control-group">
+    <span class="control-label">Preço de Referência:</span>
+    <button class="btn-pill active" onclick="setBenchmarkPrice(21000, this)">€21.000 (Melhor Caso)</button>
+    <button class="btn-pill" onclick="setBenchmarkPrice(25000, this)">€25.000 (Mercado Realista)</button>
+    <button class="btn-pill" onclick="setBenchmarkPrice(30000, this)">€30.000 (Seminovo 2024)</button>
+  </div>
+  <div class="control-group">
+    <span class="control-label">Filtrar Ano:</span>
+    <button class="btn-pill active" onclick="setFilterYear('all', this)">Todos (2021-2024)</button>
+    <button class="btn-pill" onclick="setFilterYear('2021', this)">2021</button>
+    <button class="btn-pill" onclick="setFilterYear('2022', this)">2022</button>
+    <button class="btn-pill" onclick="setFilterYear('2023', this)">2023</button>
+    <button class="btn-pill" onclick="setFilterYear('2024', this)">2024</button>
+  </div>
+  <div class="control-group">
+    <span class="control-label">Ordenar por:</span>
+    <button class="btn-pill active" onclick="setSortMode('min_cost', this)">Custo Mínimo (Sweet Spot)</button>
+    <button class="btn-pill" onclick="setSortMode('avg_cost', this)">Custo Médio</button>
+    <button class="btn-pill" onclick="setSortMode('year_desc', this)">Ano Mais Recente</button>
+  </div>
+</div>
+
+<!-- Grelha de Cards com Ranges por Modelo -->
+<div class="grid-summary" id="gridApp"></div>
+
+<!-- Tabela Master de Comparação Lado a Lado -->
+<div class="master-table-card">
+  <h2>
+    <span>&#128202; Tabela Comparativa Completa Lado a Lado</span>
+    <span style="font-size:10px;font-weight:400;color:var(--text-muted)" id="benchmarkLabel">Preço Compra: €21.000</span>
+  </h2>
+  <table id="masterTable">
+    <thead>
+      <tr>
+        <th>Modelo &amp; Ano</th>
+        <th>Garantia Bateria</th>
+        <th>35.000 km</th>
+        <th>50.000 km</th>
+        <th>70.000 km</th>
+        <th>90.000 km</th>
+        <th>110.000 km</th>
+        <th>Range (€/mês)</th>
+      </tr>
+    </thead>
+    <tbody id="masterTbody"></tbody>
+  </table>
+</div>
+
+<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Dashboard Comparativo de Elétricos</footer>
+
+<script>
+(function(){
+'use strict';
+
+var M = 28; // 28 meses
+var TKM = 21000;
+var LFPR = 0.5;
+
+var WS = [
+    {m: 24, p: 0},
+    {m: 18, p: 750},
+    {m: 12, p: 1500},
+    {m: 6,  p: 2000},
+    {m: 0,  p: 2500},
+    {m: -999, p: 3000}
+];
+
+var CARS = [
+    {
+        id: 'tesla_m3_2021', name: 'Tesla Model 3 SR+ LFP', year: 2021, brand: 'tesla', lfp: true,
+        ry: 2021, rm: 12, wy: 8, wk: 192000, b35: 18300, step: 300, jump: 400
+    },
+    {
+        id: 'tesla_m3_2022', name: 'Tesla Model 3 RWD LFP', year: 2022, brand: 'tesla', lfp: true,
+        ry: 2022, rm: 6, wy: 8, wk: 192000, b35: 19800, step: 300, jump: 400
+    },
+    {
+        id: 'tesla_m3_2023', name: 'Tesla Model 3 RWD LFP', year: 2023, brand: 'tesla', lfp: true,
+        ry: 2023, rm: 6, wy: 8, wk: 192000, b35: 21500, step: 350, jump: 400
+    },
+    {
+        id: 'tesla_m3_2024', name: 'Tesla Model 3 Highland RWD LFP', year: 2024, brand: 'tesla', lfp: true,
+        ry: 2024, rm: 3, wy: 8, wk: 192000, b35: 24500, step: 400, jump: 500
+    },
+    {
+        id: 'ioniq5_2021', name: 'IONIQ 5 72.6 kWh', year: 2021, brand: 'ioniq5', lfp: false,
+        ry: 2021, rm: 11, wy: 8, wk: 160000, b35: 17000, step: 500, jump: 500
+    },
+    {
+        id: 'ioniq5_2022', name: 'IONIQ 5 72.6 kWh', y: 2022, year: 2022, brand: 'ioniq5', lfp: false,
+        ry: 2022, rm: 7, wy: 8, wk: 160000, b35: 17500, step: 500, jump: 500
+    },
+    {
+        id: 'ioniq5_2023', name: 'IONIQ 5 77.4 kWh', year: 2023, brand: 'ioniq5', lfp: false,
+        ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 19800, step: 500, jump: 500
+    },
+    {
+        id: 'ioniq5_2024', name: 'IONIQ 5 84 kWh (Facelift)', year: 2024, brand: 'ioniq5', lfp: false,
+        ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 23200, step: 500, jump: 600
+    },
+    {
+        id: 'megane_2021', name: 'Megane E-Tech EV60', year: 2021, brand: 'megane', lfp: false,
+        ry: 2021, rm: 12, wy: 8, wk: 160000, b35: 15800, step: 500, jump: 500
+    },
+    {
+        id: 'megane_2022', name: 'Megane E-Tech EV60', year: 2022, brand: 'megane', lfp: false,
+        ry: 2022, rm: 9, wy: 8, wk: 160000, b35: 16500, step: 500, jump: 500
+    },
+    {
+        id: 'megane_2023', name: 'Megane E-Tech EV60', year: 2023, brand: 'megane', lfp: false,
+        ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 18500, step: 500, jump: 500
+    },
+    {
+        id: 'megane_2024', name: 'Megane E-Tech EV60', year: 2024, brand: 'megane', lfp: false,
+        ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 21000, step: 500, jump: 600
+    }
+];
+
+var benchmarkPrice = 21000;
+var filterYear = 'all';
+var sortMode = 'min_cost';
+
+function wMonths(c) {
+    return (c.ry + c.wy - 2028) * 12 + (c.rm - 12);
+}
+
+function wPenalty(c) {
+    var m = wMonths(c);
+    var p = 3000;
+    for (var i = 0; i < WS.length; i++) {
+        if (m >= WS[i].m) { p = WS[i].p; break; }
+    }
+    if (c.lfp && p > 0) p = Math.round(p * LFPR);
+    return p;
+}
+
+function getBaseResale(c, k) {
+    var stepsCount = (k - 35) / 5;
+    var res = c.b35;
+    for (var i = 0; i < stepsCount; i++) {
+        var currentKm = 35 + i * 5;
+        var drop = c.step + (currentKm === 90 ? c.jump : 0);
+        res -= drop;
+    }
+    return res;
+}
+
+function aResale(c, k) {
+    var p = wPenalty(c);
+    var fkm = k * 1000 + TKM;
+    if (fkm > c.wk) {
+        var kp = 3000;
+        if (c.lfp) kp = Math.round(kp * LFPR);
+        p = Math.max(p, kp);
+    }
+    return Math.max(0, getBaseResale(c, k) - p);
+}
+
+function mo(price, resale) {
+    return Math.round((price - resale) / M);
+}
+
+function col(v) {
+    var t = Math.max(0, Math.min(1, (v - 100) / 600));
+    return 'rgb(' + Math.round(255 * t) + ',' + Math.round(255 * (1 - t)) + ',50)';
+}
+
+function computeMetrics(c, p) {
+    var kms = [35, 50, 70, 90, 110];
+    var costs = kms.map(function(k){ return mo(p, aResale(c, k)); });
+    var min = Math.min.apply(null, costs);
+    var max = Math.max.apply(null, costs);
+    var sum = costs.reduce(function(a,b){return a+b;},0);
+    var avg = Math.round(sum / costs.length);
+    return {
+        costs: costs,
+        min: min,
+        max: max,
+        avg: avg
+    };
+}
+
+window.setBenchmarkPrice = function(price, btn) {
+    benchmarkPrice = price;
+    updateButtons(btn);
+    renderDashboard();
+};
+
+window.setFilterYear = function(year, btn) {
+    filterYear = year;
+    updateButtons(btn);
+    renderDashboard();
+};
+
+window.setSortMode = function(mode, btn) {
+    sortMode = mode;
+    updateButtons(btn);
+    renderDashboard();
+};
+
+function updateButtons(clickedBtn) {
+    var parent = clickedBtn.parentElement;
+    var btns = parent.querySelectorAll('.btn-pill');
+    btns.forEach(function(b){ b.classList.remove('active'); });
+    clickedBtn.classList.add('active');
+}
+
+function renderDashboard() {
+    document.getElementById('benchmarkLabel').textContent = 'Preço Compra Referência: €' + benchmarkPrice.toLocaleString('pt-PT');
+
+    var list = CARS.filter(function(c) {
+        return filterYear === 'all' || c.year.toString() === filterYear;
+    });
+
+    var items = list.map(function(c) {
+        var m = computeMetrics(c, benchmarkPrice);
+        return { car: c, metrics: m };
+    });
+
+    items.sort(function(a, b) {
+        if (sortMode === 'min_cost') return a.metrics.min - b.metrics.min;
+        if (sortMode === 'avg_cost') return a.metrics.avg - b.metrics.avg;
+        if (sortMode === 'year_desc') return b.car.year - a.car.year;
+        return 0;
+    });
+
+    // Render Grid Cards
+    var gridHtml = '';
+    items.forEach(function(item) {
+        var c = item.car;
+        var m = item.metrics;
+        var pen = wPenalty(c);
+        var wm = wMonths(c);
+
+        var normFill = Math.max(5, Math.min(100, (m.avg / 600) * 100));
+
+        gridHtml += '<div class="model-card">';
+        gridHtml += '<div class="card-header">';
+        gridHtml += '<div class="model-title">' + c.name + (c.lfp ? ' <span class="badge-lfp">LFP</span>' : '') + '</div>';
+        gridHtml += '<span class="year-badge">' + c.year + '</span>';
+        gridHtml += '</div>';
+
+        gridHtml += '<div class="range-box">';
+        gridHtml += '<div class="range-values">';
+        gridHtml += '<div><span style="font-size:9px;color:var(--text-muted)">Min (35k km):</span> <span class="val-min">€' + m.min + '</span><span style="font-size:9px">/mês</span></div>';
+        gridHtml += '<div><span style="font-size:9px;color:var(--text-muted)">Média:</span> <span class="val-mid">€' + m.avg + '</span></div>';
+        gridHtml += '<div><span style="font-size:9px;color:var(--text-muted)">Max (110k km):</span> <span class="val-max">€' + m.max + '</span></div>';
+        gridHtml += '</div>';
+
+        gridHtml += '<div class="bar-track"><div class="bar-fill" style="width:' + normFill + '%"></div></div>';
+        gridHtml += '</div>';
+
+        gridHtml += '<div class="card-meta">';
+        gridHtml += '<span>Garantia bateria em 2028: <b>' + (wm > 0 ? wm + 'm restantes' : 'Expirada') + '</b></span>';
+        gridHtml += '<span>Penalização: <b style="color:' + (pen > 0 ? '#ff453a' : '#30d158') + '">-' + pen + '€</b></span>';
+        gridHtml += '</div>';
+        gridHtml += '</div>';
+    });
+    document.getElementById('gridApp').innerHTML = gridHtml;
+
+    // Render Master Table
+    var tableHtml = '';
+    items.forEach(function(item) {
+        var c = item.car;
+        var m = item.metrics;
+        var wm = wMonths(c);
+        var pen = wPenalty(c);
+
+        tableHtml += '<tr>';
+        tableHtml += '<td>' + c.name + ' <span class="year-badge">' + c.year + '</span>' + (c.lfp ? '<span class="badge-lfp">LFP</span>' : '') + '</td>';
+        tableHtml += '<td style="font-size:9px;color:var(--text-muted)">' + (wm > 0 ? wm + 'm rest. (-' + pen + '€)' : 'Expirada (-' + pen + '€)') + '</td>';
+
+        m.costs.forEach(function(cost) {
+            tableHtml += '<td><span class="cell-pill" style="background:' + col(cost) + ';color:#000">' + cost + '€</span></td>';
+        });
+
+        tableHtml += '<td style="color:#ffd60a;font-weight:700">' + m.min + '€ - ' + m.max + '€</td>';
+        tableHtml += '</tr>';
+    });
+    document.getElementById('masterTbody').innerHTML = tableHtml;
+}
+
+renderDashboard();
+
+})();
+</script>
+
+</body>
+</html>

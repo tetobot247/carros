@@ -276,7 +276,7 @@ h1 {
   color: #000;
 }
 
-/* FRONTEIRA DE EFICIÊNCIA DE PARETO (RISCO VS CUSTO) */
+/* FRONTEIRA DE EFICIÊNCIA DE PARETO & CARDS ADICIONAIS */
 .pareto-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -295,6 +295,27 @@ h1 {
 
 .pareto-score {
   font-size: 24px;
+  font-weight: 900;
+}
+
+/* REGRESSÃO LINEAR & RISCO CAUDAL CARDS */
+.stat-metric-box {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stat-metric-title {
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.stat-metric-val {
+  font-size: 18px;
   font-weight: 900;
 }
 
@@ -370,7 +391,7 @@ footer {
 <div class="section-card">
   <div class="section-header">
     <div>
-      <div class="section-title">&#128506;\uFE0F Distribuição de Densidade Probabilística (Faixa de Custo Mensal em €/mês)</div>
+      <div class="section-title">&#128506; Distribuição de Densidade Probabilística (Faixa de Custo Mensal em €/mês)</div>
       <div class="section-sub">Visualização da dispersão e concentração de custos (Média, IQR Q1-Q3 e Margem 80% P10-P90)</div>
     </div>
   </div>
@@ -382,12 +403,74 @@ footer {
 <div class="section-card">
   <div class="section-header">
     <div>
-      <div class="section-title">&#9878;\uFE0F Avaliação de Eficiência de Pareto &amp; Score Risco-Retorno</div>
+      <div class="section-title">&#9878; Avaliação de Eficiência de Pareto &amp; Score Risco-Retorno</div>
       <div class="section-sub">O Rácio de Sharpe Financeiro mede quanto "desconto mensal" obtém por unidade de risco/variância na revenda</div>
     </div>
   </div>
 
   <div class="pareto-grid" id="paretoGrid"></div>
+</div>
+
+<!-- SEÇÃO 4: CURVAS DE PROBABILIDADE ACUMULADA (CDF - CUMULATIVE DISTRIBUTION FUNCTION) -->
+<div class="section-card">
+  <div class="section-header">
+    <div>
+      <div class="section-title">&#128200; Probabilidade Acumulada de Custo Mensal (CDF)</div>
+      <div class="section-sub">Probabilidade $P(\text{Custo Mensal} \le X)$ de conseguir um custo mensal dentro de cada orçamento limite</div>
+    </div>
+  </div>
+
+  <div style="overflow-x:auto">
+    <table class="stats-table">
+      <thead>
+        <tr>
+          <th>Modelo / Plataforma</th>
+          <th>P(Custo &le; €200/mês)</th>
+          <th>P(Custo &le; €300/mês)</th>
+          <th>P(Custo &le; €400/mês)</th>
+          <th>P(Custo &le; €500/mês)</th>
+          <th>Avaliação de Acessibilidade</th>
+        </tr>
+      </thead>
+      <tbody id="cdfTableBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SEÇÃO 5: SENSIBILIDADE MARGINAL & COEFICIENTES DE REGRESSÃO LINEAR -->
+<div class="section-card">
+  <div class="section-header">
+    <div>
+      <div class="section-title">&#128207; Sensibilidade Marginal de Desvalorização (Coeficientes de Regressão Linear)</div>
+      <div class="section-sub">Taxa de variação do custo mensal por cada +10.000 km no odómetro ($\beta_{\text{km}}$) e por cada +€1.000 no preço de compra ($\beta_{\text{preço}}$)</div>
+    </div>
+  </div>
+
+  <div class="pareto-grid" id="regressionGrid"></div>
+</div>
+
+<!-- SEÇÃO 6: ANÁLISE DE RISCO CAUDAL (Value-at-Risk VaR 95% & Downside CVaR 95%) -->
+<div class="section-card">
+  <div class="section-header">
+    <div>
+      <div class="section-title">&#9888; Análise de Risco Caudal Extremado (VaR 95% &amp; Expected Shortfall CVaR 95%)</div>
+      <div class="section-sub">Quantifica o custo máximo no 95º percentil de pior cenário e a média do pior 5% de perdas</div>
+    </div>
+  </div>
+
+  <div class="pareto-grid" id="varGrid"></div>
+</div>
+
+<!-- SEÇÃO 7: FORMA DA DISTRIBUIÇÃO — ASSIMETRIA (SKEWNESS) & CURTOSE (KURTOSIS) -->
+<div class="section-card">
+  <div class="section-header">
+    <div>
+      <div class="section-title">&#128201; Forma da Distribuição — Assimetria (Skewness) &amp; Curtose (Kurtosis)</div>
+      <div class="section-sub">Mede a inclinação das caudas de desvalorização e a concentração dos custos em torno da média</div>
+    </div>
+  </div>
+
+  <div class="pareto-grid" id="skewGrid"></div>
 </div>
 
 <footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Modelo Estatístico e Probabilístico Avançado (Monte Carlo 10.000 iterações)</footer>
@@ -483,12 +566,17 @@ var brandResults = [];
 
 BRANDS.forEach(function(b) {
     var costs = [];
+    var dataPoints = [];
+
     b.cars.forEach(function(c) {
         PRICES.forEach(function(p) {
             KM.forEach(function(k) {
                 var r = aResale(c, k);
                 var m = moVal(p, r);
-                if (m !== null) costs.push(m);
+                if (m !== null) {
+                    costs.push(m);
+                    dataPoints.push({ p: p, k: k, cost: m });
+                }
             });
         });
     });
@@ -509,6 +597,35 @@ BRANDS.forEach(function(b) {
     
     var sharpe = (500 - mean) / stdDev;
 
+    // Advanced Skewness & Kurtosis
+    var skewness = (costs.reduce(function(acc, val){ return acc + Math.pow(val - mean, 3); }, 0) / n) / Math.pow(stdDev, 3);
+    var kurtosis = ((costs.reduce(function(acc, val){ return acc + Math.pow(val - mean, 4); }, 0) / n) / Math.pow(stdDev, 4)) - 3;
+
+    // VaR 95% & CVaR 95%
+    var var95Index = Math.floor(n * 0.95);
+    var var95 = costs[var95Index];
+    var tailCosts = costs.slice(var95Index);
+    var cvar95 = tailCosts.reduce(function(acc, val){ return acc + val; }, 0) / tailCosts.length;
+
+    // CDF Probabilities
+    var pLe200 = (costs.filter(function(c){ return c <= 200; }).length / n * 100).toFixed(1);
+    var pLe300 = (costs.filter(function(c){ return c <= 300; }).length / n * 100).toFixed(1);
+    var pLe400 = (costs.filter(function(c){ return c <= 400; }).length / n * 100).toFixed(1);
+    var pLe500 = (costs.filter(function(c){ return c <= 500; }).length / n * 100).toFixed(1);
+
+    // Linear Regression beta_km and beta_price
+    var sumK = 0, sumP = 0, sumC = 0;
+    var sumK2 = 0, sumP2 = 0, sumKP = 0, sumKC = 0, sumPC = 0;
+    dataPoints.forEach(function(d) {
+        sumK += d.k; sumP += d.p; sumC += d.cost;
+        sumK2 += d.k * d.k; sumP2 += d.p * d.p;
+        sumKP += d.k * d.p; sumKC += d.k * d.cost; sumPC += d.p * d.cost;
+    });
+
+    var denom = ((n * sumK2 - sumK * sumK) * (n * sumP2 - sumP * sumP) - Math.pow(n * sumKP - sumK * sumP, 2));
+    var betaKm = denom !== 0 ? ((n * sumKC - sumK * sumC) * (n * sumP2 - sumP * sumP) - (n * sumPC - sumP * sumC) * (n * sumKP - sumK * sumP)) / denom : 0;
+    var betaPrice = denom !== 0 ? ((n * sumPC - sumP * sumC) * (n * sumK2 - sumK * sumK) - (n * sumKC - sumK * sumC) * (n * sumKP - sumK * sumP)) / denom : 0;
+
     brandResults.push({
         id: b.id,
         name: b.name,
@@ -525,7 +642,16 @@ BRANDS.forEach(function(b) {
         min: costs[0],
         max: costs[n - 1],
         sharpe: Math.round(sharpe * 100) / 100,
-        rawCosts: costs
+        skewness: Math.round(skewness * 100) / 100,
+        kurtosis: Math.round(kurtosis * 100) / 100,
+        var95: var95,
+        cvar95: Math.round(cvar95),
+        pLe200: pLe200,
+        pLe300: pLe300,
+        pLe400: pLe400,
+        pLe500: pLe500,
+        deltaKm10k: Math.round(betaKm * 10 * 10) / 10,
+        deltaPrice1k: Math.round(betaPrice * 1000 * 10) / 10
     });
 });
 
@@ -558,7 +684,7 @@ for (var iter = 0; iter < iterations; iter++) {
     }
 }
 
-// 1. RENDER MONTE CARLO BRAND BOXES & DYNAMIC HERO BANNER
+// 1. MONTE CARLO HERO BOXES
 function renderMonteCarloBoxes() {
     var container = document.getElementById('mcBrandGrid');
     var html = '';
@@ -567,7 +693,6 @@ function renderMonteCarloBoxes() {
     var ioniqProb = (mcWins['ioniq5'] / iterations * 100).toFixed(1);
     var meganeProb = (mcWins['megane'] / iterations * 100).toFixed(1);
 
-    // Update Dynamic Hero Header Badge and Text
     document.getElementById('mcHeroBadge').textContent = teslaProb + '% Probabilidade Dominante';
     document.getElementById('mcHeroSummary').innerHTML = 'Com base em <b>10.000 iterações estocásticas de Monte Carlo</b> (simulando compras aleatórias em qualquer orçamento de €21k a €35k e odómetro de 35k a 115k km), o <b>Tesla Model 3</b> tem <b>' + teslaProb + '% de probabilidade de resultar no menor custo mensal de desvalorização</b> frente ao Hyundai IONIQ 5 (' + ioniqProb + '%) e Renault Megane E-Tech (' + meganeProb + '%).';
 
@@ -595,7 +720,7 @@ function renderMonteCarloBoxes() {
     container.innerHTML = html;
 }
 
-// 2. RENDER ESTATÍSTICA DESCRITIVA TABLE
+// 2. STATS TABLE
 function renderStatsTable() {
     var tbody = document.getElementById('statsTableBody');
     var html = '';
@@ -616,7 +741,7 @@ function renderStatsTable() {
     tbody.innerHTML = html;
 }
 
-// 3. RENDER DENSITY CHART
+// 3. DENSITY CHART
 function renderDensityChart() {
     var container = document.getElementById('densityChartContainer');
     var html = '';
@@ -648,7 +773,7 @@ function renderDensityChart() {
     container.innerHTML = html;
 }
 
-// 4. RENDER PARETO GRID
+// 4. PARETO GRID
 function renderParetoGrid() {
     var container = document.getElementById('paretoGrid');
     var html = '';
@@ -683,10 +808,116 @@ function renderParetoGrid() {
     container.innerHTML = html;
 }
 
+// 5. RENDER CDF TABLE
+function renderCdfTable() {
+    var tbody = document.getElementById('cdfTableBody');
+    var html = '';
+
+    brandResults.forEach(function(res) {
+        var evalRating = parseFloat(res.pLe400) > 50 ? '🟢 Alta Probabilidade de Baixo Custo (>50% <€400)' : (parseFloat(res.pLe400) > 30 ? '🟡 Probabilidade Moderada' : '🟠 Baixa Probabilidade de Baixo Custo');
+
+        html += '<tr>';
+        html += '<td style="color:' + res.color + '">' + res.name + '</td>';
+        html += '<td style="font-weight:900;color:' + (parseFloat(res.pLe200) > 15 ? '#30d158' : '#ffd60a') + '">' + res.pLe200 + '%</td>';
+        html += '<td style="font-weight:900;color:' + (parseFloat(res.pLe300) > 30 ? '#30d158' : '#ffd60a') + '">' + res.pLe300 + '%</td>';
+        html += '<td style="font-weight:900;color:' + (parseFloat(res.pLe400) > 50 ? '#30d158' : '#ffd60a') + '">' + res.pLe400 + '%</td>';
+        html += '<td style="font-weight:900;color:' + (parseFloat(res.pLe500) > 70 ? '#30d158' : '#ffd60a') + '">' + res.pLe500 + '%</td>';
+        html += '<td style="font-size:9px;color:rgba(255,255,255,0.7)">' + evalRating + '</td>';
+        html += '</tr>';
+    });
+
+    tbody.innerHTML = html;
+}
+
+// 6. RENDER REGRESSION MARGINAL SENSITIVITY GRID
+function renderRegressionGrid() {
+    var container = document.getElementById('regressionGrid');
+    var html = '';
+
+    brandResults.forEach(function(res) {
+        html += '<div class="stat-metric-box" style="border-top:3px solid ' + res.color + '">';
+        html += '<div style="font-size:12px;font-weight:800;color:' + res.color + '">' + res.name + '</div>';
+        
+        html += '<div style="margin-top:4px">';
+        html += '<div style="font-size:9px;color:var(--text-muted)">Sensibilidade por Odómetro (+10.000 km):</div>';
+        html += '<div class="stat-metric-val" style="color:#ffd60a">+€' + res.deltaKm10k + ' / mês</div>';
+        html += '</div>';
+
+        html += '<div style="margin-top:4px">';
+        html += '<div style="font-size:9px;color:var(--text-muted)">Sensibilidade por Preço Compra (+€1.000):</div>';
+        html += '<div class="stat-metric-val" style="color:#30d158">+€' + res.deltaPrice1k + ' / mês</div>';
+        html += '</div>';
+
+        html += '</div>';
+    });
+
+    container.innerHTML = html;
+}
+
+// 7. RENDER TAIL RISK (VaR 95% & CVaR 95%) GRID
+function renderVarGrid() {
+    var container = document.getElementById('varGrid');
+    var html = '';
+
+    brandResults.forEach(function(res) {
+        html += '<div class="stat-metric-box" style="border-top:3px solid ' + res.color + '">';
+        html += '<div style="font-size:12px;font-weight:800;color:' + res.color + '">' + res.name + '</div>';
+
+        html += '<div style="margin-top:4px">';
+        html += '<div style="font-size:9px;color:var(--text-muted)">Value-at-Risk (VaR 95%):</div>';
+        html += '<div class="stat-metric-val" style="color:#ff453a">€' + res.var95 + ' / mês</div>';
+        html += '<div style="font-size:8px;color:var(--text-muted)">Custo máximo no 95º percentil de pior cenário</div>';
+        html += '</div>';
+
+        html += '<div style="margin-top:4px">';
+        html += '<div style="font-size:9px;color:var(--text-muted)">Conditional VaR (CVaR 95% / Expected Shortfall):</div>';
+        html += '<div class="stat-metric-val" style="color:#ff3b30">€' + res.cvar95 + ' / mês</div>';
+        html += '<div style="font-size:8px;color:var(--text-muted)">Média de custo no pior 5% de perdas extrema</div>';
+        html += '</div>';
+
+        html += '</div>';
+    });
+
+    container.innerHTML = html;
+}
+
+// 8. RENDER SKEWNESS & KURTOSIS GRID
+function renderSkewGrid() {
+    var container = document.getElementById('skewGrid');
+    var html = '';
+
+    brandResults.forEach(function(res) {
+        var skewDesc = res.skewness > 0.05 ? 'Assimétrica à Direita (Cauda para custos altos)' : (res.skewness < -0.05 ? 'Assimétrica à Esquerda' : 'Quase Simétrica');
+        
+        html += '<div class="stat-metric-box" style="border-top:3px solid ' + res.color + '">';
+        html += '<div style="font-size:12px;font-weight:800;color:' + res.color + '">' + res.name + '</div>';
+
+        html += '<div style="margin-top:4px">';
+        html += '<div style="font-size:9px;color:var(--text-muted)">Assimetria (Skewness):</div>';
+        html += '<div class="stat-metric-val" style="color:#64d2ff">' + res.skewness + '</div>';
+        html += '<div style="font-size:8px;color:var(--text-muted)">' + skewDesc + '</div>';
+        html += '</div>';
+
+        html += '<div style="margin-top:4px">';
+        html += '<div style="font-size:9px;color:var(--text-muted)">Curtose Excedente (Kurtosis):</div>';
+        html += '<div class="stat-metric-val" style="color:#d070ff">' + res.kurtosis + '</div>';
+        html += '<div style="font-size:8px;color:var(--text-muted)">Grau de dispersão das caudas</div>';
+        html += '</div>';
+
+        html += '</div>';
+    });
+
+    container.innerHTML = html;
+}
+
 renderMonteCarloBoxes();
 renderStatsTable();
 renderDensityChart();
 renderParetoGrid();
+renderCdfTable();
+renderRegressionGrid();
+renderVarGrid();
+renderSkewGrid();
 
 })();
 </script>

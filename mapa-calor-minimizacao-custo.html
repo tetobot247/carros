@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mapa de Calor Mestre — Minimização de Custo Mensal (Garantia da Bateria)</title>
+<title>Mapa de Calor Mestre — Minimização de Custo Mensal (Estado da Bateria)</title>
 
 <style>
 :root {
@@ -236,8 +236,8 @@ table.hm-table td:first-child {
   position: relative;
 }
 
-.px-block.has-w-pen {
-  border-bottom: 2px solid #ffd60a;
+.px-block.has-w-expired {
+  border-bottom: 2px solid #ff453a;
 }
 
 .px-block:hover {
@@ -263,9 +263,9 @@ table.hm-table td:first-child {
 
 .w-badge {
   font-size: 8px;
-  color: #ffd60a;
-  background: rgba(255, 214, 10, 0.12);
-  border: 1px solid rgba(255, 214, 10, 0.25);
+  color: #ff453a;
+  background: rgba(255, 69, 58, 0.15);
+  border: 1px solid rgba(255, 69, 58, 0.4);
   border-radius: 3px;
   padding: 0 3px;
   margin-left: 3px;
@@ -308,7 +308,7 @@ footer {
 <div class="top-bar">
   <div>
     <h1>&#9889; Mapa de Calor Mestre — Minimização de Custo Mensal</h1>
-    <div class="sub">3.060 Pontos de Dados Visuais com Indicador Específico de Perda de Garantia da Bateria (&#9889;)</div>
+    <div class="sub">3.060 Pontos de Dados Visuais (Sinalização Exclusiva para Garantia de Bateria 100% Expirada)</div>
   </div>
   <a href="mega-matriz-todas-ofertas.html" class="nav-link">&rarr; Ver Mega-Matriz de Números</a>
 </div>
@@ -327,13 +327,13 @@ footer {
   <div class="h-item"><div class="h-box" style="background:#ff9f0a"></div> Elevado (€300 - €400/mês)</div>
   <div class="h-item"><div class="h-box" style="background:#ff453a"></div> Caro (&gt; €400/mês)</div>
   <div class="h-item"><div class="h-box" style="background:rgba(255,255,255,0.1)"></div> Irrealista (Preço &le; Revenda)</div>
-  <div class="h-item"><span style="color:#ffd60a;font-weight:900">&#9889;</span> <span style="color:#ffd60a;font-weight:700">Traço Amarelo / &#9889;: Penalização por Expiração Próxima da GARANTIA DA BATERIA HV</span></div>
+  <div class="h-item"><span style="color:#ff453a;font-weight:900">&#9889;</span> <span style="color:#ff453a;font-weight:700">&#9889; Marcado EXCLUSIVAMENTE se a Garantia da Bateria estiver 100% EXPIRADA (0 meses)</span></div>
 </div>
 
 <!-- O MATRIZ MESTRE HEATMAP -->
 <div class="heatmap-card">
   <div style="font-size:13px;font-weight:800;margin-bottom:4px">&#128506;\uFE0F Matriz de Densidade Visual (Todos os 12 Veículos vs Quilometragem)</div>
-  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">Cada célula contém uma barra de 15 blocos (€21k a €35k). Passe o cursor por cima de qualquer bloco para ver a oferta exata e a GARANTIA DA BATERIA!</div>
+  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">Cada célula contém uma barra de 15 blocos (€21k a €35k). Passe o cursor por cima de qualquer bloco para ver a oferta exata!</div>
 
   <table class="hm-table">
     <thead>
@@ -346,7 +346,7 @@ footer {
 <!-- Tooltip Flutuante -->
 <div class="custom-tooltip" id="tooltip"></div>
 
-<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Fator Exclusivo: Garantia da Bateria de Alta Voltagem</footer>
+<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Sinalização Exclusiva para Garantia de Bateria Expirada</footer>
 
 <script>
 (function(){
@@ -440,8 +440,9 @@ function getBlockColor(v) {
 
 function getBrandBadge(c) {
     var cls = 'b-' + c.brand;
-    var pen = wPenalty(c);
-    var wTag = pen > 0 ? '<span class="w-badge" title="Perda da Garantia da Bateria HV em 2028 (-' + pen + '€)">&#9889;</span>' : '';
+    var wm = wMonths(c);
+    var isExpired = (wm <= 0);
+    var wTag = isExpired ? '<span class="w-badge" title="Garantia Bateria Expirada">&#9889; EXPIRADA</span>' : '';
     return '<span class="brand-badge ' + cls + '">' + c.n + ' (' + c.y + ')' + wTag + '</span>';
 }
 
@@ -467,8 +468,9 @@ function renderLeaderboard() {
     var html = '';
 
     top5.forEach(function(item, idx) {
-        var pen = wPenalty(item.car);
-        var wTag = pen > 0 ? ' <span style="color:#ffd60a">&#9889; (Pen. Bateria: -' + pen + '€)</span>' : '';
+        var wm = wMonths(item.car);
+        var isExpired = (wm <= 0);
+        var wTag = isExpired ? ' <span style="color:#ff453a">&#9889; (Bateria Expirada)</span>' : '';
         html += '<div class="lb-item">';
         html += '<span class="lb-rank">#' + (idx + 1) + '</span>';
         html += '<span class="lb-cost">€' + item.cost + '<span style="font-size:10px;font-weight:400">/mês</span></span>';
@@ -494,7 +496,9 @@ function renderHeatmap() {
     var tbHtml = '';
 
     CARS.forEach(function(c) {
-        var pen = wPenalty(c);
+        var wm = wMonths(c);
+        var isExpired = (wm <= 0);
+
         tbHtml += '<tr>';
         tbHtml += '<td>' + getBrandBadge(c) + '</td>';
 
@@ -505,14 +509,14 @@ function renderHeatmap() {
             PR.forEach(function(p) {
                 var m = moVal(p, r);
                 var bg = getBlockColor(m);
-                var penCls = (pen > 0) ? 'has-w-pen' : '';
+                var expCls = isExpired ? 'has-w-expired' : '';
 
-                tbHtml += '<div class="px-block ' + penCls + '" style="background:' + bg + '" ';
+                tbHtml += '<div class="px-block ' + expCls + '" style="background:' + bg + '" ';
                 tbHtml += 'data-name="' + c.n + ' (' + c.y + ')" ';
                 tbHtml += 'data-price="' + p + '" ';
                 tbHtml += 'data-km="' + k + '" ';
                 tbHtml += 'data-resale="' + r + '" ';
-                tbHtml += 'data-pen="' + pen + '" ';
+                tbHtml += 'data-wm="' + wm + '" ';
                 tbHtml += 'data-cost="' + (m !== null ? m : 'N/A') + '" ';
                 tbHtml += 'onmouseenter="showTooltip(event, this)" onmouseleave="hideTooltip()"></div>';
             });
@@ -534,7 +538,7 @@ window.showTooltip = function(e, el) {
     var price = Number(el.getAttribute('data-price')).toLocaleString('pt-PT');
     var km = el.getAttribute('data-km');
     var resale = Number(el.getAttribute('data-resale')).toLocaleString('pt-PT');
-    var pen = Number(el.getAttribute('data-pen'));
+    var wm = Number(el.getAttribute('data-wm'));
     var cost = el.getAttribute('data-cost');
 
     var html = '';
@@ -542,10 +546,10 @@ window.showTooltip = function(e, el) {
     if (cost !== 'N/A') {
         html += '<div class="tt-cost">€' + cost + '<span style="font-size:11px;font-weight:500;color:#fff"> / mês</span></div>';
         html += '<div>Compra: <b>€' + price + '</b> &middot; Odómetro: <b>' + km + '.000 km</b></div>';
-        if (pen > 0) {
-            html += '<div style="font-size:9px;color:#ffd60a;margin-top:2px">&#9889; <b>Perda da GARANTIA DA BATERIA em 2028</b>: Penalização de -' + pen + '€ aplicada na revenda (€' + resale + ')</div>';
+        if (wm <= 0) {
+            html += '<div style="font-size:9px;color:#ff453a;margin-top:2px">&#9889; <b>Garantia da Bateria Expirada (0m)</b> em Dez/2028 (Revenda: €' + resale + ')</div>';
         } else {
-            html += '<div style="font-size:9px;color:#30d158;margin-top:2px">&check; <b>Garantia da Bateria Protegida</b> em 2028 (Revenda: €' + resale + ')</div>';
+            html += '<div style="font-size:9px;color:#30d158;margin-top:2px">&check; <b>Garantia da Bateria Activa</b> em Dez/2028 (' + wm + 'm restantes)</div>';
         }
     } else {
         html += '<div style="color:#ff453a;font-weight:700;margin-top:2px">Combinação Irrealista</div>';

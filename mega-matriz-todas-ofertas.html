@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mega-Matriz Granular — Todos os Elétricos (Com Indicador de Garantia)</title>
+<title>Mega-Matriz Granular — Todos os Elétricos (Fator Garantia da Bateria HV)</title>
 
 <style>
 :root {
@@ -147,7 +147,7 @@ select:focus, input:focus {
   border-color: #30d158;
 }
 
-/* LEGENDA DE ELEMENTOS VISUAIS */
+/* LEGENDA VISUAL EXPLICITA DE GARANTIA DA BATERIA */
 .visual-legend-bar {
   display: flex;
   gap: 14px;
@@ -348,7 +348,7 @@ footer {
 
 <div class="top-bar">
   <div>
-    <h1>&#9889; Mega-Matriz Granular Reunida (1000 em 1000)</h1>
+    <h1>&#9889; Mega-Matriz Granular Reunida (Foco: Garantia da Bateria HV)</h1>
     <div class="sub">15 Níveis de Preço de Compra (€21k a €35k) &times; 17 Quilometragens (35k a 115k km) para TODOS os 12 Veículos</div>
   </div>
   <a href="mapa-calor-minimizacao-custo.html" class="nav-link">&rarr; Ver Mapa de Calor</a>
@@ -376,29 +376,29 @@ footer {
   </div>
 </div>
 
-<!-- LEGENDA VISUAL SUBTIL DE GARANTIA DA BATERIA -->
+<!-- LEGENDA VISUAL EXPLICITA DE GARANTIA DA BATERIA -->
 <div class="visual-legend-bar">
-  <div class="v-item"><span class="w-icon">&#9889;</span> <span>Ícone <b>&#9889;</b> subtil / traço amarelo:</span> <span style="color:var(--text-muted)">Perda de Garantia da Bateria em 2028 (Penalização aplicada ao valor de revenda)</span></div>
-  <div class="v-item"><span style="color:#30d158;font-weight:800">&check; Sem &#9889;:</span> <span style="color:var(--text-muted)">Garantia Confortável (&ge; 24 meses restantes em 2028 / Pen. €0)</span></div>
+  <div class="v-item"><span class="w-icon">&#9889;</span> <span>Ícone <b>&#9889;</b> / traço amarelo:</span> <span style="color:#ffd60a;font-weight:700">Perda / Expiração Próxima da GARANTIA DA BATERIA de Alta Voltagem em 2028 (&lt; 24 meses restantes)</span></div>
+  <div class="v-item"><span style="color:#30d158;font-weight:800">&check; Sem &#9889;:</span> <span style="color:var(--text-muted)">Garantia da Bateria Ampla em 2028 (&ge; 24m restantes / Pen. €0)</span></div>
 </div>
 
 <!-- PARTE 1: MEGA-TABELA REUNIDA COM PASSO DE 1000 EM 1000 -->
 <div class="mega-table-card">
-  <div style="font-size:14px;font-weight:800;margin-bottom:4px">&#128202; Visão Cruzada Granular Reunida (Filtrada por Custo Mensal em €/mês)</div>
-  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">O símbolo subtil <b>&#9889;</b> identifica instantaneamente quais os modelos e células que sofreram penalização por expiração da garantia de bateria em Dez/2028.</div>
+  <div style="font-size:14px;font-weight:800;margin-bottom:4px">&#128202; Visão Cruzada Granular Reunida (Impacto da Garantia da Bateria no Custo Mensal)</div>
+  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">O símbolo subtil <b>&#9889;</b> identifica pontualmente os modelos que sofrem perda/desconto no valor de revenda por expiração da <b>Garantia da Bateria (8 anos/160k-192k km)</b>.</div>
 
   <div id="megaTableContainer"></div>
 </div>
 
 <!-- PARTE 2: FEED COMPLETO DE TODAS AS 12 MATRIZES GRANULARES INDIVIDUAIS -->
 <div style="width:100%;max-width:1400px;margin-top:10px">
-  <div style="font-size:15px;font-weight:800;margin-bottom:4px">&#128269; As 12 Matrizes Granulares Completas (Foco no Custo Mensal Pretendido)</div>
-  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">Todas as matrizes exibidas simultaneamente com indicação subtil de garantia.</div>
+  <div style="font-size:15px;font-weight:800;margin-bottom:4px">&#128269; As 12 Matrizes Granulares Completas (Garantia de Bateria Detalhada por Modelo)</div>
+  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">Todas as matrizes exibidas simultaneamente com estado explícito da garantia da bateria.</div>
 
   <div class="all-cards-feed" id="allCardsFeed"></div>
 </div>
 
-<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Filtro por Custo Mensal com Indicador de Garantia de Bateria</footer>
+<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Fator Exclusivo: Perda da Garantia da Bateria de Alta Voltagem</footer>
 
 <script>
 (function(){
@@ -536,7 +536,7 @@ function isCostInFilter(m) {
 function getBadge(c) {
     var cls = 'b-' + c.brand;
     var pen = wPenalty(c);
-    var wTag = pen > 0 ? '<span class="w-badge" title="Garantia bateria expira em breve (-' + pen + '€)">&#9889;</span>' : '';
+    var wTag = pen > 0 ? '<span class="w-badge" title="Garantia da Bateria HV expira em breve em 2028 (-' + pen + '€ na revenda)">&#9889;</span>' : '';
     return '<span class="badge-car ' + cls + '">' + c.n + ' (' + c.y + ')' + wTag + '</span>';
 }
 
@@ -569,8 +569,8 @@ function renderMegaTable() {
                     var match = isCostInFilter(m);
                     var dimCls = match ? '' : 'cell-dimmed';
                     var penCls = (pen > 0) ? 'has-w-penalty' : '';
-                    var wIcon = (pen > 0) ? '<span class="w-icon" title="Perda de garantia em 2028: -' + pen + '€">&#9889;</span>' : '';
-                    html += '<td><span class="cell-pill ' + dimCls + ' ' + penCls + '" style="background:' + col(m) + ';color:#000" title="Revenda: €' + r + (pen > 0 ? ' (Penalização Garantia: -' + pen + '€)' : '') + '">' + m + '€' + wIcon + '</span></td>';
+                    var wIcon = (pen > 0) ? '<span class="w-icon" title="Garantia da Bateria HV expira em 2028: -' + pen + '€ penalização no valor de revenda">&#9889;</span>' : '';
+                    html += '<td><span class="cell-pill ' + dimCls + ' ' + penCls + '" style="background:' + col(m) + ';color:#000" title="Revenda: €' + r + (pen > 0 ? ' (Penalização Garantia Bateria: -' + pen + '€)' : '') + '">' + m + '€' + wIcon + '</span></td>';
                 } else {
                     html += '<td><span class="cell-na">&mdash;</span></td>';
                 }
@@ -596,13 +596,13 @@ function renderAllCardsFeed() {
         html += '<div class="granular-card ' + borderCls + '" id="' + c.id + '">';
         html += '<h3>';
         html += getBadge(c);
-        html += '<span style="font-size:10px;color:' + (pen > 0 ? '#ffd60a' : '#30d158') + '">Penalização: -' + pen + '€' + (pen > 0 ? ' &#9889;' : '') + '</span>';
+        html += '<span style="font-size:10px;color:' + (pen > 0 ? '#ffd60a' : '#30d158') + '">Pen. Bateria: -' + pen + '€' + (pen > 0 ? ' &#9889;' : '') + '</span>';
         html += '</h3>';
 
         html += '<div class="w-info">';
-        html += 'Garantia bateria em Dez/2028: <b>' + (wm > 0 ? wm + 'm restantes' : 'Expirada') + '</b>';
-        if (c.lfp) html += ' &middot; <span style="color:#30d158">Bateria LFP (50% redutor)</span>';
-        if (pen > 0) html += ' &middot; <span style="color:#ffd60a">&#9889; Desconto aplicado de -' + pen + '€ no valor de revenda</span>';
+        html += 'Garantia da Bateria HV em Dez/2028: <b>' + (wm > 0 ? wm + 'm restantes' : 'Expirada') + '</b>';
+        if (c.lfp) html += ' &middot; <span style="color:#30d158">Bateria LFP (50% redutor de desvalorização)</span>';
+        if (pen > 0) html += ' &middot; <span style="color:#ffd60a">&#9889; Desconto aplicado de -' + pen + '€ na revenda por perda de garantia da bateria</span>';
         html += '</div>';
 
         html += '<table class="mega-table"><thead><tr><th>€\\km</th>';
@@ -620,7 +620,7 @@ function renderAllCardsFeed() {
                     var match = isCostInFilter(m);
                     var dimCls = match ? '' : 'cell-dimmed';
                     var penCls = (pen > 0) ? 'has-w-penalty' : '';
-                    var wIcon = (pen > 0) ? '<span class="w-icon">&#9889;</span>' : '';
+                    var wIcon = (pen > 0) ? '<span class="w-icon" title="Penalização Garantia Bateria: -' + pen + '€">&#9889;</span>' : '';
                     html += '<td><span class="cell-pill ' + dimCls + ' ' + penCls + '" style="background:' + col(m) + ';color:#000">' + m + wIcon + '</span></td>';
                 } else {
                     html += '<td><span class="cell-na">&mdash;</span></td>';

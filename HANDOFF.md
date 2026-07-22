@@ -6,31 +6,30 @@
 
 ---
 
-## 🚨 PONTO CRÍTICO / ISSUE CONHECIDO
-
-**Os preços de compra dos carros nas matrizes atuais estão incorretos/irrealistas.**
-* **Problema:** As tabelas exibem uma grade uniforme de preços de compra (€21.000 a €35.000) aplicada a todas as quilometragens e modelos.
-* **Impacto:** Vários cenários (ex: comprar um Tesla 2024 Highland com 35k km por €21.000) são irrealistas no mercado real de Portugal.
-* **Próximo passo necessário:** Definir/corrigir uma matriz de preços de compra realistas baseados na quilometragem, ano e modelo (ou desativar/filtrar células irrealistas nas tabelas) e refletir essas alterações no `regras-calculo.md` e no JavaScript dos HTMLs.
-
----
-
 ## 📜 HISTÓRICO E ESTRUTURA DO PROJETO
 
 ### Arquivos Principais
 
-1. **`matrizes-unificadas-granulares.html` (NOVO - Matriz Granular Unificada)**
-   - Reúne **todos os dados granulares completos** numa única matriz de comparação.
-   - **Elementos visuais por modelo:** Badges e indicadores de cor neon distintos por marca (🔴 Tesla = Vermelho Neon, 🔵 IONIQ 5 = Azul Elétrico, 🟣 Megane = Roxo Neon).
-   - Alternância entre **Tabela Cruzada Unificada** (todos os modelos como linhas e km como colunas) e **Matrizes Granulares Lado a Lado** (Split View).
+1. **`diagrama-referencia-ofertas.html` (NOVO - Diagrama Mestre de Referência & Avaliador de Ofertas)**
+   - **Diagrama Mestre de Referência:** Tabela 15x17 cobrindo todas as combinações de Preço de Compra (€21k a €35k) vs Quilometragem (35k a 115k km) para qualquer modelo/ano (2021-2024).
+   - **Código de Cores de Qualidade do Negócio:**
+     - 🟢 **Excelente:** `< €200/mês`
+     - 🟢 **Bom:** `€200 - €275/mês`
+     - 🟡 **Razoável:** `€275 - €350/mês`
+     - 🟠 **Elevado:** `€350 - €450/mês`
+     - 🔴 **Mau Negócio:** `> €450/mês`
+   - **Avaliador Rápido de Ofertas (Widget):** Permite inserir qualquer anúncio de mercado (Modelo, Preço e Km) e dá um verdito instantâneo com destaque da célula exata no diagrama.
 
-2. **`matrizes-km-granular-v3.html` (Versão 3 — Matrizes Granulares por Card)**
-   - Visualização com cards por modelo e filtros dinâmicos de ano/marca.
+2. **`matrizes-unificadas-granulares.html` (Matriz Granular Unificada)**
+   - Reúne todos os dados granulares com indicadores visuais de cor por marca (🔴 Tesla, 🔵 IONIQ 5, 🟣 Megane).
 
-3. **`valores-revenda.json` (Base de Dados JSON)**
-   - Estrutura JSON com dados completos das 12 variantes (2021-2024), estimativas de revenda base, penalizações de garantia e revenda ajustada por km.
+3. **`matrizes-km-granular-v3.html` (Versão 3 — Matrizes por Card)**
+   - Visualização por cards dinâmicos.
 
-4. **`regras-calculo.md` (Fonte da Verdade)**
+4. **`valores-revenda.json` (Base de Dados JSON)**
+   - Estrutura JSON com dados completos das 12 variantes (2021-2024).
+
+5. **`regras-calculo.md` (Fonte da Verdade)**
    - Especificação matemática completa do projeto v3.1.
 
 ---
@@ -43,10 +42,3 @@
 - **Local:** Porto, Portugal.
 - **Anos Cobertos:** 2021, 2022, 2023, 2024.
 - **Sem Custo Negativo:** Se `Preço_Compra ≤ Revenda_Ajustada`, a célula exibe `—` (Irrealista).
-
----
-
-## 📌 INSTRUÇÕES PARA O PRÓXIMO AGENTE
-1. Ler este `HANDOFF.md` e o `regras-calculo.md`.
-2. Verificar a nova página `matrizes-unificadas-granulares.html`.
-3. Ajustar os preços de compra para faixas realistas por modelo, ano e km.

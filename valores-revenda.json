@@ -1,9 +1,8 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
   "metadata": {
-    "versao": "2.0",
+    "versao": "3.0",
     "data_atualizacao": "2026-07-22",
-    "descricao": "Base de dados com estimativas de valor de revenda de veículos elétricos em Dezembro de 2028 após 28 meses de posse e 750 km/mês (total +21.000 km).",
+    "descricao": "Base de dados expandida com estimativas de revenda para veículos elétricos de 2021 a 2024 (28 meses de posse, +21.000 km).",
     "parametros_globais": {
       "meses_posse": 28,
       "km_mensal": 750,
@@ -16,7 +15,7 @@
   },
   "modelos": [
     {
-      "id": "tesla_m3_lfp_2021",
+      "id": "tesla_m3_2021",
       "nome": "Tesla Model 3 SR+ LFP",
       "ano": 2021,
       "bateria_lfp": true,
@@ -26,65 +25,561 @@
         "limite_km": 192000,
         "data_expiracao": "2029-12",
         "meses_restantes_na_venda": 12,
-        "faixa_penalizacao": "12-17m",
         "penalizacao_base_eur": 1500,
         "penalizacao_final_eur": 750,
         "aplicou_redutor_lfp": true
       },
+      "fatores_desvalorizacao": [
+        "Bateria LFP 55 kWh com alta durabilidade",
+        "Rede Supercharger",
+        "Garantia expira em Dez/2029 (12m restantes)"
+      ],
       "estimativas_revenda": [
-        {"km_compra": 35000, "km_venda": 56000, "revenda_base_eur": 18300, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 17550},
-        {"km_compra": 40000, "km_venda": 61000, "revenda_base_eur": 18000, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 17250},
-        {"km_compra": 45000, "km_venda": 66000, "revenda_base_eur": 17700, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 16950},
-        {"km_compra": 50000, "km_venda": 71000, "revenda_base_eur": 17400, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 16650},
-        {"km_compra": 55000, "km_venda": 76000, "revenda_base_eur": 17100, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 16350},
-        {"km_compra": 60000, "km_venda": 81000, "revenda_base_eur": 16800, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 16050},
-        {"km_compra": 65000, "km_venda": 86000, "revenda_base_eur": 16500, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 15750},
-        {"km_compra": 70000, "km_venda": 91000, "revenda_base_eur": 16200, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 15450},
-        {"km_compra": 75000, "km_venda": 96000, "revenda_base_eur": 15900, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 15150},
-        {"km_compra": 80000, "km_venda": 101000, "revenda_base_eur": 15600, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 14850},
-        {"km_compra": 85000, "km_venda": 106000, "revenda_base_eur": 15300, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 14550},
-        {"km_compra": 90000, "km_venda": 111000, "revenda_base_eur": 15000, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 14250},
-        {"km_compra": 95000, "km_venda": 116000, "revenda_base_eur": 14300, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 13550},
-        {"km_compra": 100000, "km_venda": 121000, "revenda_base_eur": 13900, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 13150},
-        {"km_compra": 105000, "km_venda": 126000, "revenda_base_eur": 13500, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 12750},
-        {"km_compra": 110000, "km_venda": 131000, "revenda_base_eur": 13000, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 12250},
-        {"km_compra": 115000, "km_venda": 136000, "revenda_base_eur": 12500, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 11750}
+        {
+          "km_compra": 35000,
+          "km_venda": 56000,
+          "revenda_base_eur": 18300,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 17550
+        },
+        {
+          "km_compra": 40000,
+          "km_venda": 61000,
+          "revenda_base_eur": 18000,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 17250
+        },
+        {
+          "km_compra": 45000,
+          "km_venda": 66000,
+          "revenda_base_eur": 17700,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 16950
+        },
+        {
+          "km_compra": 50000,
+          "km_venda": 71000,
+          "revenda_base_eur": 17400,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 16650
+        },
+        {
+          "km_compra": 55000,
+          "km_venda": 76000,
+          "revenda_base_eur": 17100,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 16350
+        },
+        {
+          "km_compra": 60000,
+          "km_venda": 81000,
+          "revenda_base_eur": 16800,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 16050
+        },
+        {
+          "km_compra": 65000,
+          "km_venda": 86000,
+          "revenda_base_eur": 16500,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 15750
+        },
+        {
+          "km_compra": 70000,
+          "km_venda": 91000,
+          "revenda_base_eur": 16200,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 15450
+        },
+        {
+          "km_compra": 75000,
+          "km_venda": 96000,
+          "revenda_base_eur": 15900,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 15150
+        },
+        {
+          "km_compra": 80000,
+          "km_venda": 101000,
+          "revenda_base_eur": 15600,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 14850
+        },
+        {
+          "km_compra": 85000,
+          "km_venda": 106000,
+          "revenda_base_eur": 15300,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 14550
+        },
+        {
+          "km_compra": 90000,
+          "km_venda": 111000,
+          "revenda_base_eur": 15000,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 14250
+        },
+        {
+          "km_compra": 95000,
+          "km_venda": 116000,
+          "revenda_base_eur": 14700,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 13950
+        },
+        {
+          "km_compra": 100000,
+          "km_venda": 121000,
+          "revenda_base_eur": 14400,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 13650
+        },
+        {
+          "km_compra": 105000,
+          "km_venda": 126000,
+          "revenda_base_eur": 14100,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 13350
+        },
+        {
+          "km_compra": 110000,
+          "km_venda": 131000,
+          "revenda_base_eur": 13800,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 13050
+        },
+        {
+          "km_compra": 115000,
+          "km_venda": 136000,
+          "revenda_base_eur": 13500,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 12750
+        }
       ]
     },
     {
-      "id": "ioniq5_2022",
-      "nome": "IONIQ 5 72.6 kWh",
+      "id": "tesla_m3_2022",
+      "nome": "Tesla Model 3 RWD LFP",
       "ano": 2022,
-      "bateria_lfp": false,
-      "data_registo_estimada": "2022-07",
+      "bateria_lfp": true,
+      "data_registo_estimada": "2022-06",
       "garantia_bateria": {
         "duracao_anos": 8,
-        "limite_km": 160000,
-        "data_expiracao": "2030-07",
-        "meses_restantes_na_venda": 19,
-        "faixa_penalizacao": "18-23m",
+        "limite_km": 192000,
+        "data_expiracao": "2030-06",
+        "meses_restantes_na_venda": 18,
         "penalizacao_base_eur": 750,
-        "penalizacao_final_eur": 750,
-        "aplicou_redutor_lfp": false
+        "penalizacao_final_eur": 375,
+        "aplicou_redutor_lfp": true
       },
+      "fatores_desvalorizacao": [
+        "Bateria LFP 60 kWh com mais alcance",
+        "Processador AMD Ryzen",
+        "Garantia expira em Jun/2030 (18m restantes)"
+      ],
       "estimativas_revenda": [
-        {"km_compra": 35000, "km_venda": 56000, "revenda_base_eur": 17500, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 16750},
-        {"km_compra": 40000, "km_venda": 61000, "revenda_base_eur": 17000, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 16250},
-        {"km_compra": 45000, "km_venda": 66000, "revenda_base_eur": 16500, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 15750},
-        {"km_compra": 50000, "km_venda": 71000, "revenda_base_eur": 16000, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 15250},
-        {"km_compra": 55000, "km_venda": 76000, "revenda_base_eur": 15500, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 14750},
-        {"km_compra": 60000, "km_venda": 81000, "revenda_base_eur": 15000, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 14250},
-        {"km_compra": 65000, "km_venda": 86000, "revenda_base_eur": 14500, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 13750},
-        {"km_compra": 70000, "km_venda": 91000, "revenda_base_eur": 14000, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 13250},
-        {"km_compra": 75000, "km_venda": 96000, "revenda_base_eur": 13500, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 12750},
-        {"km_compra": 80000, "km_venda": 101000, "revenda_base_eur": 13000, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 12250},
-        {"km_compra": 85000, "km_venda": 106000, "revenda_base_eur": 12500, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 11750},
-        {"km_compra": 90000, "km_venda": 111000, "revenda_base_eur": 12000, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 11250},
-        {"km_compra": 95000, "km_venda": 116000, "revenda_base_eur": 11000, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 10250},
-        {"km_compra": 100000, "km_venda": 121000, "revenda_base_eur": 10500, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 9750},
-        {"km_compra": 105000, "km_venda": 126000, "revenda_base_eur": 10000, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 9250},
-        {"km_compra": 110000, "km_venda": 131000, "revenda_base_eur": 9500, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 8750},
-        {"km_compra": 115000, "km_venda": 136000, "revenda_base_eur": 9000, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 8250}
+        {
+          "km_compra": 35000,
+          "km_venda": 56000,
+          "revenda_base_eur": 19800,
+          "penalizacao_garantia_eur": 375,
+          "revenda_ajustada_eur": 19425
+        },
+        {
+          "km_compra": 40000,
+          "km_venda": 61000,
+          "revenda_base_eur": 19500,
+          "penalizacao_garantia_eur": 375,
+          "revenda_ajustada_eur": 19125
+        },
+        {
+          "km_compra": 45000,
+          "km_venda": 66000,
+          "revenda_base_eur": 19200,
+          "penalizacao_garantia_eur": 375,
+          "revenda_ajustada_eur": 18825
+        },
+        {
+          "km_compra": 50000,
+          "km_venda": 71000,
+          "revenda_base_eur": 18900,
+          "penalizacao_garantia_eur": 375,
+          "revenda_ajustada_eur": 18525
+        },
+        {
+          "km_compra": 55000,
+          "km_venda": 76000,
+          "revenda_base_eur": 18600,
+          "penalizacao_garantia_eur": 375,
+          "revenda_ajustada_eur": 18225
+        },
+        {
+          "km_compra": 60000,
+          "km_venda": 81000,
+          "revenda_base_eur": 18300,
+          "penalizacao_garantia_eur": 375,
+          "revenda_ajustada_eur": 17925
+        },
+        {
+          "km_compra": 65000,
+          "km_venda": 86000,
+          "revenda_base_eur": 18000,
+          "penalizacao_garantia_eur": 375,
+          "revenda_ajustada_eur": 17625
+        },
+        {
+          "km_compra": 70000,
+          "km_venda": 91000,
+          "revenda_base_eur": 17700,
+          "penalizacao_garantia_eur": 375,
+          "revenda_ajustada_eur": 17325
+        },
+        {
+          "km_compra": 75000,
+          "km_venda": 96000,
+          "revenda_base_eur": 17400,
+          "penalizacao_garantia_eur": 375,
+          "revenda_ajustada_eur": 17025
+        },
+        {
+          "km_compra": 80000,
+          "km_venda": 101000,
+          "revenda_base_eur": 17100,
+          "penalizacao_garantia_eur": 375,
+          "revenda_ajustada_eur": 16725
+        },
+        {
+          "km_compra": 85000,
+          "km_venda": 106000,
+          "revenda_base_eur": 16800,
+          "penalizacao_garantia_eur": 375,
+          "revenda_ajustada_eur": 16425
+        },
+        {
+          "km_compra": 90000,
+          "km_venda": 111000,
+          "revenda_base_eur": 16500,
+          "penalizacao_garantia_eur": 375,
+          "revenda_ajustada_eur": 16125
+        },
+        {
+          "km_compra": 95000,
+          "km_venda": 116000,
+          "revenda_base_eur": 16200,
+          "penalizacao_garantia_eur": 375,
+          "revenda_ajustada_eur": 15825
+        },
+        {
+          "km_compra": 100000,
+          "km_venda": 121000,
+          "revenda_base_eur": 15900,
+          "penalizacao_garantia_eur": 375,
+          "revenda_ajustada_eur": 15525
+        },
+        {
+          "km_compra": 105000,
+          "km_venda": 126000,
+          "revenda_base_eur": 15600,
+          "penalizacao_garantia_eur": 375,
+          "revenda_ajustada_eur": 15225
+        },
+        {
+          "km_compra": 110000,
+          "km_venda": 131000,
+          "revenda_base_eur": 15300,
+          "penalizacao_garantia_eur": 375,
+          "revenda_ajustada_eur": 14925
+        },
+        {
+          "km_compra": 115000,
+          "km_venda": 136000,
+          "revenda_base_eur": 15000,
+          "penalizacao_garantia_eur": 375,
+          "revenda_ajustada_eur": 14625
+        }
+      ]
+    },
+    {
+      "id": "tesla_m3_2023",
+      "nome": "Tesla Model 3 RWD LFP",
+      "ano": 2023,
+      "bateria_lfp": true,
+      "data_registo_estimada": "2023-06",
+      "garantia_bateria": {
+        "duracao_anos": 8,
+        "limite_km": 192000,
+        "data_expiracao": "2031-06",
+        "meses_restantes_na_venda": 30,
+        "penalizacao_base_eur": 0,
+        "penalizacao_final_eur": 0,
+        "aplicou_redutor_lfp": true
+      },
+      "fatores_desvalorizacao": [
+        "Excelente retenção de valor",
+        "30m de garantia de bateria restante em 2028",
+        "Suspensão melhorada vs 2021/2022"
+      ],
+      "estimativas_revenda": [
+        {
+          "km_compra": 35000,
+          "km_venda": 56000,
+          "revenda_base_eur": 21500,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 21500
+        },
+        {
+          "km_compra": 40000,
+          "km_venda": 61000,
+          "revenda_base_eur": 21150,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 21150
+        },
+        {
+          "km_compra": 45000,
+          "km_venda": 66000,
+          "revenda_base_eur": 20800,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 20800
+        },
+        {
+          "km_compra": 50000,
+          "km_venda": 71000,
+          "revenda_base_eur": 20450,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 20450
+        },
+        {
+          "km_compra": 55000,
+          "km_venda": 76000,
+          "revenda_base_eur": 20100,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 20100
+        },
+        {
+          "km_compra": 60000,
+          "km_venda": 81000,
+          "revenda_base_eur": 19750,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 19750
+        },
+        {
+          "km_compra": 65000,
+          "km_venda": 86000,
+          "revenda_base_eur": 19400,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 19400
+        },
+        {
+          "km_compra": 70000,
+          "km_venda": 91000,
+          "revenda_base_eur": 19050,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 19050
+        },
+        {
+          "km_compra": 75000,
+          "km_venda": 96000,
+          "revenda_base_eur": 18700,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 18700
+        },
+        {
+          "km_compra": 80000,
+          "km_venda": 101000,
+          "revenda_base_eur": 18350,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 18350
+        },
+        {
+          "km_compra": 85000,
+          "km_venda": 106000,
+          "revenda_base_eur": 18000,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 18000
+        },
+        {
+          "km_compra": 90000,
+          "km_venda": 111000,
+          "revenda_base_eur": 17650,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 17650
+        },
+        {
+          "km_compra": 95000,
+          "km_venda": 116000,
+          "revenda_base_eur": 17300,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 17300
+        },
+        {
+          "km_compra": 100000,
+          "km_venda": 121000,
+          "revenda_base_eur": 16950,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 16950
+        },
+        {
+          "km_compra": 105000,
+          "km_venda": 126000,
+          "revenda_base_eur": 16600,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 16600
+        },
+        {
+          "km_compra": 110000,
+          "km_venda": 131000,
+          "revenda_base_eur": 16250,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 16250
+        },
+        {
+          "km_compra": 115000,
+          "km_venda": 136000,
+          "revenda_base_eur": 15900,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 15900
+        }
+      ]
+    },
+    {
+      "id": "tesla_m3_2024",
+      "nome": "Tesla Model 3 Highland RWD LFP",
+      "ano": 2024,
+      "bateria_lfp": true,
+      "data_registo_estimada": "2024-03",
+      "garantia_bateria": {
+        "duracao_anos": 8,
+        "limite_km": 192000,
+        "data_expiracao": "2032-03",
+        "meses_restantes_na_venda": 39,
+        "penalizacao_base_eur": 0,
+        "penalizacao_final_eur": 0,
+        "aplicou_redutor_lfp": true
+      },
+      "fatores_desvalorizacao": [
+        "Design Highland altamente valorizado na revenda",
+        "Insonorização e conforto premium",
+        "Garantia de bateria confortável (39m restantes em 2028)"
+      ],
+      "estimativas_revenda": [
+        {
+          "km_compra": 35000,
+          "km_venda": 56000,
+          "revenda_base_eur": 24500,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 24500
+        },
+        {
+          "km_compra": 40000,
+          "km_venda": 61000,
+          "revenda_base_eur": 24100,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 24100
+        },
+        {
+          "km_compra": 45000,
+          "km_venda": 66000,
+          "revenda_base_eur": 23700,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 23700
+        },
+        {
+          "km_compra": 50000,
+          "km_venda": 71000,
+          "revenda_base_eur": 23300,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 23300
+        },
+        {
+          "km_compra": 55000,
+          "km_venda": 76000,
+          "revenda_base_eur": 22900,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 22900
+        },
+        {
+          "km_compra": 60000,
+          "km_venda": 81000,
+          "revenda_base_eur": 22500,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 22500
+        },
+        {
+          "km_compra": 65000,
+          "km_venda": 86000,
+          "revenda_base_eur": 22100,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 22100
+        },
+        {
+          "km_compra": 70000,
+          "km_venda": 91000,
+          "revenda_base_eur": 21700,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 21700
+        },
+        {
+          "km_compra": 75000,
+          "km_venda": 96000,
+          "revenda_base_eur": 21300,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 21300
+        },
+        {
+          "km_compra": 80000,
+          "km_venda": 101000,
+          "revenda_base_eur": 20900,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 20900
+        },
+        {
+          "km_compra": 85000,
+          "km_venda": 106000,
+          "revenda_base_eur": 20500,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 20500
+        },
+        {
+          "km_compra": 90000,
+          "km_venda": 111000,
+          "revenda_base_eur": 20100,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 20100
+        },
+        {
+          "km_compra": 95000,
+          "km_venda": 116000,
+          "revenda_base_eur": 19700,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 19700
+        },
+        {
+          "km_compra": 100000,
+          "km_venda": 121000,
+          "revenda_base_eur": 19300,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 19300
+        },
+        {
+          "km_compra": 105000,
+          "km_venda": 126000,
+          "revenda_base_eur": 18900,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 18900
+        },
+        {
+          "km_compra": 110000,
+          "km_venda": 131000,
+          "revenda_base_eur": 18500,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 18500
+        },
+        {
+          "km_compra": 115000,
+          "km_venda": 136000,
+          "revenda_base_eur": 18100,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 18100
+        }
       ]
     },
     {
@@ -98,33 +593,707 @@
         "limite_km": 160000,
         "data_expiracao": "2029-11",
         "meses_restantes_na_venda": 11,
-        "faixa_penalizacao": "6-11m",
         "penalizacao_base_eur": 2000,
         "penalizacao_final_eur": 2000,
         "aplicou_redutor_lfp": false
       },
+      "fatores_desvalorizacao": [
+        "Bateria 72.6 kWh NMC",
+        "Apenas 11m de garantia restante em Dez/2028",
+        "Sem pré-condicionamento de bateria"
+      ],
       "estimativas_revenda": [
-        {"km_compra": 35000, "km_venda": 56000, "revenda_base_eur": 17000, "penalizacao_garantia_eur": 2000, "revenda_ajustada_eur": 15000},
-        {"km_compra": 40000, "km_venda": 61000, "revenda_base_eur": 16500, "penalizacao_garantia_eur": 2000, "revenda_ajustada_eur": 14500},
-        {"km_compra": 45000, "km_venda": 66000, "revenda_base_eur": 16000, "penalizacao_garantia_eur": 2000, "revenda_ajustada_eur": 14000},
-        {"km_compra": 50000, "km_venda": 71000, "revenda_base_eur": 15500, "penalizacao_garantia_eur": 2000, "revenda_ajustada_eur": 13500},
-        {"km_compra": 55000, "km_venda": 76000, "revenda_base_eur": 15000, "penalizacao_garantia_eur": 2000, "revenda_ajustada_eur": 13000},
-        {"km_compra": 60000, "km_venda": 81000, "revenda_base_eur": 14500, "penalizacao_garantia_eur": 2000, "revenda_ajustada_eur": 12500},
-        {"km_compra": 65000, "km_venda": 86000, "revenda_base_eur": 14000, "penalizacao_garantia_eur": 2000, "revenda_ajustada_eur": 12000},
-        {"km_compra": 70000, "km_venda": 91000, "revenda_base_eur": 13500, "penalizacao_garantia_eur": 2000, "revenda_ajustada_eur": 11500},
-        {"km_compra": 75000, "km_venda": 96000, "revenda_base_eur": 13000, "penalizacao_garantia_eur": 2000, "revenda_ajustada_eur": 11000},
-        {"km_compra": 80000, "km_venda": 101000, "revenda_base_eur": 12500, "penalizacao_garantia_eur": 2000, "revenda_ajustada_eur": 10500},
-        {"km_compra": 85000, "km_venda": 106000, "revenda_base_eur": 12000, "penalizacao_garantia_eur": 2000, "revenda_ajustada_eur": 10000},
-        {"km_compra": 90000, "km_venda": 111000, "revenda_base_eur": 11500, "penalizacao_garantia_eur": 2000, "revenda_ajustada_eur": 9500},
-        {"km_compra": 95000, "km_venda": 116000, "revenda_base_eur": 10500, "penalizacao_garantia_eur": 2000, "revenda_ajustada_eur": 8500},
-        {"km_compra": 100000, "km_venda": 121000, "revenda_base_eur": 10000, "penalizacao_garantia_eur": 2000, "revenda_ajustada_eur": 8000},
-        {"km_compra": 105000, "km_venda": 126000, "revenda_base_eur": 9500, "penalizacao_garantia_eur": 2000, "revenda_ajustada_eur": 7500},
-        {"km_compra": 110000, "km_venda": 131000, "revenda_base_eur": 9000, "penalizacao_garantia_eur": 2000, "revenda_ajustada_eur": 7000},
-        {"km_compra": 115000, "km_venda": 136000, "revenda_base_eur": 8500, "penalizacao_garantia_eur": 2000, "revenda_ajustada_eur": 6500}
+        {
+          "km_compra": 35000,
+          "km_venda": 56000,
+          "revenda_base_eur": 17000,
+          "penalizacao_garantia_eur": 2000,
+          "revenda_ajustada_eur": 15000
+        },
+        {
+          "km_compra": 40000,
+          "km_venda": 61000,
+          "revenda_base_eur": 16500,
+          "penalizacao_garantia_eur": 2000,
+          "revenda_ajustada_eur": 14500
+        },
+        {
+          "km_compra": 45000,
+          "km_venda": 66000,
+          "revenda_base_eur": 16000,
+          "penalizacao_garantia_eur": 2000,
+          "revenda_ajustada_eur": 14000
+        },
+        {
+          "km_compra": 50000,
+          "km_venda": 71000,
+          "revenda_base_eur": 15500,
+          "penalizacao_garantia_eur": 2000,
+          "revenda_ajustada_eur": 13500
+        },
+        {
+          "km_compra": 55000,
+          "km_venda": 76000,
+          "revenda_base_eur": 15000,
+          "penalizacao_garantia_eur": 2000,
+          "revenda_ajustada_eur": 13000
+        },
+        {
+          "km_compra": 60000,
+          "km_venda": 81000,
+          "revenda_base_eur": 14500,
+          "penalizacao_garantia_eur": 2000,
+          "revenda_ajustada_eur": 12500
+        },
+        {
+          "km_compra": 65000,
+          "km_venda": 86000,
+          "revenda_base_eur": 14000,
+          "penalizacao_garantia_eur": 2000,
+          "revenda_ajustada_eur": 12000
+        },
+        {
+          "km_compra": 70000,
+          "km_venda": 91000,
+          "revenda_base_eur": 13500,
+          "penalizacao_garantia_eur": 2000,
+          "revenda_ajustada_eur": 11500
+        },
+        {
+          "km_compra": 75000,
+          "km_venda": 96000,
+          "revenda_base_eur": 13000,
+          "penalizacao_garantia_eur": 2000,
+          "revenda_ajustada_eur": 11000
+        },
+        {
+          "km_compra": 80000,
+          "km_venda": 101000,
+          "revenda_base_eur": 12500,
+          "penalizacao_garantia_eur": 2000,
+          "revenda_ajustada_eur": 10500
+        },
+        {
+          "km_compra": 85000,
+          "km_venda": 106000,
+          "revenda_base_eur": 12000,
+          "penalizacao_garantia_eur": 2000,
+          "revenda_ajustada_eur": 10000
+        },
+        {
+          "km_compra": 90000,
+          "km_venda": 111000,
+          "revenda_base_eur": 11500,
+          "penalizacao_garantia_eur": 2000,
+          "revenda_ajustada_eur": 9500
+        },
+        {
+          "km_compra": 95000,
+          "km_venda": 116000,
+          "revenda_base_eur": 11000,
+          "penalizacao_garantia_eur": 2000,
+          "revenda_ajustada_eur": 9000
+        },
+        {
+          "km_compra": 100000,
+          "km_venda": 121000,
+          "revenda_base_eur": 10500,
+          "penalizacao_garantia_eur": 2000,
+          "revenda_ajustada_eur": 8500
+        },
+        {
+          "km_compra": 105000,
+          "km_venda": 126000,
+          "revenda_base_eur": 10000,
+          "penalizacao_garantia_eur": 2000,
+          "revenda_ajustada_eur": 8000
+        },
+        {
+          "km_compra": 110000,
+          "km_venda": 131000,
+          "revenda_base_eur": 9500,
+          "penalizacao_garantia_eur": 2000,
+          "revenda_ajustada_eur": 7500
+        },
+        {
+          "km_compra": 115000,
+          "km_venda": 136000,
+          "revenda_base_eur": 9000,
+          "penalizacao_garantia_eur": 2000,
+          "revenda_ajustada_eur": 7000
+        }
       ]
     },
     {
-      "id": "megane_etech_2022",
+      "id": "ioniq5_2022",
+      "nome": "IONIQ 5 72.6 kWh",
+      "ano": 2022,
+      "bateria_lfp": false,
+      "data_registo_estimada": "2022-07",
+      "garantia_bateria": {
+        "duracao_anos": 8,
+        "limite_km": 160000,
+        "data_expiracao": "2030-07",
+        "meses_restantes_na_venda": 19,
+        "penalizacao_base_eur": 750,
+        "penalizacao_final_eur": 750,
+        "aplicou_redutor_lfp": false
+      },
+      "fatores_desvalorizacao": [
+        "Garantia standard expira em 2027",
+        "Pressão do facelift 2024 com 84 kWh",
+        "Carregamento ultrarrápido 800V"
+      ],
+      "estimativas_revenda": [
+        {
+          "km_compra": 35000,
+          "km_venda": 56000,
+          "revenda_base_eur": 17500,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 16750
+        },
+        {
+          "km_compra": 40000,
+          "km_venda": 61000,
+          "revenda_base_eur": 17000,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 16250
+        },
+        {
+          "km_compra": 45000,
+          "km_venda": 66000,
+          "revenda_base_eur": 16500,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 15750
+        },
+        {
+          "km_compra": 50000,
+          "km_venda": 71000,
+          "revenda_base_eur": 16000,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 15250
+        },
+        {
+          "km_compra": 55000,
+          "km_venda": 76000,
+          "revenda_base_eur": 15500,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 14750
+        },
+        {
+          "km_compra": 60000,
+          "km_venda": 81000,
+          "revenda_base_eur": 15000,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 14250
+        },
+        {
+          "km_compra": 65000,
+          "km_venda": 86000,
+          "revenda_base_eur": 14500,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 13750
+        },
+        {
+          "km_compra": 70000,
+          "km_venda": 91000,
+          "revenda_base_eur": 14000,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 13250
+        },
+        {
+          "km_compra": 75000,
+          "km_venda": 96000,
+          "revenda_base_eur": 13500,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 12750
+        },
+        {
+          "km_compra": 80000,
+          "km_venda": 101000,
+          "revenda_base_eur": 13000,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 12250
+        },
+        {
+          "km_compra": 85000,
+          "km_venda": 106000,
+          "revenda_base_eur": 12500,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 11750
+        },
+        {
+          "km_compra": 90000,
+          "km_venda": 111000,
+          "revenda_base_eur": 12000,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 11250
+        },
+        {
+          "km_compra": 95000,
+          "km_venda": 116000,
+          "revenda_base_eur": 11500,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 10750
+        },
+        {
+          "km_compra": 100000,
+          "km_venda": 121000,
+          "revenda_base_eur": 11000,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 10250
+        },
+        {
+          "km_compra": 105000,
+          "km_venda": 126000,
+          "revenda_base_eur": 10500,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 9750
+        },
+        {
+          "km_compra": 110000,
+          "km_venda": 131000,
+          "revenda_base_eur": 10000,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 9250
+        },
+        {
+          "km_compra": 115000,
+          "km_venda": 136000,
+          "revenda_base_eur": 9500,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 8750
+        }
+      ]
+    },
+    {
+      "id": "ioniq5_2023",
+      "nome": "IONIQ 5 77.4 kWh",
+      "ano": 2023,
+      "bateria_lfp": false,
+      "data_registo_estimada": "2023-06",
+      "garantia_bateria": {
+        "duracao_anos": 8,
+        "limite_km": 160000,
+        "data_expiracao": "2031-06",
+        "meses_restantes_na_venda": 30,
+        "penalizacao_base_eur": 0,
+        "penalizacao_final_eur": 0,
+        "aplicou_redutor_lfp": false
+      },
+      "fatores_desvalorizacao": [
+        "Bateria maior de 77.4 kWh aumenta valor de revenda",
+        "Pré-condicionamento de bateria de série",
+        "Garantia confortável em 2028 (30m restantes)"
+      ],
+      "estimativas_revenda": [
+        {
+          "km_compra": 35000,
+          "km_venda": 56000,
+          "revenda_base_eur": 19800,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 19800
+        },
+        {
+          "km_compra": 40000,
+          "km_venda": 61000,
+          "revenda_base_eur": 19300,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 19300
+        },
+        {
+          "km_compra": 45000,
+          "km_venda": 66000,
+          "revenda_base_eur": 18800,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 18800
+        },
+        {
+          "km_compra": 50000,
+          "km_venda": 71000,
+          "revenda_base_eur": 18300,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 18300
+        },
+        {
+          "km_compra": 55000,
+          "km_venda": 76000,
+          "revenda_base_eur": 17800,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 17800
+        },
+        {
+          "km_compra": 60000,
+          "km_venda": 81000,
+          "revenda_base_eur": 17300,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 17300
+        },
+        {
+          "km_compra": 65000,
+          "km_venda": 86000,
+          "revenda_base_eur": 16800,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 16800
+        },
+        {
+          "km_compra": 70000,
+          "km_venda": 91000,
+          "revenda_base_eur": 16300,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 16300
+        },
+        {
+          "km_compra": 75000,
+          "km_venda": 96000,
+          "revenda_base_eur": 15800,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 15800
+        },
+        {
+          "km_compra": 80000,
+          "km_venda": 101000,
+          "revenda_base_eur": 15300,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 15300
+        },
+        {
+          "km_compra": 85000,
+          "km_venda": 106000,
+          "revenda_base_eur": 14800,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 14800
+        },
+        {
+          "km_compra": 90000,
+          "km_venda": 111000,
+          "revenda_base_eur": 14300,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 14300
+        },
+        {
+          "km_compra": 95000,
+          "km_venda": 116000,
+          "revenda_base_eur": 13800,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 13800
+        },
+        {
+          "km_compra": 100000,
+          "km_venda": 121000,
+          "revenda_base_eur": 13300,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 13300
+        },
+        {
+          "km_compra": 105000,
+          "km_venda": 126000,
+          "revenda_base_eur": 12800,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 12800
+        },
+        {
+          "km_compra": 110000,
+          "km_venda": 131000,
+          "revenda_base_eur": 12300,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 12300
+        },
+        {
+          "km_compra": 115000,
+          "km_venda": 136000,
+          "revenda_base_eur": 11800,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 11800
+        }
+      ]
+    },
+    {
+      "id": "ioniq5_2024",
+      "nome": "IONIQ 5 84 kWh (Facelift)",
+      "ano": 2024,
+      "bateria_lfp": false,
+      "data_registo_estimada": "2024-03",
+      "garantia_bateria": {
+        "duracao_anos": 8,
+        "limite_km": 160000,
+        "data_expiracao": "2032-03",
+        "meses_restantes_na_venda": 39,
+        "penalizacao_base_eur": 0,
+        "penalizacao_final_eur": 0,
+        "aplicou_redutor_lfp": false
+      },
+      "fatores_desvalorizacao": [
+        "Nova bateria de 84 kWh com máxima autonomia",
+        "Facelift com melhorias no habitáculo e limpa-para-brisas traseiro",
+        "39m de garantia de bateria restante"
+      ],
+      "estimativas_revenda": [
+        {
+          "km_compra": 35000,
+          "km_venda": 56000,
+          "revenda_base_eur": 23200,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 23200
+        },
+        {
+          "km_compra": 40000,
+          "km_venda": 61000,
+          "revenda_base_eur": 22700,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 22700
+        },
+        {
+          "km_compra": 45000,
+          "km_venda": 66000,
+          "revenda_base_eur": 22200,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 22200
+        },
+        {
+          "km_compra": 50000,
+          "km_venda": 71000,
+          "revenda_base_eur": 21700,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 21700
+        },
+        {
+          "km_compra": 55000,
+          "km_venda": 76000,
+          "revenda_base_eur": 21200,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 21200
+        },
+        {
+          "km_compra": 60000,
+          "km_venda": 81000,
+          "revenda_base_eur": 20700,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 20700
+        },
+        {
+          "km_compra": 65000,
+          "km_venda": 86000,
+          "revenda_base_eur": 20200,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 20200
+        },
+        {
+          "km_compra": 70000,
+          "km_venda": 91000,
+          "revenda_base_eur": 19700,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 19700
+        },
+        {
+          "km_compra": 75000,
+          "km_venda": 96000,
+          "revenda_base_eur": 19200,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 19200
+        },
+        {
+          "km_compra": 80000,
+          "km_venda": 101000,
+          "revenda_base_eur": 18700,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 18700
+        },
+        {
+          "km_compra": 85000,
+          "km_venda": 106000,
+          "revenda_base_eur": 18200,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 18200
+        },
+        {
+          "km_compra": 90000,
+          "km_venda": 111000,
+          "revenda_base_eur": 17700,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 17700
+        },
+        {
+          "km_compra": 95000,
+          "km_venda": 116000,
+          "revenda_base_eur": 17200,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 17200
+        },
+        {
+          "km_compra": 100000,
+          "km_venda": 121000,
+          "revenda_base_eur": 16700,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 16700
+        },
+        {
+          "km_compra": 105000,
+          "km_venda": 126000,
+          "revenda_base_eur": 16200,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 16200
+        },
+        {
+          "km_compra": 110000,
+          "km_venda": 131000,
+          "revenda_base_eur": 15700,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 15700
+        },
+        {
+          "km_compra": 115000,
+          "km_venda": 136000,
+          "revenda_base_eur": 15200,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 15200
+        }
+      ]
+    },
+    {
+      "id": "megane_2021",
+      "nome": "Megane E-Tech EV60",
+      "ano": 2021,
+      "bateria_lfp": false,
+      "data_registo_estimada": "2021-12",
+      "garantia_bateria": {
+        "duracao_anos": 8,
+        "limite_km": 160000,
+        "data_expiracao": "2029-12",
+        "meses_restantes_na_venda": 12,
+        "penalizacao_base_eur": 1500,
+        "penalizacao_final_eur": 1500,
+        "aplicou_redutor_lfp": false
+      },
+      "fatores_desvalorizacao": [
+        "Marca francesa penaliza revenda",
+        "Apenas 12m de garantia de bateria restante em 2028",
+        "22 kW AC ideal para cidade"
+      ],
+      "estimativas_revenda": [
+        {
+          "km_compra": 35000,
+          "km_venda": 56000,
+          "revenda_base_eur": 15800,
+          "penalizacao_garantia_eur": 1500,
+          "revenda_ajustada_eur": 14300
+        },
+        {
+          "km_compra": 40000,
+          "km_venda": 61000,
+          "revenda_base_eur": 15300,
+          "penalizacao_garantia_eur": 1500,
+          "revenda_ajustada_eur": 13800
+        },
+        {
+          "km_compra": 45000,
+          "km_venda": 66000,
+          "revenda_base_eur": 14800,
+          "penalizacao_garantia_eur": 1500,
+          "revenda_ajustada_eur": 13300
+        },
+        {
+          "km_compra": 50000,
+          "km_venda": 71000,
+          "revenda_base_eur": 14300,
+          "penalizacao_garantia_eur": 1500,
+          "revenda_ajustada_eur": 12800
+        },
+        {
+          "km_compra": 55000,
+          "km_venda": 76000,
+          "revenda_base_eur": 13800,
+          "penalizacao_garantia_eur": 1500,
+          "revenda_ajustada_eur": 12300
+        },
+        {
+          "km_compra": 60000,
+          "km_venda": 81000,
+          "revenda_base_eur": 13300,
+          "penalizacao_garantia_eur": 1500,
+          "revenda_ajustada_eur": 11800
+        },
+        {
+          "km_compra": 65000,
+          "km_venda": 86000,
+          "revenda_base_eur": 12800,
+          "penalizacao_garantia_eur": 1500,
+          "revenda_ajustada_eur": 11300
+        },
+        {
+          "km_compra": 70000,
+          "km_venda": 91000,
+          "revenda_base_eur": 12300,
+          "penalizacao_garantia_eur": 1500,
+          "revenda_ajustada_eur": 10800
+        },
+        {
+          "km_compra": 75000,
+          "km_venda": 96000,
+          "revenda_base_eur": 11800,
+          "penalizacao_garantia_eur": 1500,
+          "revenda_ajustada_eur": 10300
+        },
+        {
+          "km_compra": 80000,
+          "km_venda": 101000,
+          "revenda_base_eur": 11300,
+          "penalizacao_garantia_eur": 1500,
+          "revenda_ajustada_eur": 9800
+        },
+        {
+          "km_compra": 85000,
+          "km_venda": 106000,
+          "revenda_base_eur": 10800,
+          "penalizacao_garantia_eur": 1500,
+          "revenda_ajustada_eur": 9300
+        },
+        {
+          "km_compra": 90000,
+          "km_venda": 111000,
+          "revenda_base_eur": 10300,
+          "penalizacao_garantia_eur": 1500,
+          "revenda_ajustada_eur": 8800
+        },
+        {
+          "km_compra": 95000,
+          "km_venda": 116000,
+          "revenda_base_eur": 9800,
+          "penalizacao_garantia_eur": 1500,
+          "revenda_ajustada_eur": 8300
+        },
+        {
+          "km_compra": 100000,
+          "km_venda": 121000,
+          "revenda_base_eur": 9300,
+          "penalizacao_garantia_eur": 1500,
+          "revenda_ajustada_eur": 7800
+        },
+        {
+          "km_compra": 105000,
+          "km_venda": 126000,
+          "revenda_base_eur": 8800,
+          "penalizacao_garantia_eur": 1500,
+          "revenda_ajustada_eur": 7300
+        },
+        {
+          "km_compra": 110000,
+          "km_venda": 131000,
+          "revenda_base_eur": 8300,
+          "penalizacao_garantia_eur": 1500,
+          "revenda_ajustada_eur": 6800
+        },
+        {
+          "km_compra": 115000,
+          "km_venda": 136000,
+          "revenda_base_eur": 7800,
+          "penalizacao_garantia_eur": 1500,
+          "revenda_ajustada_eur": 6300
+        }
+      ]
+    },
+    {
+      "id": "megane_2022",
       "nome": "Megane E-Tech EV60",
       "ano": 2022,
       "bateria_lfp": false,
@@ -134,29 +1303,419 @@
         "limite_km": 160000,
         "data_expiracao": "2030-09",
         "meses_restantes_na_venda": 21,
-        "faixa_penalizacao": "18-23m",
         "penalizacao_base_eur": 750,
         "penalizacao_final_eur": 750,
         "aplicou_redutor_lfp": false
       },
+      "fatores_desvalorizacao": [
+        "Bateria 60 kWh",
+        "22 kW AC é trunfo em Portugal (Mobi.E)",
+        "21m de garantia restante em 2028"
+      ],
       "estimativas_revenda": [
-        {"km_compra": 35000, "km_venda": 56000, "revenda_base_eur": 16500, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 15750},
-        {"km_compra": 40000, "km_venda": 61000, "revenda_base_eur": 16000, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 15250},
-        {"km_compra": 45000, "km_venda": 66000, "revenda_base_eur": 15500, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 14750},
-        {"km_compra": 50000, "km_venda": 71000, "revenda_base_eur": 15000, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 14250},
-        {"km_compra": 55000, "km_venda": 76000, "revenda_base_eur": 14500, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 13750},
-        {"km_compra": 60000, "km_venda": 81000, "revenda_base_eur": 14000, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 13250},
-        {"km_compra": 65000, "km_venda": 86000, "revenda_base_eur": 13500, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 12750},
-        {"km_compra": 70000, "km_venda": 91000, "revenda_base_eur": 13000, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 12250},
-        {"km_compra": 75000, "km_venda": 96000, "revenda_base_eur": 12500, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 11750},
-        {"km_compra": 80000, "km_venda": 101000, "revenda_base_eur": 12000, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 11250},
-        {"km_compra": 85000, "km_venda": 106000, "revenda_base_eur": 11500, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 10750},
-        {"km_compra": 90000, "km_venda": 111000, "revenda_base_eur": 11000, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 10250},
-        {"km_compra": 95000, "km_venda": 116000, "revenda_base_eur": 10000, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 9250},
-        {"km_compra": 100000, "km_venda": 121000, "revenda_base_eur": 9500, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 8750},
-        {"km_compra": 105000, "km_venda": 126000, "revenda_base_eur": 9000, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 8250},
-        {"km_compra": 110000, "km_venda": 131000, "revenda_base_eur": 8500, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 7750},
-        {"km_compra": 115000, "km_venda": 136000, "revenda_base_eur": 8000, "penalizacao_garantia_eur": 750, "revenda_ajustada_eur": 7250}
+        {
+          "km_compra": 35000,
+          "km_venda": 56000,
+          "revenda_base_eur": 16500,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 15750
+        },
+        {
+          "km_compra": 40000,
+          "km_venda": 61000,
+          "revenda_base_eur": 16000,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 15250
+        },
+        {
+          "km_compra": 45000,
+          "km_venda": 66000,
+          "revenda_base_eur": 15500,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 14750
+        },
+        {
+          "km_compra": 50000,
+          "km_venda": 71000,
+          "revenda_base_eur": 15000,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 14250
+        },
+        {
+          "km_compra": 55000,
+          "km_venda": 76000,
+          "revenda_base_eur": 14500,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 13750
+        },
+        {
+          "km_compra": 60000,
+          "km_venda": 81000,
+          "revenda_base_eur": 14000,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 13250
+        },
+        {
+          "km_compra": 65000,
+          "km_venda": 86000,
+          "revenda_base_eur": 13500,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 12750
+        },
+        {
+          "km_compra": 70000,
+          "km_venda": 91000,
+          "revenda_base_eur": 13000,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 12250
+        },
+        {
+          "km_compra": 75000,
+          "km_venda": 96000,
+          "revenda_base_eur": 12500,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 11750
+        },
+        {
+          "km_compra": 80000,
+          "km_venda": 101000,
+          "revenda_base_eur": 12000,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 11250
+        },
+        {
+          "km_compra": 85000,
+          "km_venda": 106000,
+          "revenda_base_eur": 11500,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 10750
+        },
+        {
+          "km_compra": 90000,
+          "km_venda": 111000,
+          "revenda_base_eur": 11000,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 10250
+        },
+        {
+          "km_compra": 95000,
+          "km_venda": 116000,
+          "revenda_base_eur": 10500,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 9750
+        },
+        {
+          "km_compra": 100000,
+          "km_venda": 121000,
+          "revenda_base_eur": 10000,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 9250
+        },
+        {
+          "km_compra": 105000,
+          "km_venda": 126000,
+          "revenda_base_eur": 9500,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 8750
+        },
+        {
+          "km_compra": 110000,
+          "km_venda": 131000,
+          "revenda_base_eur": 9000,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 8250
+        },
+        {
+          "km_compra": 115000,
+          "km_venda": 136000,
+          "revenda_base_eur": 8500,
+          "penalizacao_garantia_eur": 750,
+          "revenda_ajustada_eur": 7750
+        }
+      ]
+    },
+    {
+      "id": "megane_2023",
+      "nome": "Megane E-Tech EV60",
+      "ano": 2023,
+      "bateria_lfp": false,
+      "data_registo_estimada": "2023-06",
+      "garantia_bateria": {
+        "duracao_anos": 8,
+        "limite_km": 160000,
+        "data_expiracao": "2031-06",
+        "meses_restantes_na_venda": 30,
+        "penalizacao_base_eur": 0,
+        "penalizacao_final_eur": 0,
+        "aplicou_redutor_lfp": false
+      },
+      "fatores_desvalorizacao": [
+        "OpenR Link com Google integrado valoriza o carro",
+        "30m de garantia de bateria restante",
+        "22 kW AC de série"
+      ],
+      "estimativas_revenda": [
+        {
+          "km_compra": 35000,
+          "km_venda": 56000,
+          "revenda_base_eur": 18500,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 18500
+        },
+        {
+          "km_compra": 40000,
+          "km_venda": 61000,
+          "revenda_base_eur": 18000,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 18000
+        },
+        {
+          "km_compra": 45000,
+          "km_venda": 66000,
+          "revenda_base_eur": 17500,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 17500
+        },
+        {
+          "km_compra": 50000,
+          "km_venda": 71000,
+          "revenda_base_eur": 17000,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 17000
+        },
+        {
+          "km_compra": 55000,
+          "km_venda": 76000,
+          "revenda_base_eur": 16500,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 16500
+        },
+        {
+          "km_compra": 60000,
+          "km_venda": 81000,
+          "revenda_base_eur": 16000,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 16000
+        },
+        {
+          "km_compra": 65000,
+          "km_venda": 86000,
+          "revenda_base_eur": 15500,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 15500
+        },
+        {
+          "km_compra": 70000,
+          "km_venda": 91000,
+          "revenda_base_eur": 15000,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 15000
+        },
+        {
+          "km_compra": 75000,
+          "km_venda": 96000,
+          "revenda_base_eur": 14500,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 14500
+        },
+        {
+          "km_compra": 80000,
+          "km_venda": 101000,
+          "revenda_base_eur": 14000,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 14000
+        },
+        {
+          "km_compra": 85000,
+          "km_venda": 106000,
+          "revenda_base_eur": 13500,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 13500
+        },
+        {
+          "km_compra": 90000,
+          "km_venda": 111000,
+          "revenda_base_eur": 13000,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 13000
+        },
+        {
+          "km_compra": 95000,
+          "km_venda": 116000,
+          "revenda_base_eur": 12500,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 12500
+        },
+        {
+          "km_compra": 100000,
+          "km_venda": 121000,
+          "revenda_base_eur": 12000,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 12000
+        },
+        {
+          "km_compra": 105000,
+          "km_venda": 126000,
+          "revenda_base_eur": 11500,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 11500
+        },
+        {
+          "km_compra": 110000,
+          "km_venda": 131000,
+          "revenda_base_eur": 11000,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 11000
+        },
+        {
+          "km_compra": 115000,
+          "km_venda": 136000,
+          "revenda_base_eur": 10500,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 10500
+        }
+      ]
+    },
+    {
+      "id": "megane_2024",
+      "nome": "Megane E-Tech EV60",
+      "ano": 2024,
+      "bateria_lfp": false,
+      "data_registo_estimada": "2024-03",
+      "garantia_bateria": {
+        "duracao_anos": 8,
+        "limite_km": 160000,
+        "data_expiracao": "2032-03",
+        "meses_restantes_na_venda": 39,
+        "penalizacao_base_eur": 0,
+        "penalizacao_final_eur": 0,
+        "aplicou_redutor_lfp": false
+      },
+      "fatores_desvalorizacao": [
+        "Carro recente com baixa idade em 2028 (4 anos)",
+        "39m de garantia de bateria restante",
+        "Design moderno e compacto"
+      ],
+      "estimativas_revenda": [
+        {
+          "km_compra": 35000,
+          "km_venda": 56000,
+          "revenda_base_eur": 21000,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 21000
+        },
+        {
+          "km_compra": 40000,
+          "km_venda": 61000,
+          "revenda_base_eur": 20500,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 20500
+        },
+        {
+          "km_compra": 45000,
+          "km_venda": 66000,
+          "revenda_base_eur": 20000,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 20000
+        },
+        {
+          "km_compra": 50000,
+          "km_venda": 71000,
+          "revenda_base_eur": 19500,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 19500
+        },
+        {
+          "km_compra": 55000,
+          "km_venda": 76000,
+          "revenda_base_eur": 19000,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 19000
+        },
+        {
+          "km_compra": 60000,
+          "km_venda": 81000,
+          "revenda_base_eur": 18500,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 18500
+        },
+        {
+          "km_compra": 65000,
+          "km_venda": 86000,
+          "revenda_base_eur": 18000,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 18000
+        },
+        {
+          "km_compra": 70000,
+          "km_venda": 91000,
+          "revenda_base_eur": 17500,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 17500
+        },
+        {
+          "km_compra": 75000,
+          "km_venda": 96000,
+          "revenda_base_eur": 17000,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 17000
+        },
+        {
+          "km_compra": 80000,
+          "km_venda": 101000,
+          "revenda_base_eur": 16500,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 16500
+        },
+        {
+          "km_compra": 85000,
+          "km_venda": 106000,
+          "revenda_base_eur": 16000,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 16000
+        },
+        {
+          "km_compra": 90000,
+          "km_venda": 111000,
+          "revenda_base_eur": 15500,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 15500
+        },
+        {
+          "km_compra": 95000,
+          "km_venda": 116000,
+          "revenda_base_eur": 15000,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 15000
+        },
+        {
+          "km_compra": 100000,
+          "km_venda": 121000,
+          "revenda_base_eur": 14500,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 14500
+        },
+        {
+          "km_compra": 105000,
+          "km_venda": 126000,
+          "revenda_base_eur": 14000,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 14000
+        },
+        {
+          "km_compra": 110000,
+          "km_venda": 131000,
+          "revenda_base_eur": 13500,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 13500
+        },
+        {
+          "km_compra": 115000,
+          "km_venda": 136000,
+          "revenda_base_eur": 13000,
+          "penalizacao_garantia_eur": 0,
+          "revenda_ajustada_eur": 13000
+        }
       ]
     }
   ]

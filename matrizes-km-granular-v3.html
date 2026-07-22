@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Matrizes Depreciação v3 (2021-2024)</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:12px;color:#fff;display:flex;flex-direction:column;align-items:center;gap:14px}
+h1{font-size:18px;font-weight:700;text-align:center;opacity:.9;margin-top:6px}
+.sub{font-size:10px;color:rgba(255,255,255,.35);text-align:center}
+
+/* Filtros interativos */
+.filter-container{display:flex;flex-direction:column;gap:8px;width:100%;max-width:900px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:10px 14px}
+.filter-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.filter-label{font-size:10px;color:rgba(255,255,255,.4);font-weight:600;min-width:90px;text-transform:uppercase;letter-spacing:.5px}
+.filter-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.7);padding:4px 10px;border-radius:20px;font-size:10px;cursor:pointer;transition:all .15s ease;font-weight:500}
+.filter-btn:hover{background:rgba(255,255,255,.15);color:#fff}
+.filter-btn.active{background:#30d158;color:#000;border-color:#30d158;font-weight:700;box-shadow:0 0 10px rgba(48,209,88,.3)}
+
+.card{background:rgba(255,255,255,.06);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:12px 8px;width:100%;max-width:100%;overflow-x:auto}
+h2{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;margin-bottom:2px;white-space:nowrap}
+.tag{font-size:9px;color:#000;background:#ffd60a;padding:2px 6px;border-radius:4px;font-weight:700}
+.best{font-size:10px;color:#30d158;margin:2px 0 1px}
+.bdet{font-size:9px;color:rgba(255,255,255,.4);margin:0 0 6px}
+table{width:100%;border-collapse:collapse;font-size:9px;min-width:640px}
+th{color:rgba(255,255,255,.45);padding:3px 2px;border-bottom:1px solid rgba(255,255,255,.08);text-align:center;font-size:8px;font-weight:500}
+th:first-child{text-align:left;color:rgba(255,255,255,.3);min-width:42px;font-size:7px;position:sticky;left:0;background:#000;z-index:1}
+td{padding:3px 2px;text-align:center;border-bottom:1px solid rgba(255,255,255,.04);font-size:9px;font-weight:500}
+td:first-child{color:rgba(255,255,255,.4);font-weight:500;text-align:left;font-size:8px;white-space:nowrap;position:sticky;left:0;background:#000;z-index:1}
+.rrow td{border-top:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.35);font-size:8px;font-weight:400;font-style:italic}
+.rrow td:first-child{color:rgba(255,255,255,.25);font-size:7px;font-style:italic}
+.wbox{border:1px solid;border-radius:8px;padding:6px 10px;margin:4px 0 6px;font-size:9px;color:rgba(255,255,255,.65);line-height:1.6}
+.wbox b{font-weight:600}
+.lfp{font-size:8px;color:rgba(255,255,255,.3);background:rgba(255,255,255,.08);padding:1px 4px;border-radius:3px;margin-left:4px}
+.summ{font-size:9px;color:rgba(255,255,255,.4);margin:2px 0 6px;font-style:italic;line-height:1.4}
+.nota{font-size:9px;color:rgba(255,255,255,.3);margin-top:4px}
+.legend{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;font-size:8px;color:rgba(255,255,255,.35);margin:2px 0}
+.d{width:6px;height:6px;border-radius:50%;display:inline-block;vertical-align:middle;margin-right:1px}
+footer{font-size:8px;color:rgba(255,255,255,.15);text-align:center;padding:8px 0 4px}
+.rank{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:6px 0 0;padding:6px 0 0;border-top:1px solid rgba(255,255,255,.06)}
+.ri{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:6px 8px;font-size:8px;text-align:center;min-width:75px}
+.rn{font-size:14px;font-weight:700;display:block}
+.rv{display:block;margin-top:1px;font-size:7px}
+.vb{display:inline-block;font-size:8px;color:#ffd60a;background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.15);border-radius:4px;padding:1px 5px;margin-left:6px;vertical-align:middle}
+</style>
+</head>
+<body>
+
+<h1>&#9889; Depreciação Mensal <span class="vb">v3 (2021 - 2024)</span></h1>
+<div class="sub">28 meses &middot; 750 km/mês &middot; Ago/2026 &rarr; Dez/2028 &middot; Porto &middot; 12 Modelos/Anos</div>
+
+<div class="filter-container">
+    <div class="filter-row">
+        <span class="filter-label">Ano Fabrico:</span>
+        <button class="filter-btn active" onclick="setYear('all', this)">Todos (2021-2024)</button>
+        <button class="filter-btn" onclick="setYear(2021, this)">2021</button>
+        <button class="filter-btn" onclick="setYear(2022, this)">2022</button>
+        <button class="filter-btn" onclick="setYear(2023, this)">2023</button>
+        <button class="filter-btn" onclick="setYear(2024, this)">2024</button>
+    </div>
+    <div class="filter-row">
+        <span class="filter-label">Modelo:</span>
+        <button class="filter-btn active" onclick="setModel('all', this)">Todos</button>
+        <button class="filter-btn" onclick="setModel('tesla', this)">Tesla Model 3</button>
+        <button class="filter-btn" onclick="setModel('ioniq5', this)">IONIQ 5</button>
+        <button class="filter-btn" onclick="setModel('megane', this)">Megane E-Tech</button>
+    </div>
+</div>
+
+<div class="legend" id="legend"></div>
+
+<div id="app"></div>
+
+<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; v3 Expandida (2021-2024)</footer>
+
+<script>
+(function(){
+'use strict';
+
+var M = 28;            // meses de posse
+var KPM = 750;         // km por mês
+var TKM = M * KPM;     // 21.000 km total adicionado
+var LFPR = 0.5;        // redutor LFP (50%)
+
+var WS = [
+    {m: 24, p: 0},
+    {m: 18, p: 750},
+    {m: 12, p: 1500},
+    {m: 6,  p: 2000},
+    {m: 0,  p: 2500},
+    {m: -999, p: 3000}
+];
+
+var KM = [35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115];
+var PR = [];
+for (var i = 21000; i <= 35000; i += 1000) PR.push(i);
+
+var MN = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+
+// Base de Dados dos 12 Veículos (2021-2024)
+var CARS = [
+    // --- TESLA MODEL 3 ---
+    {
+        id: 'tesla_m3_2021', n: 'Tesla Model 3 SR+ LFP', y: 2021, brand: 'tesla', lfp: true,
+        ry: 2021, rm: 12, wy: 8, wk: 192000, b35: 18300, step: 300, jump: 400,
+        s: 'Bateria LFP 55 kWh com elevada durabilidade. 12m de garantia restantes em Dez/2028 (-€750 com redutor LFP).'
+    },
+    {
+        id: 'tesla_m3_2022', n: 'Tesla Model 3 RWD LFP', y: 2022, brand: 'tesla', lfp: true,
+        ry: 2022, rm: 6, wy: 8, wk: 192000, b35: 19800, step: 300, jump: 400,
+        s: 'Bateria LFP 60 kWh e processador AMD Ryzen. 18m de garantia de bateria restantes em 2028.'
+    },
+    {
+        id: 'tesla_m3_2023', n: 'Tesla Model 3 RWD LFP', y: 2023, brand: 'tesla', lfp: true,
+        ry: 2023, rm: 6, wy: 8, wk: 192000, b35: 21500, step: 350, jump: 400,
+        s: 'Modelo 2023 pré-Highland com excelente valor de revenda. 30m de garantia de bateria restante (sem penalização).'
+    },
+    {
+        id: 'tesla_m3_2024', n: 'Tesla Model 3 Highland RWD LFP', y: 2024, brand: 'tesla', lfp: true,
+        ry: 2024, rm: 3, wy: 8, wk: 192000, b35: 24500, step: 400, jump: 500,
+        s: 'Facelift Highland (insonorização superior, ecrã traseiro). Garantia de bateria confortável até Mar/2032 (39m restantes).'
+    },
+
+    // --- IONIQ 5 ---
+    {
+        id: 'ioniq5_2021', n: 'IONIQ 5 72.6 kWh', y: 2021, brand: 'ioniq5', lfp: false,
+        ry: 2021, rm: 11, wy: 8, wk: 160000, b35: 17000, step: 500, jump: 500,
+        s: 'Build inicial sem pré-condicionamento. Apenas 11m de garantia de bateria na venda em Dez/2028 (penalização de -€2.000).'
+    },
+    {
+        id: 'ioniq5_2022', n: 'IONIQ 5 72.6 kWh', y: 2022, brand: 'ioniq5', lfp: false,
+        ry: 2022, rm: 7, wy: 8, wk: 160000, b35: 17500, step: 500, jump: 500,
+        s: 'Garantia standard expira em 2027. 19m de garantia de bateria restantes (-€750).'
+    },
+    {
+        id: 'ioniq5_2023', n: 'IONIQ 5 77.4 kWh', y: 2023, brand: 'ioniq5', lfp: false,
+        ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 19800, step: 500, jump: 500,
+        s: 'Upgrade para bateria 77.4 kWh com maior autonomia e pré-condicionamento de série. 30m de garantia restantes.'
+    },
+    {
+        id: 'ioniq5_2024', n: 'IONIQ 5 84 kWh (Facelift)', y: 2024, brand: 'ioniq5', lfp: false,
+        ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 23200, step: 500, jump: 600,
+        s: 'Facelift 2024 com bateria de 84 kWh e limpa-para-brisas traseiro. 39m de garantia de bateria restante em 2028.'
+    },
+
+    // --- MEGANE E-TECH ---
+    {
+        id: 'megane_2021', n: 'Megane E-Tech EV60', y: 2021, brand: 'megane', lfp: false,
+        ry: 2021, rm: 12, wy: 8, wk: 160000, b35: 15800, step: 500, jump: 500,
+        s: 'Primeira vaga de produção. 12m de garantia de bateria restantes (-€1.500).'
+    },
+    {
+        id: 'megane_2022', n: 'Megane E-Tech EV60', y: 2022, brand: 'megane', lfp: false,
+        ry: 2022, rm: 9, wy: 8, wk: 160000, b35: 16500, step: 500, jump: 500,
+        s: 'Bateria 60 kWh com carregamento 22 kW AC (trunfo em Portugal). 21m de garantia restantes.'
+    },
+    {
+        id: 'megane_2023', n: 'Megane E-Tech EV60', y: 2023, brand: 'megane', lfp: false,
+        ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 18500, step: 500, jump: 500,
+        s: 'Sistema OpenR Link Google integrado com atualizações de software. 30m de garantia de bateria restantes em 2028.'
+    },
+    {
+        id: 'megane_2024', n: 'Megane E-Tech EV60', y: 2024, brand: 'megane', lfp: false,
+        ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 21000, step: 500, jump: 600,
+        s: 'Modelo recente com baixa idade em 2028 (4 anos de idade). 39m de garantia de bateria restante.'
+    }
+];
+
+// Estado dos filtros
+var currentYear = 'all';
+var currentModel = 'all';
+
+function fmt(n) {
+    return '\u20AC' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
+function wMonths(c) {
+    return (c.ry + c.wy - 2028) * 12 + (c.rm - 12);
+}
+
+function wExpiry(c) {
+    return MN[c.rm - 1] + '/' + (c.ry + c.wy);
+}
+
+function wPenalty(c) {
+    var m = wMonths(c);
+    var p = 3000;
+    for (var i = 0; i < WS.length; i++) {
+        if (m >= WS[i].m) { p = WS[i].p; break; }
+    }
+    if (c.lfp && p > 0) p = Math.round(p * LFPR);
+    return p;
+}
+
+function wLabel(c) {
+    var m = wMonths(c);
+    if (m >= 24) return '\u226524m (Sem Pen.)';
+    if (m >= 18) return '18-23m';
+    if (m >= 12) return '12-17m';
+    if (m >= 6)  return '6-11m';
+    if (m >= 0)  return '0-5m';
+    return 'Expirada';
+}
+
+function getBaseResale(c, k) {
+    var idx = KM.indexOf(k);
+    var res = c.b35;
+    for (var i = 0; i < idx; i++) {
+        var stepKm = KM[i + 1];
+        var isJump = (stepKm > 95);
+        var drop = c.step + (isJump && KM[i] === 90 ? c.jump : 0);
+        res -= drop;
+    }
+    return res;
+}
+
+function aResale(c, k) {
+    var p = wPenalty(c);
+    var fkm = k * 1000 + TKM;
+    if (fkm > c.wk) {
+        var kp = 3000;
+        if (c.lfp) kp = Math.round(kp * LFPR);
+        p = Math.max(p, kp);
+    }
+    return Math.max(0, getBaseResale(c, k) - p);
+}
+
+function mo(price, resale) {
+    return Math.round((price - resale) / M);
+}
+
+function col(v) {
+    var t = Math.max(0, Math.min(1, (v - 100) / 600));
+    return 'rgb(' + Math.round(255 * t) + ',' + Math.round(255 * (1 - t)) + ',50)';
+}
+
+window.setYear = function(year, btn) {
+    currentYear = year;
+    updateButtons(btn);
+    renderApp();
+};
+
+window.setModel = function(model, btn) {
+    currentModel = model;
+    updateButtons(btn);
+    renderApp();
+};
+
+function updateButtons(clickedBtn) {
+    var parent = clickedBtn.parentElement;
+    var btns = parent.querySelectorAll('.filter-btn');
+    btns.forEach(function(b){ b.classList.remove('active'); });
+    clickedBtn.classList.add('active');
+}
+
+function filterCars() {
+    return CARS.filter(function(c) {
+        var matchYear = (currentYear === 'all' || c.y == currentYear);
+        var matchModel = (currentModel === 'all' || c.brand === currentModel);
+        return matchYear && matchModel;
+    });
+}
+
+function renderLegend() {
+    var el = document.getElementById('legend');
+    var steps = [100, 200, 300, 400, 500, 600, 700];
+    var h = '';
+    for (var i = 0; i < steps.length; i++) {
+        h += '<span><span class="d" style="background:' + col(steps[i]) + '"></span>\u20AC' + steps[i] + '</span>';
+    }
+    el.innerHTML = h;
+}
+
+function renderCard(c) {
+    var pen = wPenalty(c);
+    var wm = wMonths(c);
+    var we = wExpiry(c);
+    var wl = wLabel(c);
+    var mpen = Math.round(pen / M);
+
+    var bM = Infinity, bK = 0;
+    for (var i = 0; i < KM.length; i++) {
+        var r = aResale(c, KM[i]);
+        var m = mo(PR[0], r);
+        if (m < bM) { bM = m; bK = KM[i]; }
+    }
+    var bR = aResale(c, bK);
+    var bP = PR[0];
+    var bD = bP - bR;
+    var bPct = (bD / bP * 100).toFixed(1);
+    var bF = bK + TKM / 1000;
+
+    var wc = pen >= 2000 ? '#ff453a' : pen >= 750 ? '#ffd60a' : '#30d158';
+    var wb = pen >= 2000 ? 'rgba(255,69,58,.08)' : pen >= 750 ? 'rgba(255,200,50,.06)' : 'rgba(48,209,88,.06)';
+    var wbb = pen >= 2000 ? 'rgba(255,69,58,.18)' : pen >= 750 ? 'rgba(255,200,50,.12)' : 'rgba(48,209,88,.15)';
+
+    var h = '<div class="card">';
+    h += '<h2>' + c.n + ' <span class="tag">' + c.y + '</span></h2>';
+    h += '<div class="best">\uD83C\uDFF7\uFE0F M\u00EDnimo Deprecia\u00E7\u00E3o (@' + fmt(bP) + '/' + bK + 'k km): <b>\u20AC' + bM + '/m\u00EAs</b> (' + bF + 'k final)</div>';
+    h += '<div class="bdet">Revenda Estimada: ' + fmt(bR) + ' \u00B7 Depr Total: ' + fmt(bD) + ' (' + bPct + '%) em ' + M + 'm</div>';
+
+    h += '<div class="wbox" style="background:' + wb + ';border-color:' + wbb + '">';
+    h += '\uD83D\uDD0B Expira: <b style="color:' + wc + '">' + we + '</b>';
+    h += ' \u00B7 Restam na Venda: <b style="color:' + wc + '">' + wm + 'm</b>';
+    h += ' \u00B7 Faixa: ' + wl;
+    h += ' \u00B7 Pen. Aplicada: <b style="color:' + wc + '">-' + fmt(pen) + '</b>';
+    if (c.lfp && pen > 0) h += ' <span class="lfp">(LFP \u00D7' + LFPR + ')</span>';
+    h += ' \u2192 <b>+\u20AC' + mpen + '/m\u00EAs</b></div>';
+
+    h += '<div class="summ">' + c.s + '</div>';
+
+    h += '<table><tr><th>\u20AC\u2216km</th>';
+    for (var i = 0; i < KM.length; i++) h += '<th>' + KM[i] + 'k</th>';
+    h += '</tr>';
+
+    for (var pi = 0; pi < PR.length; pi++) {
+        var p = PR[pi];
+        h += '<tr><td>' + fmt(p) + '</td>';
+        for (var ki = 0; ki < KM.length; ki++) {
+            var r = aResale(c, KM[ki]);
+            var m = mo(p, r);
+            h += '<td style="color:' + col(m) + '">' + m + '</td>';
+        }
+        h += '</tr>';
+    }
+
+    h += '<tr class="rrow"><td>Revenda \u20ACk</td>';
+    for (var ki = 0; ki < KM.length; ki++) {
+        var r = aResale(c, KM[ki]);
+        h += '<td>' + (r / 1000).toFixed(1) + '</td>';
+    }
+    h += '</tr>';
+
+    h += '<tr class="rrow"><td>Depr % @25k</td>';
+    for (var ki = 0; ki < KM.length; ki++) {
+        var r = aResale(c, KM[ki]);
+        var pct = ((25000 - r) / 25000 * 100).toFixed(0);
+        h += '<td>' + pct + '%</td>';
+    }
+    h += '</tr>';
+
+    h += '</table></div>';
+    return h;
+}
+
+function renderRanking(list) {
+    var results = [];
+    for (var ci = 0; ci < list.length; ci++) {
+        var c = list[ci];
+        var bM = Infinity, bK = 0;
+        for (var ki = 0; ki < KM.length; ki++) {
+            var r = aResale(c, KM[ki]);
+            var m = mo(PR[0], r);
+            if (m < bM) { bM = m; bK = KM[ki]; }
+        }
+        results.push({c: c, bM: bM, bK: bK});
+    }
+    results.sort(function(a, b) { return a.bM - b.bM; });
+
+    var rc = ['#ffd60a', '#e0e0e0', '#cd7f32', 'rgba(255,255,255,.5)'];
+
+    var h = '<div class="card"><h2>\uD83C\uDFF7\uFE0F Ranking Sweet Spots <span class="tag">Filtro Atual</span></h2><div class="rank">';
+    for (var i = 0; i < Math.min(results.length, 6); i++) {
+        var r = results[i];
+        var color = i < 3 ? rc[i] : rc[3];
+        h += '<div class="ri">';
+        h += '<span class="rn" style="color:' + color + '">' + (i + 1) + '</span>';
+        h += '<span style="color:#fff;font-weight:600;font-size:10px">\u20AC' + r.bM + '/m\u00EAs</span>';
+        h += '<span class="rv" style="color:rgba(255,255,255,.4)">\u20AC' + (PR[0] / 1000).toFixed(0) + 'k/' + r.bK + 'k km</span>';
+        h += '<span class="rv" style="color:rgba(255,255,255,.3)">' + r.c.n + ' (' + r.c.y + ')</span>';
+        h += '</div>';
+    }
+    h += '</div></div>';
+    return h;
+}
+
+function renderApp() {
+    var filtered = filterCars();
+    var html = '';
+    if (filtered.length === 0) {
+        html = '<div style="color:rgba(255,255,255,.5);padding:20px;text-align:center">Nenhum veículo encontrado para os filtros selecionados.</div>';
+    } else {
+        html += renderRanking(filtered);
+        for (var i = 0; i < filtered.length; i++) {
+            html += renderCard(filtered[i]);
+        }
+    }
+    document.getElementById('app').innerHTML = html;
+}
+
+renderLegend();
+renderApp();
+
+})();
+</script>
+</body>
+</html>

@@ -40,6 +40,9 @@
      - Novas linhas nas tabelas: "Revenda €k" e "Depr % @25k".
      - Ranking de sweet spots atualizado dinamicamente.
 
+5. **`valores-revenda.json` (Base de Dados JSON)**
+   - Estrutura de dados em JSON contendo todas as estimativas de revenda base, penalizações de garantia e revenda ajustada por modelo e quilometragem.
+
 ---
 
 ## 📐 REGRAS DE CÁLCULO E DECISÕES TOMADAS

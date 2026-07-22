@@ -10,18 +10,17 @@
 
 ### Arquivos Principais
 
-1. **`mega-matriz-todas-ofertas.html` (NOVO - Mega-Matriz Granular Reunida de €1.000 em €1.000)**
-   - **Granularidade Máxima de Preços:** 15 níveis de Preço de Compra (**€21.000, €22.000, €23.000, ..., €35.000**) &times; 17 colunas de Quilometragem (35k a 115k km).
-   - **Exibe TODOS os 12 modelos/anos (2021-2024) simultaneamente na mesma página** (total de 3.060 pontos de dados calculados e validados).
-   - **Visão 1 (Tabela Cruzada por Preço):** 15 seções de preço reunindo todos os modelos lado a lado.
-   - **Visão 2 (Feed Integral das 12 Matrizes):** Renderiza todas as 12 tabelas granulares 15x17 completas.
-   - **Navegação Direta:** Bar com chips atalhos para saltar diretamente para qualquer valor de preço de compra (€21k a €35k).
+1. **`mapa-calor-minimizacao-custo.html` (NOVO - Mapa de Calor Mestre para Minimização de Custo)**
+   - **Consolida TODOS os 3.060 pontos de dados numa única tela sem filtros:** 12 veículos (2021-2024) &times; 17 quilometragens &times; 15 níveis de preço de compra (€21k a €35k).
+   - **Referências Visuais Puras (Pixels de Calor):** As células contêm micro-blocos de densidade de cor (verde-escuro para `<150€/mês`, verde-claro para `150-220€`, amarelo, laranja e vermelho).
+   - **Tooltip Flutuante em Hover:** Revela instantaneamente o modelo, ano, preço de compra, quilometragem, revenda estimada em 2028, penalização de garantia e custo mensal exato.
+   - **Leaderboard de Minimização:** Destaca o Top 5 de menores custos absolutos.
 
-2. **`diagrama-referencia-ofertas.html` (Diagrama Mestre & Avaliador)**
-   - Matriz 15x17 com widget avaliador de ofertas de mercado.
+2. **`mega-matriz-todas-ofertas.html` (Mega-Matriz Granular de €1.000 em €1.000)**
+   - Exibe a tabela completa com números de €21k a €35k reunidos por preço e por feed.
 
-3. **`matrizes-unificadas-granulares.html` e `matrizes-km-granular-v3.html`**
-   - Interfaces alternativas de visualização.
+3. **`diagrama-referencia-ofertas.html` (Diagrama Mestre & Avaliador)**
+   - Matriz 15x17 com widget avaliador de ofertas.
 
 4. **`valores-revenda.json` (Base de Dados JSON)**
    - Estrutura JSON com dados completos das 12 variantes (2021-2024).
@@ -38,5 +37,4 @@
 - **Uso:** 750 km/mês (+21.000 km adicionados).
 - **Local:** Porto, Portugal.
 - **Anos Cobertos:** 2021, 2022, 2023, 2024.
-- **Passo de Preço:** €1.000 em €1.000 (€21k a €35k).
 - **Sem Custo Negativo:** Se `Preço_Compra ≤ Revenda_Ajustada`, a célula exibe `—` (Irrealista).

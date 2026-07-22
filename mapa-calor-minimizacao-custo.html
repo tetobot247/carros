@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mapa de Calor Mestre — Minimização de Custo Mensal</title>
+
+<style>
+:root {
+  --bg: #06070a;
+  --card-bg: rgba(255, 255, 255, 0.03);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --text: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.45);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+header {
+  text-align: center;
+  max-width: 1400px;
+}
+
+h1 {
+  font-size: 22px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffffff 0%, #30d158 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 4px;
+}
+
+.sub {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1400px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.nav-link {
+  color: #30d158;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(48, 209, 88, 0.1);
+  border: 1px solid rgba(48, 209, 88, 0.2);
+  padding: 6px 12px;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  background: rgba(48, 209, 88, 0.2);
+  box-shadow: 0 0 12px rgba(48, 209, 88, 0.3);
+}
+
+/* Leaderboard de Minimização Rápida */
+.leaderboard-card {
+  background: linear-gradient(135deg, rgba(48,209,88,0.08) 0%, rgba(0,0,0,0.5) 100%);
+  border: 1px solid rgba(48, 209, 88, 0.25);
+  border-radius: 16px;
+  padding: 14px 18px;
+  width: 100%;
+  max-width: 1400px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lb-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #30d158;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lb-items {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.lb-item {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 8px 12px;
+  min-width: 190px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  position: relative;
+}
+
+.lb-rank {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: 14px;
+  font-weight: 900;
+  color: #ffd60a;
+}
+
+.lb-cost {
+  font-size: 16px;
+  font-weight: 800;
+  color: #30d158;
+}
+
+.lb-model {
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.lb-meta {
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+/* Legenda de Cores do Mapa de Calor */
+.heatmap-legend {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-size: 10px;
+  width: 100%;
+  max-width: 1400px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  padding: 8px 16px;
+  border-radius: 12px;
+}
+
+.h-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.h-box {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+}
+
+/* O MATRIZ MESTRE HEATMAP */
+.heatmap-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(24px);
+  border-radius: 16px;
+  padding: 16px;
+  width: 100%;
+  max-width: 1400px;
+  overflow-x: auto;
+}
+
+table.hm-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9px;
+  min-width: 1000px;
+}
+
+table.hm-table th {
+  color: var(--text-muted);
+  padding: 8px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+table.hm-table th:first-child {
+  text-align: left;
+  min-width: 190px;
+}
+
+table.hm-table td {
+  padding: 6px 3px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+table.hm-table td:first-child {
+  text-align: left;
+  position: sticky;
+  left: 0;
+  background: #06070a;
+  z-index: 2;
+  font-weight: 700;
+}
+
+/* Bloco Sub-Matriz de Preços dentro da Célula */
+.pixel-strip {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2px;
+  padding: 2px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.px-block {
+  width: 100%;
+  height: 10px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.px-block:hover {
+  transform: scale(1.6);
+  z-index: 10;
+  filter: brightness(1.3);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+.brand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.b-tesla { background: rgba(255, 69, 58, 0.15); color: #ff453a; border: 1px solid rgba(255, 69, 58, 0.3); }
+.b-ioniq { background: rgba(100, 210, 255, 0.15); color: #64d2ff; border: 1px solid rgba(100, 210, 255, 0.3); }
+.b-megane { background: rgba(208, 112, 255, 0.15); color: #d070ff; border: 1px solid rgba(208, 112, 255, 0.3); }
+
+/* Tooltip Flutuante Personalizado */
+.custom-tooltip {
+  position: fixed;
+  display: none;
+  background: rgba(10, 12, 18, 0.95);
+  border: 1px solid rgba(48, 209, 88, 0.4);
+  backdrop-filter: blur(16px);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 11px;
+  color: #fff;
+  z-index: 9999;
+  pointer-events: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tt-cost {
+  font-size: 15px;
+  font-weight: 900;
+  color: #30d158;
+}
+
+footer {
+  font-size: 9px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 16px;
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div>
+    <h1>&#9889; Mapa de Calor Mestre — Minimização de Custo Mensal</h1>
+    <div class="sub">3.060 Pontos de Dados Visuais (12 Modelos &times; 15 Preços &times; 17 Quilometragens) Sem Necessidade de Filtros</div>
+  </div>
+  <a href="mega-matriz-todas-ofertas.html" class="nav-link">&rarr; Ver Mega-Matriz de Números</a>
+</div>
+
+<!-- LEADERBOARD TOP MINIMIZADORES -->
+<div class="leaderboard-card">
+  <div class="lb-title">&#127942; Oportunidades de Ouro (Top Menores Custos Mensais de Mercado)</div>
+  <div class="lb-items" id="leaderboardItems"></div>
+</div>
+
+<!-- LEGENDA DO MAPA DE CALOR -->
+<div class="heatmap-legend">
+  <div class="h-item"><div class="h-box" style="background:#30d158"></div> Mínimo Absoluto (&lt; €150/mês)</div>
+  <div class="h-item"><div class="h-box" style="background:#a3e635"></div> Excelente (€150 - €220/mês)</div>
+  <div class="h-item"><div class="h-box" style="background:#ffd60a"></div> Razoável (€220 - €300/mês)</div>
+  <div class="h-item"><div class="h-box" style="background:#ff9f0a"></div> Elevado (€300 - €400/mês)</div>
+  <div class="h-item"><div class="h-box" style="background:#ff453a"></div> Caro (&gt; €400/mês)</div>
+  <div class="h-item"><div class="h-box" style="background:rgba(255,255,255,0.1)"></div> Irrealista (Preço &le; Revenda)</div>
+</div>
+
+<!-- O MATRIZ MESTRE HEATMAP -->
+<div class="heatmap-card">
+  <div style="font-size:13px;font-weight:800;margin-bottom:4px">&#128506;\uFE0F Matriz de Densidade Visual (Todos os 12 Veículos vs Quilometragem)</div>
+  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">Cada célula contém uma barra de 15 blocos (€21k a €35k). Passe o cursor por cima de qualquer bloco para ver a oferta exata!</div>
+
+  <table class="hm-table">
+    <thead>
+      <tr id="hmThRow"></tr>
+    </thead>
+    <tbody id="hmTbody"></tbody>
+  </table>
+</div>
+
+<!-- Tooltip Flutuante -->
+<div class="custom-tooltip" id="tooltip"></div>
+
+<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Mapa de Calor Mestre de Minimização de Custo</footer>
+
+<script>
+(function(){
+'use strict';
+
+var M = 28;
+var TKM = 21000;
+var LFPR = 0.5;
+
+var WS = [
+    {m: 24, p: 0},
+    {m: 18, p: 750},
+    {m: 12, p: 1500},
+    {m: 6,  p: 2000},
+    {m: 0,  p: 2500},
+    {m: -999, p: 3000}
+];
+
+var KM = [35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115];
+var PR = [];
+for (var pVal = 21000; pVal <= 35000; pVal += 1000) PR.push(pVal);
+
+var CARS = [
+    { id: 'tesla_2021', n: 'Tesla Model 3 SR+ LFP', y: 2021, brand: 'tesla', lfp: true, ry: 2021, rm: 12, wy: 8, wk: 192000, b35: 18300, step: 300, jump: 400 },
+    { id: 'tesla_2022', n: 'Tesla Model 3 RWD LFP', y: 2022, brand: 'tesla', lfp: true, ry: 2022, rm: 6, wy: 8, wk: 192000, b35: 19800, step: 300, jump: 400 },
+    { id: 'tesla_2023', n: 'Tesla Model 3 RWD LFP', y: 2023, brand: 'tesla', lfp: true, ry: 2023, rm: 6, wy: 8, wk: 192000, b35: 21500, step: 350, jump: 400 },
+    { id: 'tesla_2024', n: 'Tesla Model 3 Highland', y: 2024, brand: 'tesla', lfp: true, ry: 2024, rm: 3, wy: 8, wk: 192000, b35: 24500, step: 400, jump: 500 },
+
+    { id: 'ioniq_2021', n: 'IONIQ 5 72.6 kWh', y: 2021, brand: 'ioniq5', lfp: false, ry: 2021, rm: 11, wy: 8, wk: 160000, b35: 17000, step: 500, jump: 500 },
+    { id: 'ioniq_2022', n: 'IONIQ 5 72.6 kWh', y: 2022, brand: 'ioniq5', lfp: false, ry: 2022, rm: 7, wy: 8, wk: 160000, b35: 17500, step: 500, jump: 500 },
+    { id: 'ioniq_2023', n: 'IONIQ 5 77.4 kWh', y: 2023, brand: 'ioniq5', lfp: false, ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 19800, step: 500, jump: 500 },
+    { id: 'ioniq_2024', n: 'IONIQ 5 84 kWh Facelift', y: 2024, brand: 'ioniq5', lfp: false, ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 23200, step: 500, jump: 600 },
+
+    { id: 'megane_2021', n: 'Megane E-Tech EV60', y: 2021, brand: 'megane', lfp: false, ry: 2021, rm: 12, wy: 8, wk: 160000, b35: 15800, step: 500, jump: 500 },
+    { id: 'megane_2022', n: 'Megane E-Tech EV60', y: 2022, brand: 'megane', lfp: false, ry: 2022, rm: 9, wy: 8, wk: 160000, b35: 16500, step: 500, jump: 500 },
+    { id: 'megane_2023', n: 'Megane E-Tech EV60', y: 2023, brand: 'megane', lfp: false, ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 18500, step: 500, jump: 500 },
+    { id: 'megane_2024', n: 'Megane E-Tech EV60', y: 2024, brand: 'megane', lfp: false, ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 21000, step: 500, jump: 600 }
+];
+
+function wMonths(c) {
+    return (c.ry + c.wy - 2028) * 12 + (c.rm - 12);
+}
+
+function wPenalty(c) {
+    var m = wMonths(c);
+    var p = 3000;
+    for (var i = 0; i < WS.length; i++) {
+        if (m >= WS[i].m) { p = WS[i].p; break; }
+    }
+    if (c.lfp && p > 0) p = Math.round(p * LFPR);
+    return p;
+}
+
+function getBaseResale(c, k) {
+    var idx = KM.indexOf(k);
+    var res = c.b35;
+    for (var i = 0; i < idx; i++) {
+        var stepKm = KM[i + 1];
+        var isJump = (stepKm > 95);
+        var drop = c.step + (isJump && KM[i] === 90 ? c.jump : 0);
+        res -= drop;
+    }
+    return res;
+}
+
+function aResale(c, k) {
+    var p = wPenalty(c);
+    var fkm = k * 1000 + TKM;
+    if (fkm > c.wk) {
+        var kp = 3000;
+        if (c.lfp) kp = Math.round(kp * LFPR);
+        p = Math.max(p, kp);
+    }
+    return Math.max(0, getBaseResale(c, k) - p);
+}
+
+function moVal(price, resale) {
+    var diff = price - resale;
+    if (diff <= 0) return null;
+    return Math.round(diff / M);
+}
+
+function getBlockColor(v) {
+    if (v === null) return 'rgba(255,255,255,0.06)';
+    if (v < 150) return '#30d158';
+    if (v <= 220) return '#a3e635';
+    if (v <= 300) return '#ffd60a';
+    if (v <= 400) return '#ff9f0a';
+    return '#ff453a';
+}
+
+function getBrandBadge(c) {
+    var cls = 'b-' + c.brand;
+    return '<span class="brand-badge ' + cls + '">' + c.n + ' (' + c.y + ')</span>';
+}
+
+// 1. LEADERBOARD TOP MINIMIZADORES
+function renderLeaderboard() {
+    var allScenarios = [];
+    CARS.forEach(function(c) {
+        PR.forEach(function(p) {
+            KM.forEach(function(k) {
+                var r = aResale(c, k);
+                var m = moVal(p, r);
+                if (m !== null) {
+                    allScenarios.push({ car: c, price: p, km: k, resale: r, cost: m });
+                }
+            });
+        });
+    });
+
+    allScenarios.sort(function(a, b){ return a.cost - b.cost; });
+
+    var top5 = allScenarios.slice(0, 6);
+    var container = document.getElementById('leaderboardItems');
+    var html = '';
+
+    top5.forEach(function(item, idx) {
+        html += '<div class="lb-item">';
+        html += '<span class="lb-rank">#' + (idx + 1) + '</span>';
+        html += '<span class="lb-cost">€' + item.cost + '<span style="font-size:10px;font-weight:400">/mês</span></span>';
+        html += '<span class="lb-model">' + item.car.n + ' (' + item.car.y + ')</span>';
+        html += '<span class="lb-meta">Compra: €' + item.price.toLocaleString('pt-PT') + ' &middot; ' + item.km + 'k km</span>';
+        html += '<span class="lb-meta">Revenda 2028: €' + item.resale.toLocaleString('pt-PT') + '</span>';
+        html += '</div>';
+    });
+
+    container.innerHTML = html;
+}
+
+// 2. MATRIZ DE DENSIDADE HEATMAP
+function renderHeatmap() {
+    var thRow = document.getElementById('hmThRow');
+    var thHtml = '<th>Modelo &amp; Ano \\ Km</th>';
+    KM.forEach(function(k) {
+        thHtml += '<th>' + k + 'k km</th>';
+    });
+    thRow.innerHTML = thHtml;
+
+    var tbody = document.getElementById('hmTbody');
+    var tbHtml = '';
+
+    CARS.forEach(function(c) {
+        tbHtml += '<tr>';
+        tbHtml += '<td>' + getBrandBadge(c) + '</td>';
+
+        KM.forEach(function(k) {
+            var r = aResale(c, k);
+            tbHtml += '<td><div class="pixel-strip">';
+
+            PR.forEach(function(p) {
+                var m = moVal(p, r);
+                var bg = getBlockColor(m);
+                var pen = wPenalty(c);
+
+                tbHtml += '<div class="px-block" style="background:' + bg + '" ';
+                tbHtml += 'data-name="' + c.n + ' (' + c.y + ')" ';
+                tbHtml += 'data-price="' + p + '" ';
+                tbHtml += 'data-km="' + k + '" ';
+                tbHtml += 'data-resale="' + r + '" ';
+                tbHtml += 'data-pen="' + pen + '" ';
+                tbHtml += 'data-cost="' + (m !== null ? m : 'N/A') + '" ';
+                tbHtml += 'onmouseenter="showTooltip(event, this)" onmouseleave="hideTooltip()"></div>';
+            });
+
+            tbHtml += '</div></td>';
+        });
+
+        tbHtml += '</tr>';
+    });
+
+    tbody.innerHTML = tbHtml;
+}
+
+// TOOLTIP FLUTUANTE
+var tooltipEl = document.getElementById('tooltip');
+
+window.showTooltip = function(e, el) {
+    var name = el.getAttribute('data-name');
+    var price = Number(el.getAttribute('data-price')).toLocaleString('pt-PT');
+    var km = el.getAttribute('data-km');
+    var resale = Number(el.getAttribute('data-resale')).toLocaleString('pt-PT');
+    var pen = el.getAttribute('data-pen');
+    var cost = el.getAttribute('data-cost');
+
+    var html = '';
+    html += '<div style="font-size:10px;font-weight:700;color:var(--text-muted)">' + name + '</div>';
+    if (cost !== 'N/A') {
+        html += '<div class="tt-cost">€' + cost + '<span style="font-size:11px;font-weight:500;color:#fff"> / mês</span></div>';
+        html += '<div>Compra: <b>€' + price + '</b> &middot; Odómetro: <b>' + km + '.000 km</b></div>';
+        html += '<div style="font-size:9px;color:rgba(255,255,255,0.6)">Revenda Dez/2028: €' + resale + ' (Pen. Garantia: -' + pen + '€)</div>';
+    } else {
+        html += '<div style="color:#ff453a;font-weight:700;margin-top:2px">Combinação Irrealista</div>';
+        html += '<div style="font-size:9px;color:var(--text-muted)">Preço de compra (€' + price + ') igual ou inferior à revenda (€' + resale + ')</div>';
+    }
+
+    tooltipEl.innerHTML = html;
+    tooltipEl.style.display = 'flex';
+    updateTooltipPos(e);
+};
+
+window.hideTooltip = function() {
+    tooltipEl.style.display = 'none';
+};
+
+document.addEventListener('mousemove', function(e) {
+    if (tooltipEl.style.display === 'flex') {
+        updateTooltipPos(e);
+    }
+});
+
+function updateTooltipPos(e) {
+    var x = e.clientX + 14;
+    var y = e.clientY + 14;
+    if (x + 220 > window.innerWidth) x = e.clientX - 230;
+    if (y + 120 > window.innerHeight) y = e.clientY - 130;
+    tooltipEl.style.left = x + 'px';
+    tooltipEl.style.top = y + 'px';
+}
+
+renderLeaderboard();
+renderHeatmap();
+
+})();
+</script>
+
+</body>
+</html>

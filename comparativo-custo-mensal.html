@@ -74,7 +74,6 @@ h1 {
   box-shadow: 0 0 12px rgba(48, 209, 88, 0.3);
 }
 
-/* Painel de Filtros e Controlos */
 .controls-card {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
@@ -101,7 +100,7 @@ h1 {
   letter-spacing: 0.8px;
   color: var(--text-muted);
   font-weight: 700;
-  min-width: 130px;
+  min-width: 140px;
 }
 
 .btn-pill {
@@ -129,7 +128,6 @@ h1 {
   box-shadow: 0 0 12px rgba(48, 209, 88, 0.3);
 }
 
-/* Grelha Visual de Ranges de Custo */
 .grid-summary {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -176,6 +174,15 @@ h1 {
   border-radius: 4px;
 }
 
+.price-tag {
+  font-size: 10px;
+  color: rgba(255,255,255,0.6);
+  background: rgba(255,255,255,0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
 .range-box {
   background: rgba(0, 0, 0, 0.4);
   border-radius: 10px;
@@ -191,25 +198,10 @@ h1 {
   align-items: baseline;
 }
 
-.val-min {
-  color: #30d158;
-  font-weight: 800;
-  font-size: 18px;
-}
+.val-min { color: #30d158; font-weight: 800; font-size: 18px; }
+.val-mid { color: #ffd60a; font-size: 11px; font-weight: 600; }
+.val-max { color: #ff453a; font-weight: 700; font-size: 13px; }
 
-.val-mid {
-  color: #ffd60a;
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.val-max {
-  color: #ff453a;
-  font-weight: 700;
-  font-size: 13px;
-}
-
-/* Barra de Progresso Visual do Range */
 .bar-track {
   height: 8px;
   background: rgba(255, 255, 255, 0.1);
@@ -233,7 +225,6 @@ h1 {
   padding-top: 6px;
 }
 
-/* Tabela Comparativa Master */
 .master-table-card {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
@@ -257,7 +248,7 @@ table {
   width: 100%;
   border-collapse: collapse;
   font-size: 10px;
-  min-width: 700px;
+  min-width: 750px;
 }
 
 th {
@@ -301,6 +292,12 @@ td:first-child {
   min-width: 48px;
 }
 
+.cell-na {
+  color: rgba(255, 255, 255, 0.25);
+  font-style: italic;
+  font-size: 9px;
+}
+
 footer {
   font-size: 9px;
   color: var(--text-muted);
@@ -314,18 +311,19 @@ footer {
 <div class="top-bar">
   <div>
     <h1>&#9889; Comparativo Geral de Custo Mensal</h1>
-    <div class="sub">Visão Consolidada: Ranges de Custo (€/mês) para Todos os Modelos (2021–2024)</div>
+    <div class="sub">Visão Unificada: Ranges de Custo Mensal (€/mês) Ajustados por Ano de Fabrico (2021–2024)</div>
   </div>
   <a href="matrizes-km-granular-v3.html" class="nav-link">&rarr; Ver Matrizes Granulares (v3)</a>
 </div>
 
-<!-- Controlos de Filtro e Benchmark -->
+<!-- Controlos de Filtro e Modo de Preço -->
 <div class="controls-card">
   <div class="control-group">
-    <span class="control-label">Preço de Referência:</span>
-    <button class="btn-pill active" onclick="setBenchmarkPrice(21000, this)">€21.000 (Melhor Caso)</button>
-    <button class="btn-pill" onclick="setBenchmarkPrice(25000, this)">€25.000 (Mercado Realista)</button>
-    <button class="btn-pill" onclick="setBenchmarkPrice(30000, this)">€30.000 (Seminovo 2024)</button>
+    <span class="control-label">Preço de Compra:</span>
+    <button class="btn-pill active" onclick="setPriceMode('realistic', this)">Realista por Ano (Recomendado)</button>
+    <button class="btn-pill" onclick="setPriceMode(25000, this)">€25.000 Fixo</button>
+    <button class="btn-pill" onclick="setPriceMode(30000, this)">€30.000 Fixo</button>
+    <button class="btn-pill" onclick="setPriceMode(35000, this)">€35.000 Fixo</button>
   </div>
   <div class="control-group">
     <span class="control-label">Filtrar Ano:</span>
@@ -337,25 +335,24 @@ footer {
   </div>
   <div class="control-group">
     <span class="control-label">Ordenar por:</span>
-    <button class="btn-pill active" onclick="setSortMode('min_cost', this)">Custo Mínimo (Sweet Spot)</button>
-    <button class="btn-pill" onclick="setSortMode('avg_cost', this)">Custo Médio</button>
+    <button class="btn-pill active" onclick="setSortMode('min_cost', this)">Menor Custo Mínimo</button>
+    <button class="btn-pill" onclick="setSortMode('avg_cost', this)">Menor Custo Médio</button>
     <button class="btn-pill" onclick="setSortMode('year_desc', this)">Ano Mais Recente</button>
   </div>
 </div>
 
-<!-- Grelha de Cards com Ranges por Modelo -->
 <div class="grid-summary" id="gridApp"></div>
 
-<!-- Tabela Master de Comparação Lado a Lado -->
 <div class="master-table-card">
   <h2>
-    <span>&#128202; Tabela Comparativa Completa Lado a Lado</span>
-    <span style="font-size:10px;font-weight:400;color:var(--text-muted)" id="benchmarkLabel">Preço Compra: €21.000</span>
+    <span>&#128202; Tabela Comparativa Completa</span>
+    <span style="font-size:10px;font-weight:400;color:var(--text-muted)" id="benchmarkLabel">Modo: Preço Realista de Mercado por Ano</span>
   </h2>
   <table id="masterTable">
     <thead>
       <tr>
         <th>Modelo &amp; Ano</th>
+        <th>Preço Compra</th>
         <th>Garantia Bateria</th>
         <th>35.000 km</th>
         <th>50.000 km</th>
@@ -369,13 +366,13 @@ footer {
   </table>
 </div>
 
-<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Dashboard Comparativo de Elétricos</footer>
+<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Dashboard Comparativo de Elétricos sem valores negativos</footer>
 
 <script>
 (function(){
 'use strict';
 
-var M = 28; // 28 meses
+var M = 28;
 var TKM = 21000;
 var LFPR = 0.5;
 
@@ -387,6 +384,14 @@ var WS = [
     {m: 0,  p: 2500},
     {m: -999, p: 3000}
 ];
+
+// Preços de Compra Típicos/Realistas de Mercado em Agosto de 2026 por Ano de Fabrico
+var REALISTIC_PRICES = {
+    2021: 24000,
+    2022: 26000,
+    2023: 29000,
+    2024: 33000
+};
 
 var CARS = [
     {
@@ -410,7 +415,7 @@ var CARS = [
         ry: 2021, rm: 11, wy: 8, wk: 160000, b35: 17000, step: 500, jump: 500
     },
     {
-        id: 'ioniq5_2022', name: 'IONIQ 5 72.6 kWh', y: 2022, year: 2022, brand: 'ioniq5', lfp: false,
+        id: 'ioniq5_2022', name: 'IONIQ 5 72.6 kWh', year: 2022, brand: 'ioniq5', lfp: false,
         ry: 2022, rm: 7, wy: 8, wk: 160000, b35: 17500, step: 500, jump: 500
     },
     {
@@ -439,7 +444,7 @@ var CARS = [
     }
 ];
 
-var benchmarkPrice = 21000;
+var priceMode = 'realistic';
 var filterYear = 'all';
 var sortMode = 'min_cost';
 
@@ -479,23 +484,32 @@ function aResale(c, k) {
     return Math.max(0, getBaseResale(c, k) - p);
 }
 
-function mo(price, resale) {
-    return Math.round((price - resale) / M);
+// CUSTO MENSAL COM PROTEÇÃO CONTRA VALORES NEGATIVOS
+function moVal(price, resale) {
+    var diff = price - resale;
+    if (diff <= 0) return null; // Combinação irrealista
+    return Math.round(diff / M);
 }
 
 function col(v) {
+    if (v === null) return 'rgba(255,255,255,0.2)';
     var t = Math.max(0, Math.min(1, (v - 100) / 600));
     return 'rgb(' + Math.round(255 * t) + ',' + Math.round(255 * (1 - t)) + ',50)';
 }
 
-function computeMetrics(c, p) {
+function computeMetrics(c) {
+    var p = (priceMode === 'realistic') ? REALISTIC_PRICES[c.year] : Number(priceMode);
     var kms = [35, 50, 70, 90, 110];
-    var costs = kms.map(function(k){ return mo(p, aResale(c, k)); });
-    var min = Math.min.apply(null, costs);
-    var max = Math.max.apply(null, costs);
-    var sum = costs.reduce(function(a,b){return a+b;},0);
-    var avg = Math.round(sum / costs.length);
+    
+    var costs = kms.map(function(k){ return moVal(p, aResale(c, k)); });
+    var validCosts = costs.filter(function(v){ return v !== null; });
+
+    var min = validCosts.length ? Math.min.apply(null, validCosts) : null;
+    var max = validCosts.length ? Math.max.apply(null, validCosts) : null;
+    var avg = validCosts.length ? Math.round(validCosts.reduce(function(a,b){return a+b;},0) / validCosts.length) : null;
+
     return {
+        price: p,
         costs: costs,
         min: min,
         max: max,
@@ -503,8 +517,8 @@ function computeMetrics(c, p) {
     };
 }
 
-window.setBenchmarkPrice = function(price, btn) {
-    benchmarkPrice = price;
+window.setPriceMode = function(mode, btn) {
+    priceMode = mode;
     updateButtons(btn);
     renderDashboard();
 };
@@ -529,20 +543,23 @@ function updateButtons(clickedBtn) {
 }
 
 function renderDashboard() {
-    document.getElementById('benchmarkLabel').textContent = 'Preço Compra Referência: €' + benchmarkPrice.toLocaleString('pt-PT');
+    var label = (priceMode === 'realistic') 
+        ? 'Modo: Preço Realista de Mercado por Ano (2021=€24k, 2022=€26k, 2023=€29k, 2024=€33k)'
+        : 'Modo: Preço Fixo de Compra: €' + Number(priceMode).toLocaleString('pt-PT');
+    document.getElementById('benchmarkLabel').textContent = label;
 
     var list = CARS.filter(function(c) {
         return filterYear === 'all' || c.year.toString() === filterYear;
     });
 
     var items = list.map(function(c) {
-        var m = computeMetrics(c, benchmarkPrice);
+        var m = computeMetrics(c);
         return { car: c, metrics: m };
     });
 
     items.sort(function(a, b) {
-        if (sortMode === 'min_cost') return a.metrics.min - b.metrics.min;
-        if (sortMode === 'avg_cost') return a.metrics.avg - b.metrics.avg;
+        if (sortMode === 'min_cost') return (a.metrics.min || 9999) - (b.metrics.min || 9999);
+        if (sortMode === 'avg_cost') return (a.metrics.avg || 9999) - (b.metrics.avg || 9999);
         if (sortMode === 'year_desc') return b.car.year - a.car.year;
         return 0;
     });
@@ -555,19 +572,26 @@ function renderDashboard() {
         var pen = wPenalty(c);
         var wm = wMonths(c);
 
-        var normFill = Math.max(5, Math.min(100, (m.avg / 600) * 100));
+        var normFill = m.avg ? Math.max(5, Math.min(100, (m.avg / 600) * 100)) : 0;
 
         gridHtml += '<div class="model-card">';
         gridHtml += '<div class="card-header">';
+        gridHtml += '<div>';
         gridHtml += '<div class="model-title">' + c.name + (c.lfp ? ' <span class="badge-lfp">LFP</span>' : '') + '</div>';
+        gridHtml += '<div style="font-size:9px;color:var(--text-muted);margin-top:2px">Preço Compra: <b style="color:#fff">€' + m.price.toLocaleString('pt-PT') + '</b></div>';
+        gridHtml += '</div>';
         gridHtml += '<span class="year-badge">' + c.year + '</span>';
         gridHtml += '</div>';
 
         gridHtml += '<div class="range-box">';
         gridHtml += '<div class="range-values">';
-        gridHtml += '<div><span style="font-size:9px;color:var(--text-muted)">Min (35k km):</span> <span class="val-min">€' + m.min + '</span><span style="font-size:9px">/mês</span></div>';
-        gridHtml += '<div><span style="font-size:9px;color:var(--text-muted)">Média:</span> <span class="val-mid">€' + m.avg + '</span></div>';
-        gridHtml += '<div><span style="font-size:9px;color:var(--text-muted)">Max (110k km):</span> <span class="val-max">€' + m.max + '</span></div>';
+        if (m.min !== null) {
+            gridHtml += '<div><span style="font-size:9px;color:var(--text-muted)">Min (35k km):</span> <span class="val-min">€' + m.min + '</span><span style="font-size:9px">/mês</span></div>';
+            gridHtml += '<div><span style="font-size:9px;color:var(--text-muted)">Média:</span> <span class="val-mid">€' + m.avg + '</span></div>';
+            gridHtml += '<div><span style="font-size:9px;color:var(--text-muted)">Max (110k km):</span> <span class="val-max">€' + m.max + '</span></div>';
+        } else {
+            gridHtml += '<div style="color:var(--text-muted);font-size:11px;font-style:italic">Preço de compra abaixo da revenda (Irrealista)</div>';
+        }
         gridHtml += '</div>';
 
         gridHtml += '<div class="bar-track"><div class="bar-fill" style="width:' + normFill + '%"></div></div>';
@@ -591,13 +615,22 @@ function renderDashboard() {
 
         tableHtml += '<tr>';
         tableHtml += '<td>' + c.name + ' <span class="year-badge">' + c.year + '</span>' + (c.lfp ? '<span class="badge-lfp">LFP</span>' : '') + '</td>';
+        tableHtml += '<td style="color:#ffd60a">€' + m.price.toLocaleString('pt-PT') + '</td>';
         tableHtml += '<td style="font-size:9px;color:var(--text-muted)">' + (wm > 0 ? wm + 'm rest. (-' + pen + '€)' : 'Expirada (-' + pen + '€)') + '</td>';
 
         m.costs.forEach(function(cost) {
-            tableHtml += '<td><span class="cell-pill" style="background:' + col(cost) + ';color:#000">' + cost + '€</span></td>';
+            if (cost !== null) {
+                tableHtml += '<td><span class="cell-pill" style="background:' + col(cost) + ';color:#000">' + cost + '€</span></td>';
+            } else {
+                tableHtml += '<td><span class="cell-na">&mdash;</span></td>';
+            }
         });
 
-        tableHtml += '<td style="color:#ffd60a;font-weight:700">' + m.min + '€ - ' + m.max + '€</td>';
+        if (m.min !== null) {
+            tableHtml += '<td style="color:#ffd60a;font-weight:700">' + m.min + '€ - ' + m.max + '€</td>';
+        } else {
+            tableHtml += '<td class="cell-na">&mdash;</td>';
+        }
         tableHtml += '</tr>';
     });
     document.getElementById('masterTbody').innerHTML = tableHtml;

@@ -10,7 +10,6 @@ body{background:#000;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",san
 h1{font-size:18px;font-weight:700;text-align:center;opacity:.9;margin-top:6px}
 .sub{font-size:10px;color:rgba(255,255,255,.35);text-align:center}
 
-/* Filtros interativos */
 .filter-container{display:flex;flex-direction:column;gap:8px;width:100%;max-width:900px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:10px 14px}
 .filter-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .filter-label{font-size:10px;color:rgba(255,255,255,.4);font-weight:600;min-width:90px;text-transform:uppercase;letter-spacing:.5px}
@@ -72,16 +71,16 @@ footer{font-size:8px;color:rgba(255,255,255,.15);text-align:center;padding:8px 0
 
 <div id="app"></div>
 
-<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; v3 Expandida (2021-2024)</footer>
+<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; v3 Sem Valores Negativos</footer>
 
 <script>
 (function(){
 'use strict';
 
-var M = 28;            // meses de posse
-var KPM = 750;         // km por mês
-var TKM = M * KPM;     // 21.000 km total adicionado
-var LFPR = 0.5;        // redutor LFP (50%)
+var M = 28;
+var KPM = 750;
+var TKM = M * KPM;
+var LFPR = 0.5;
 
 var WS = [
     {m: 24, p: 0},
@@ -98,9 +97,7 @@ for (var i = 21000; i <= 35000; i += 1000) PR.push(i);
 
 var MN = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
 
-// Base de Dados dos 12 Veículos (2021-2024)
 var CARS = [
-    // --- TESLA MODEL 3 ---
     {
         id: 'tesla_m3_2021', n: 'Tesla Model 3 SR+ LFP', y: 2021, brand: 'tesla', lfp: true,
         ry: 2021, rm: 12, wy: 8, wk: 192000, b35: 18300, step: 300, jump: 400,
@@ -121,8 +118,6 @@ var CARS = [
         ry: 2024, rm: 3, wy: 8, wk: 192000, b35: 24500, step: 400, jump: 500,
         s: 'Facelift Highland (insonorização superior, ecrã traseiro). Garantia de bateria confortável até Mar/2032 (39m restantes).'
     },
-
-    // --- IONIQ 5 ---
     {
         id: 'ioniq5_2021', n: 'IONIQ 5 72.6 kWh', y: 2021, brand: 'ioniq5', lfp: false,
         ry: 2021, rm: 11, wy: 8, wk: 160000, b35: 17000, step: 500, jump: 500,
@@ -143,8 +138,6 @@ var CARS = [
         ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 23200, step: 500, jump: 600,
         s: 'Facelift 2024 com bateria de 84 kWh e limpa-para-brisas traseiro. 39m de garantia de bateria restante em 2028.'
     },
-
-    // --- MEGANE E-TECH ---
     {
         id: 'megane_2021', n: 'Megane E-Tech EV60', y: 2021, brand: 'megane', lfp: false,
         ry: 2021, rm: 12, wy: 8, wk: 160000, b35: 15800, step: 500, jump: 500,
@@ -167,7 +160,6 @@ var CARS = [
     }
 ];
 
-// Estado dos filtros
 var currentYear = 'all';
 var currentModel = 'all';
 
@@ -226,11 +218,15 @@ function aResale(c, k) {
     return Math.max(0, getBaseResale(c, k) - p);
 }
 
-function mo(price, resale) {
-    return Math.round((price - resale) / M);
+// CUSTO MENSAL PROTEGIDO
+function moVal(price, resale) {
+    var diff = price - resale;
+    if (diff <= 0) return null; // Preço de compra irrealista (abaixo do valor de revenda)
+    return Math.round(diff / M);
 }
 
 function col(v) {
+    if (v === null) return 'rgba(255,255,255,0.2)';
     var t = Math.max(0, Math.min(1, (v - 100) / 600));
     return 'rgb(' + Math.round(255 * t) + ',' + Math.round(255 * (1 - t)) + ',50)';
 }
@@ -279,16 +275,24 @@ function renderCard(c) {
     var wl = wLabel(c);
     var mpen = Math.round(pen / M);
 
-    var bM = Infinity, bK = 0;
-    for (var i = 0; i < KM.length; i++) {
-        var r = aResale(c, KM[i]);
-        var m = mo(PR[0], r);
-        if (m < bM) { bM = m; bK = KM[i]; }
+    // Encontrar melhor cenário válido (onde preço > revenda)
+    var bM = Infinity, bK = 0, bP = 0;
+    for (var pi = 0; pi < PR.length; pi++) {
+        var p = PR[pi];
+        for (var ki = 0; ki < KM.length; ki++) {
+            var r = aResale(c, KM[ki]);
+            var m = moVal(p, r);
+            if (m !== null && m < bM) {
+                bM = m;
+                bK = KM[ki];
+                bP = p;
+            }
+        }
     }
-    var bR = aResale(c, bK);
-    var bP = PR[0];
+
+    var bR = (bP > 0) ? aResale(c, bK) : 0;
     var bD = bP - bR;
-    var bPct = (bD / bP * 100).toFixed(1);
+    var bPct = (bP > 0) ? (bD / bP * 100).toFixed(1) : 0;
     var bF = bK + TKM / 1000;
 
     var wc = pen >= 2000 ? '#ff453a' : pen >= 750 ? '#ffd60a' : '#30d158';
@@ -297,8 +301,12 @@ function renderCard(c) {
 
     var h = '<div class="card">';
     h += '<h2>' + c.n + ' <span class="tag">' + c.y + '</span></h2>';
-    h += '<div class="best">\uD83C\uDFF7\uFE0F M\u00EDnimo Deprecia\u00E7\u00E3o (@' + fmt(bP) + '/' + bK + 'k km): <b>\u20AC' + bM + '/m\u00EAs</b> (' + bF + 'k final)</div>';
-    h += '<div class="bdet">Revenda Estimada: ' + fmt(bR) + ' \u00B7 Depr Total: ' + fmt(bD) + ' (' + bPct + '%) em ' + M + 'm</div>';
+    if (bM !== Infinity) {
+        h += '<div class="best">\uD83C\uDFF7\uFE0F M\u00EDnimo Deprecia\u00E7\u00E3o Realista (@' + fmt(bP) + '/' + bK + 'k km): <b>\u20AC' + bM + '/m\u00EAs</b> (' + bF + 'k final)</div>';
+        h += '<div class="bdet">Revenda Estimada: ' + fmt(bR) + ' \u00B7 Depr Total: ' + fmt(bD) + ' (' + bPct + '%) em ' + M + 'm</div>';
+    } else {
+        h += '<div class="best" style="color:var(--text-muted)">Preço de compra necessário acima de €35.000</div>';
+    }
 
     h += '<div class="wbox" style="background:' + wb + ';border-color:' + wbb + '">';
     h += '\uD83D\uDD0B Expira: <b style="color:' + wc + '">' + we + '</b>';
@@ -319,8 +327,12 @@ function renderCard(c) {
         h += '<tr><td>' + fmt(p) + '</td>';
         for (var ki = 0; ki < KM.length; ki++) {
             var r = aResale(c, KM[ki]);
-            var m = mo(p, r);
-            h += '<td style="color:' + col(m) + '">' + m + '</td>';
+            var m = moVal(p, r);
+            if (m !== null) {
+                h += '<td style="color:' + col(m) + '">' + m + '</td>';
+            } else {
+                h += '<td style="color:rgba(255,255,255,.2);font-style:italic">&mdash;</td>';
+            }
         }
         h += '</tr>';
     }
@@ -335,8 +347,12 @@ function renderCard(c) {
     h += '<tr class="rrow"><td>Depr % @25k</td>';
     for (var ki = 0; ki < KM.length; ki++) {
         var r = aResale(c, KM[ki]);
-        var pct = ((25000 - r) / 25000 * 100).toFixed(0);
-        h += '<td>' + pct + '%</td>';
+        if (25000 > r) {
+            var pct = ((25000 - r) / 25000 * 100).toFixed(0);
+            h += '<td>' + pct + '%</td>';
+        } else {
+            h += '<td>&mdash;</td>';
+        }
     }
     h += '</tr>';
 
@@ -345,29 +361,37 @@ function renderCard(c) {
 }
 
 function renderRanking(list) {
+    var REALISTIC_BUY_PRICE = {
+        2021: 24000,
+        2022: 26000,
+        2023: 29000,
+        2024: 33000
+    };
+
     var results = [];
     for (var ci = 0; ci < list.length; ci++) {
         var c = list[ci];
+        var buyPrice = REALISTIC_BUY_PRICE[c.y];
         var bM = Infinity, bK = 0;
         for (var ki = 0; ki < KM.length; ki++) {
             var r = aResale(c, KM[ki]);
-            var m = mo(PR[0], r);
-            if (m < bM) { bM = m; bK = KM[ki]; }
+            var m = moVal(buyPrice, r);
+            if (m !== null && m < bM) { bM = m; bK = KM[ki]; }
         }
-        results.push({c: c, bM: bM, bK: bK});
+        results.push({c: c, bM: bM, bK: bK, p: buyPrice});
     }
     results.sort(function(a, b) { return a.bM - b.bM; });
 
     var rc = ['#ffd60a', '#e0e0e0', '#cd7f32', 'rgba(255,255,255,.5)'];
 
-    var h = '<div class="card"><h2>\uD83C\uDFF7\uFE0F Ranking Sweet Spots <span class="tag">Filtro Atual</span></h2><div class="rank">';
+    var h = '<div class="card"><h2>\uD83C\uDFF7\uFE0F Ranking Sweet Spots <span class="tag">Preços Realistas por Ano</span></h2><div class="rank">';
     for (var i = 0; i < Math.min(results.length, 6); i++) {
         var r = results[i];
         var color = i < 3 ? rc[i] : rc[3];
         h += '<div class="ri">';
         h += '<span class="rn" style="color:' + color + '">' + (i + 1) + '</span>';
         h += '<span style="color:#fff;font-weight:600;font-size:10px">\u20AC' + r.bM + '/m\u00EAs</span>';
-        h += '<span class="rv" style="color:rgba(255,255,255,.4)">\u20AC' + (PR[0] / 1000).toFixed(0) + 'k/' + r.bK + 'k km</span>';
+        h += '<span class="rv" style="color:rgba(255,255,255,.4)">\u20AC' + (r.p / 1000).toFixed(0) + 'k/' + r.bK + 'k km</span>';
         h += '<span class="rv" style="color:rgba(255,255,255,.3)">' + r.c.n + ' (' + r.c.y + ')</span>';
         h += '</div>';
     }

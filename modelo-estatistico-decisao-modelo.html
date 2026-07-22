@@ -578,16 +578,26 @@ var WS = [
 
 var KM = [35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115];
 var PRICES = [];
-for (var pv = 21000; pv <= 35000; pv += 1000) PRICES.push(pv);
+for (var pv = 21000; pv <= 42000; pv += 1000) PRICES.push(pv);
 
 var CARS = [
-    // TESLA MODEL 3
+    // TESLA MODEL 3 SR / RWD (LFP)
     { id: 'tesla_2021', n: 'Tesla Model 3 SR+ LFP', y: 2021, brand: 'tesla', lfp: true, ry: 2021, rm: 12, wy: 8, wk: 192000, b35: 18300, step: 300, jump: 400 },
     { id: 'tesla_2022', n: 'Tesla Model 3 RWD LFP', y: 2022, brand: 'tesla', lfp: true, ry: 2022, rm: 6, wy: 8, wk: 192000, b35: 19800, step: 300, jump: 400 },
     { id: 'tesla_2023', n: 'Tesla Model 3 RWD LFP', y: 2023, brand: 'tesla', lfp: true, ry: 2023, rm: 6, wy: 8, wk: 192000, b35: 21500, step: 350, jump: 400 },
     { id: 'tesla_2024', n: 'Tesla Model 3 Highland', y: 2024, brand: 'tesla', lfp: true, ry: 2024, rm: 3, wy: 8, wk: 192000, b35: 24500, step: 400, jump: 500 },
 
-    // HYUNDAI IONIQ 5
+    // TESLA MODEL 3 LONG RANGE AWD (NMC)
+    { id: 'tesla_lr_2021', n: 'Tesla Model 3 LR AWD', y: 2021, brand: 'tesla_lr', lfp: false, ry: 2021, rm: 9, wy: 8, wk: 192000, b35: 20000, step: 350, jump: 450 },
+    { id: 'tesla_lr_2022', n: 'Tesla Model 3 LR AWD', y: 2022, brand: 'tesla_lr', lfp: false, ry: 2022, rm: 6, wy: 8, wk: 192000, b35: 21800, step: 350, jump: 450 },
+    { id: 'tesla_lr_2023', n: 'Tesla Model 3 LR AWD', y: 2023, brand: 'tesla_lr', lfp: false, ry: 2023, rm: 6, wy: 8, wk: 192000, b35: 24000, step: 400, jump: 450 },
+    { id: 'tesla_lr_2024', n: 'Tesla Model 3 Highland LR', y: 2024, brand: 'tesla_lr', lfp: false, ry: 2024, rm: 3, wy: 8, wk: 192000, b35: 27500, step: 450, jump: 550 },
+
+    // IONIQ 5 58 kWh (STANDARD RANGE)
+    { id: 'ioniq5_58_2021', n: 'IONIQ 5 58 kWh Standard', y: 2021, brand: 'ioniq5_58', lfp: false, ry: 2021, rm: 11, wy: 8, wk: 160000, b35: 13500, step: 450, jump: 500 },
+    { id: 'ioniq5_58_2022', n: 'IONIQ 5 58 kWh Standard', y: 2022, brand: 'ioniq5_58', lfp: false, ry: 2022, rm: 7, wy: 8, wk: 160000, b35: 15000, step: 450, jump: 500 },
+
+    // HYUNDAI IONIQ 5 (LONG RANGE)
     { id: 'ioniq_2021', n: 'IONIQ 5 72.6 kWh', y: 2021, brand: 'ioniq5', lfp: false, ry: 2021, rm: 11, wy: 8, wk: 160000, b35: 16000, step: 500, jump: 500 },
     { id: 'ioniq_2022', n: 'IONIQ 5 72.6 kWh', y: 2022, brand: 'ioniq5', lfp: false, ry: 2022, rm: 7, wy: 8, wk: 160000, b35: 17500, step: 500, jump: 500 },
     { id: 'ioniq_2023', n: 'IONIQ 5 77.4 kWh', y: 2023, brand: 'ioniq5', lfp: false, ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 19800, step: 500, jump: 500 },
@@ -643,11 +653,13 @@ function moVal(price, resale) {
     return Math.round(diff / M);
 }
 
-// COMPUTE STATS PER BRAND
+// COMPUTE STATS PER BRAND (5 MODEL BRANDS)
 var BRANDS = [
-    { id: 'tesla', name: 'Tesla Model 3', color: '#ff453a', cars: CARS.filter(function(c){ return c.brand === 'tesla'; }) },
-    { id: 'ioniq5', name: 'Hyundai IONIQ 5', color: '#64d2ff', cars: CARS.filter(function(c){ return c.brand === 'ioniq5'; }) },
-    { id: 'megane', name: 'Renault Megane E-Tech', color: '#d070ff', cars: CARS.filter(function(c){ return c.brand === 'megane'; }) }
+    { id: 'tesla', name: 'Tesla Model 3 SR/RWD (LFP)', color: '#ff453a', cars: CARS.filter(function(c){ return c.brand === 'tesla'; }) },
+    { id: 'tesla_lr', name: 'Tesla Model 3 Long Range (NMC)', color: '#ff9f0a', cars: CARS.filter(function(c){ return c.brand === 'tesla_lr'; }) },
+    { id: 'ioniq5', name: 'Hyundai IONIQ 5 (Long Range)', color: '#64d2ff', cars: CARS.filter(function(c){ return c.brand === 'ioniq5'; }) },
+    { id: 'ioniq5_58', name: 'Hyundai IONIQ 5 58 kWh (Standard)', color: '#5ac8fa', cars: CARS.filter(function(c){ return c.brand === 'ioniq5_58'; }) },
+    { id: 'megane', name: 'Renault Megane E-Tech EV60', color: '#d070ff', cars: CARS.filter(function(c){ return c.brand === 'megane'; }) }
 ];
 
 var brandResults = [];
@@ -745,7 +757,8 @@ BRANDS.forEach(function(b) {
 
 // MONTE CARLO SIMULATION (10.000 Iterações Estocásticas)
 var iterations = 10000;
-var mcWins = { tesla: 0, ioniq5: 0, megane: 0 };
+var mcWins = {};
+BRANDS.forEach(function(b){ mcWins[b.id] = 0; });
 
 for (var iter = 0; iter < iterations; iter++) {
     var randomP = PRICES[Math.floor(Math.random() * PRICES.length)];
@@ -777,17 +790,24 @@ function renderMonteCarloBoxes() {
     var container = document.getElementById('mcBrandGrid');
     var html = '';
 
-    var teslaProb = (mcWins['tesla'] / iterations * 100).toFixed(1);
-    var ioniqProb = (mcWins['ioniq5'] / iterations * 100).toFixed(1);
-    var meganeProb = (mcWins['megane'] / iterations * 100).toFixed(1);
+    var maxWins = 0;
+    var topWinner = BRANDS[0];
+    BRANDS.forEach(function(b) {
+        var w = mcWins[b.id] || 0;
+        if (w > maxWins) {
+            maxWins = w;
+            topWinner = b;
+        }
+    });
+    var topProb = (maxWins / iterations * 100).toFixed(1);
 
-    document.getElementById('mcHeroBadge').textContent = teslaProb + '% Probabilidade Dominante';
-    document.getElementById('mcHeroSummary').innerHTML = 'Com base em <b>10.000 iterações estocásticas de Monte Carlo</b> (simulando compras aleatórias em qualquer orçamento de €21k a €35k e odómetro de 35k a 115k km), o <b>Tesla Model 3</b> tem <b>' + teslaProb + '% de probabilidade de resultar no menor custo mensal de desvalorização</b> frente ao Hyundai IONIQ 5 (' + ioniqProb + '%) e Renault Megane E-Tech (' + meganeProb + '%).';
+    document.getElementById('mcHeroBadge').textContent = topProb + '% Probabilidade Dominante';
+    document.getElementById('mcHeroSummary').innerHTML = 'Com base em <b>10.000 iterações estocásticas de Monte Carlo</b> (simulando compras aleatórias em orçamentos de €21k a €42k e odómetro de 35k a 115k km), o <b>' + topWinner.name + '</b> apresenta a maior probabilidade (<b>' + topProb + '%</b>) de resultar no menor custo mensal de desvalorização entre os 5 modelos analisados.';
 
     brandResults.forEach(function(res) {
         var winCount = mcWins[res.id] || 0;
         var prob = (winCount / iterations * 100).toFixed(1);
-        var isWinner = res.id === 'tesla';
+        var isWinner = res.id === topWinner.id;
 
         html += '<div class="mc-brand-box ' + (isWinner ? 'winner' : '') + '">';
         html += '<div style="display:flex;justify-content:space-between;align-items:center">';
@@ -867,9 +887,9 @@ function renderParetoGrid() {
     var html = '';
 
     brandResults.forEach(function(res) {
-        var isTesla = res.id === 'tesla';
-        var status = isTesla ? 'Dominante na Fronteira de Pareto' : 'Sub-ótimo (Menor Retenção)';
-        var badgeColor = isTesla ? '#30d158' : '#ff453a';
+        var isHighSharpe = res.sharpe > 0.5;
+        var status = isHighSharpe ? 'Dominante na Fronteira de Pareto' : (res.sharpe > 0 ? 'Eficiência Moderada' : 'Sub-ótimo (Menor Retenção)');
+        var badgeColor = isHighSharpe ? '#30d158' : (res.sharpe > 0 ? '#ffd60a' : '#ff453a');
 
         html += '<div class="pareto-card" style="border-top:3px solid ' + res.color + '">';
         html += '<div style="font-size:12px;font-weight:800;color:' + res.color + '">' + res.name + '</div>';
@@ -881,12 +901,16 @@ function renderParetoGrid() {
         html += '</div>';
 
         html += '<div style="font-size:9px;color:var(--text-muted);line-height:1.4;margin-top:4px">';
-        if (isTesla) {
-            html += 'Combina o <b>menor custo médio mensal (€365/mês)</b> com o <b>menor desvio padrão (€175)</b> e a vantagem da química <b>LFP indestrutível</b>. Domina a fronteira estocástica.';
+        if (res.id === 'tesla') {
+            html += 'Combina custo médio reduzido com a vantagem da química <b>LFP indestrutível</b> e garantia de 192.000 km.';
+        } else if (res.id === 'tesla_lr') {
+            html += 'Combina <b>máxima autonomia e Dual Motor AWD</b> com forte retenção de valor, compensando o investimento inicial mais alto.';
         } else if (res.id === 'ioniq5') {
-            html += 'Apresenta excelente espaço e tecnologia 800V, mas sofre maior variação por km (€500/5k km) e penalização de bateria NMC em modelos de 2021/2022.';
+            html += 'Excelente espaço interno e tecnologia 800V, mantendo retenção de valor sólida nas versões de maior bateria (72.6/77.4/84 kWh).';
+        } else if (res.id === 'ioniq5_58') {
+            html += 'Preço de entrada mais acessível no mercado de usados, mas sofre maior desvalorização relativa devido à bateria mais pequena de 58 kWh.';
         } else {
-            html += 'Hatchback muito prático com excelente carregamento AC 22kW, mas desvalorização percentual mais acentuada no mercado de usados em Portugal.';
+            html += 'Hatchback compacto premium com excelente carregamento AC 22kW de série, ideal para utilização urbana e mista em Portugal.';
         }
         html += '</div>';
 

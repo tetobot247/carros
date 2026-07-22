@@ -61,8 +61,10 @@ footer{font-size:8px;color:rgba(255,255,255,.15);text-align:center;padding:8px 0
     <div class="filter-row">
         <span class="filter-label">Modelo:</span>
         <button class="filter-btn active" onclick="setModel('all', this)">Todos</button>
-        <button class="filter-btn" onclick="setModel('tesla', this)">Tesla Model 3</button>
-        <button class="filter-btn" onclick="setModel('ioniq5', this)">IONIQ 5</button>
+        <button class="filter-btn" onclick="setModel('tesla', this)">Tesla M3 LFP</button>
+        <button class="filter-btn" onclick="setModel('tesla_lr', this)">Tesla M3 LR</button>
+        <button class="filter-btn" onclick="setModel('ioniq5_58', this)">IONIQ 5 58k</button>
+        <button class="filter-btn" onclick="setModel('ioniq5', this)">IONIQ 5 LR</button>
         <button class="filter-btn" onclick="setModel('megane', this)">Megane E-Tech</button>
     </div>
 </div>
@@ -71,7 +73,7 @@ footer{font-size:8px;color:rgba(255,255,255,.15);text-align:center;padding:8px 0
 
 <div id="app"></div>
 
-<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; v3 Sem Valores Negativos</footer>
+<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; v4.0 (18 Variantes)</footer>
 
 <script>
 (function(){
@@ -93,11 +95,12 @@ var WS = [
 
 var KM = [35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115];
 var PR = [];
-for (var i = 21000; i <= 35000; i += 1000) PR.push(i);
+for (var i = 21000; i <= 42000; i += 1000) PR.push(i);
 
 var MN = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
 
 var CARS = [
+    // --- TESLA MODEL 3 SR / RWD (LFP) ---
     {
         id: 'tesla_m3_2021', n: 'Tesla Model 3 SR+ LFP', y: 2021, brand: 'tesla', lfp: true,
         ry: 2021, rm: 12, wy: 8, wk: 192000, b35: 18300, step: 300, jump: 400,
@@ -118,6 +121,42 @@ var CARS = [
         ry: 2024, rm: 3, wy: 8, wk: 192000, b35: 24500, step: 400, jump: 500,
         s: 'Facelift Highland (insonorização superior, ecrã traseiro). Garantia de bateria confortável até Mar/2032 (39m restantes).'
     },
+
+    // --- TESLA MODEL 3 LONG RANGE AWD (NMC) ---
+    {
+        id: 'tesla_lr_2021', n: 'Tesla Model 3 LR AWD', y: 2021, brand: 'tesla_lr', lfp: false,
+        ry: 2021, rm: 9, wy: 8, wk: 192000, b35: 20000, step: 350, jump: 450,
+        s: 'Bateria NMC 75-82 kWh, Dual Motor AWD e maior autonomia. 9m de garantia de bateria restantes em Dez/2028 (-€2.500).'
+    },
+    {
+        id: 'tesla_lr_2022', n: 'Tesla Model 3 LR AWD', y: 2022, brand: 'tesla_lr', lfp: false,
+        ry: 2022, rm: 6, wy: 8, wk: 192000, b35: 21800, step: 350, jump: 450,
+        s: 'AMD Ryzen com mais autonomia e tração integral. 18m de garantia restantes (-€750).'
+    },
+    {
+        id: 'tesla_lr_2023', n: 'Tesla Model 3 LR AWD', y: 2023, brand: 'tesla_lr', lfp: false,
+        ry: 2023, rm: 6, wy: 8, wk: 192000, b35: 24000, step: 400, jump: 450,
+        s: 'Autonomia ~630 km WLTP. 30m de garantia de bateria restante em 2028.'
+    },
+    {
+        id: 'tesla_lr_2024', n: 'Tesla Model 3 Highland LR', y: 2024, brand: 'tesla_lr', lfp: false,
+        ry: 2024, rm: 3, wy: 8, wk: 192000, b35: 27500, step: 450, jump: 550,
+        s: 'Highland Long Range com autonomia máxima de ~678 km WLTP e tração integral. 39m de garantia restantes.'
+    },
+
+    // --- IONIQ 5 58 kWh (STANDARD RANGE) ---
+    {
+        id: 'ioniq5_58_2021', n: 'IONIQ 5 58 kWh Standard', y: 2021, brand: 'ioniq5_58', lfp: false,
+        ry: 2021, rm: 11, wy: 8, wk: 160000, b35: 13500, step: 450, jump: 500,
+        s: 'Bateria 58 kWh de entrada (autonomia urbana/mista). 11m de garantia de bateria restantes em 2028 (-€2.000).'
+    },
+    {
+        id: 'ioniq5_58_2022', n: 'IONIQ 5 58 kWh Standard', y: 2022, brand: 'ioniq5_58', lfp: false,
+        ry: 2022, rm: 7, wy: 8, wk: 160000, b35: 15000, step: 450, jump: 500,
+        s: 'Bateria 58 kWh de entrada. 19m de garantia de bateria restantes em 2028 (-€750).'
+    },
+
+    // --- IONIQ 5 LONG RANGE ---
     {
         id: 'ioniq5_2021', n: 'IONIQ 5 72.6 kWh', y: 2021, brand: 'ioniq5', lfp: false,
         ry: 2021, rm: 11, wy: 8, wk: 160000, b35: 16000, step: 500, jump: 500,
@@ -138,6 +177,8 @@ var CARS = [
         ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 23200, step: 500, jump: 600,
         s: 'Facelift 2024 com bateria de 84 kWh e limpa-para-brisas traseiro. 39m de garantia de bateria restante em 2028.'
     },
+
+    // --- MEGANE E-TECH ---
     {
         id: 'megane_2021', n: 'Megane E-Tech EV60', y: 2021, brand: 'megane', lfp: false,
         ry: 2021, rm: 12, wy: 8, wk: 160000, b35: 15800, step: 500, jump: 500,
@@ -371,7 +412,7 @@ function renderRanking(list) {
     var results = [];
     for (var ci = 0; ci < list.length; ci++) {
         var c = list[ci];
-        var buyPrice = REALISTIC_BUY_PRICE[c.y];
+        var buyPrice = (c.brand === 'tesla_lr' ? (c.y === 2024 ? 37000 : REALISTIC_BUY_PRICE[c.y] + 3000) : REALISTIC_BUY_PRICE[c.y]);
         var bM = Infinity, bK = 0;
         for (var ki = 0; ki < KM.length; ki++) {
             var r = aResale(c, KM[ki]);

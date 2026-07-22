@@ -394,6 +394,7 @@ var REALISTIC_PRICES = {
 };
 
 var CARS = [
+    // TESLA MODEL 3 SR / RWD (LFP)
     {
         id: 'tesla_m3_2021', name: 'Tesla Model 3 SR+ LFP', year: 2021, brand: 'tesla', lfp: true,
         ry: 2021, rm: 12, wy: 8, wk: 192000, b35: 18300, step: 300, jump: 400
@@ -410,6 +411,36 @@ var CARS = [
         id: 'tesla_m3_2024', name: 'Tesla Model 3 Highland RWD LFP', year: 2024, brand: 'tesla', lfp: true,
         ry: 2024, rm: 3, wy: 8, wk: 192000, b35: 24500, step: 400, jump: 500
     },
+
+    // TESLA MODEL 3 LONG RANGE AWD (NMC)
+    {
+        id: 'tesla_lr_2021', name: 'Tesla Model 3 LR AWD', year: 2021, brand: 'tesla_lr', lfp: false,
+        ry: 2021, rm: 9, wy: 8, wk: 192000, b35: 20000, step: 350, jump: 450
+    },
+    {
+        id: 'tesla_lr_2022', name: 'Tesla Model 3 LR AWD', year: 2022, brand: 'tesla_lr', lfp: false,
+        ry: 2022, rm: 6, wy: 8, wk: 192000, b35: 21800, step: 350, jump: 450
+    },
+    {
+        id: 'tesla_lr_2023', name: 'Tesla Model 3 LR AWD', year: 2023, brand: 'tesla_lr', lfp: false,
+        ry: 2023, rm: 6, wy: 8, wk: 192000, b35: 24000, step: 400, jump: 450
+    },
+    {
+        id: 'tesla_lr_2024', name: 'Tesla Model 3 Highland LR', year: 2024, brand: 'tesla_lr', lfp: false,
+        ry: 2024, rm: 3, wy: 8, wk: 192000, b35: 27500, step: 450, jump: 550
+    },
+
+    // IONIQ 5 58 kWh (STANDARD RANGE)
+    {
+        id: 'ioniq5_58_2021', name: 'IONIQ 5 58 kWh Standard', year: 2021, brand: 'ioniq5_58', lfp: false,
+        ry: 2021, rm: 11, wy: 8, wk: 160000, b35: 13500, step: 450, jump: 500
+    },
+    {
+        id: 'ioniq5_58_2022', name: 'IONIQ 5 58 kWh Standard', year: 2022, brand: 'ioniq5_58', lfp: false,
+        ry: 2022, rm: 7, wy: 8, wk: 160000, b35: 15000, step: 450, jump: 500
+    },
+
+    // IONIQ 5 LONG RANGE
     {
         id: 'ioniq5_2021', name: 'IONIQ 5 72.6 kWh', year: 2021, brand: 'ioniq5', lfp: false,
         ry: 2021, rm: 11, wy: 8, wk: 160000, b35: 16000, step: 500, jump: 500
@@ -426,6 +457,8 @@ var CARS = [
         id: 'ioniq5_2024', name: 'IONIQ 5 84 kWh (Facelift)', year: 2024, brand: 'ioniq5', lfp: false,
         ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 23200, step: 500, jump: 600
     },
+
+    // MEGANE E-TECH EV60
     {
         id: 'megane_2021', name: 'Megane E-Tech EV60', year: 2021, brand: 'megane', lfp: false,
         ry: 2021, rm: 12, wy: 8, wk: 160000, b35: 15800, step: 500, jump: 500

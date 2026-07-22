@@ -95,11 +95,15 @@ h1 {
 
 /* BRAND COLORS */
 .c-tesla { color: #ff453a; }
+.c-tesla_lr { color: #ff9f0a; }
 .c-ioniq { color: #64d2ff; }
+.c-ioniq5_58 { color: #5ac8fa; }
 .c-megane { color: #d070ff; }
 
 .bg-tesla { background: rgba(255,69,58,0.2); border: 1px solid rgba(255,69,58,0.3); }
+.bg-tesla_lr { background: rgba(255,159,10,0.2); border: 1px solid rgba(255,159,10,0.3); }
 .bg-ioniq { background: rgba(100,210,255,0.2); border: 1px solid rgba(100,210,255,0.3); }
+.bg-ioniq5_58 { background: rgba(90,200,250,0.2); border: 1px solid rgba(90,200,250,0.3); }
 .bg-megane { background: rgba(208,112,255,0.2); border: 1px solid rgba(208,112,255,0.3); }
 
 /* PODIUM */
@@ -446,22 +450,35 @@ var WS = [
 
 var KM = [35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115];
 var PRICES = [];
-for (var pv = 21000; pv <= 35000; pv += 1000) PRICES.push(pv);
+for (var pv = 21000; pv <= 42000; pv += 1000) PRICES.push(pv);
 
 // Preços típicos de compra por ano (para cálculo de retenção %)
 var TYPICAL_PRICES = { 2021: 24000, 2022: 26000, 2023: 29000, 2024: 33000 };
 
 var CARS = [
+    // TESLA MODEL 3 SR / RWD (LFP)
     { id: 'tesla_2021', n: 'Tesla M3 SR+ LFP', y: 2021, brand: 'tesla', lfp: true, ry: 2021, rm: 12, wy: 8, wk: 192000, b35: 18300, step: 300, jump: 400 },
     { id: 'tesla_2022', n: 'Tesla M3 RWD LFP', y: 2022, brand: 'tesla', lfp: true, ry: 2022, rm: 6, wy: 8, wk: 192000, b35: 19800, step: 300, jump: 400 },
     { id: 'tesla_2023', n: 'Tesla M3 RWD LFP', y: 2023, brand: 'tesla', lfp: true, ry: 2023, rm: 6, wy: 8, wk: 192000, b35: 21500, step: 350, jump: 400 },
     { id: 'tesla_2024', n: 'Tesla M3 Highland', y: 2024, brand: 'tesla', lfp: true, ry: 2024, rm: 3, wy: 8, wk: 192000, b35: 24500, step: 400, jump: 500 },
 
+    // TESLA MODEL 3 LONG RANGE AWD (NMC)
+    { id: 'tesla_lr_2021', n: 'Tesla M3 LR AWD', y: 2021, brand: 'tesla_lr', lfp: false, ry: 2021, rm: 9, wy: 8, wk: 192000, b35: 20000, step: 350, jump: 450 },
+    { id: 'tesla_lr_2022', n: 'Tesla M3 LR AWD', y: 2022, brand: 'tesla_lr', lfp: false, ry: 2022, rm: 6, wy: 8, wk: 192000, b35: 21800, step: 350, jump: 450 },
+    { id: 'tesla_lr_2023', n: 'Tesla M3 LR AWD', y: 2023, brand: 'tesla_lr', lfp: false, ry: 2023, rm: 6, wy: 8, wk: 192000, b35: 24000, step: 400, jump: 450 },
+    { id: 'tesla_lr_2024', n: 'Tesla M3 Highland LR', y: 2024, brand: 'tesla_lr', lfp: false, ry: 2024, rm: 3, wy: 8, wk: 192000, b35: 27500, step: 450, jump: 550 },
+
+    // IONIQ 5 58 kWh (STANDARD RANGE)
+    { id: 'ioniq5_58_2021', n: 'IONIQ 5 58kWh Standard', y: 2021, brand: 'ioniq5_58', lfp: false, ry: 2021, rm: 11, wy: 8, wk: 160000, b35: 13500, step: 450, jump: 500 },
+    { id: 'ioniq5_58_2022', n: 'IONIQ 5 58kWh Standard', y: 2022, brand: 'ioniq5_58', lfp: false, ry: 2022, rm: 7, wy: 8, wk: 160000, b35: 15000, step: 450, jump: 500 },
+
+    // IONIQ 5 LONG RANGE
     { id: 'ioniq_2021', n: 'IONIQ 5 72.6 kWh', y: 2021, brand: 'ioniq5', lfp: false, ry: 2021, rm: 11, wy: 8, wk: 160000, b35: 16000, step: 500, jump: 500 },
     { id: 'ioniq_2022', n: 'IONIQ 5 72.6 kWh', y: 2022, brand: 'ioniq5', lfp: false, ry: 2022, rm: 7, wy: 8, wk: 160000, b35: 17500, step: 500, jump: 500 },
     { id: 'ioniq_2023', n: 'IONIQ 5 77.4 kWh', y: 2023, brand: 'ioniq5', lfp: false, ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 19800, step: 500, jump: 500 },
     { id: 'ioniq_2024', n: 'IONIQ 5 84kWh FL', y: 2024, brand: 'ioniq5', lfp: false, ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 23200, step: 500, jump: 600 },
 
+    // MEGANE E-TECH
     { id: 'megane_2021', n: 'Megane E-Tech', y: 2021, brand: 'megane', lfp: false, ry: 2021, rm: 12, wy: 8, wk: 160000, b35: 15800, step: 500, jump: 500 },
     { id: 'megane_2022', n: 'Megane E-Tech', y: 2022, brand: 'megane', lfp: false, ry: 2022, rm: 9, wy: 8, wk: 160000, b35: 16500, step: 500, jump: 500 },
     { id: 'megane_2023', n: 'Megane E-Tech', y: 2023, brand: 'megane', lfp: false, ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 18500, step: 500, jump: 500 },
@@ -469,9 +486,11 @@ var CARS = [
 ];
 
 var BRAND_COLORS = {
-    tesla:  { bg: 'rgba(255,69,58,0.25)',  border: 'rgba(255,69,58,0.5)',  text: '#ff453a', fill: '#ff453a' },
-    ioniq5: { bg: 'rgba(100,210,255,0.25)', border: 'rgba(100,210,255,0.5)', text: '#64d2ff', fill: '#64d2ff' },
-    megane: { bg: 'rgba(208,112,255,0.25)', border: 'rgba(208,112,255,0.5)', text: '#d070ff', fill: '#d070ff' }
+    tesla:     { bg: 'rgba(255,69,58,0.25)',  border: 'rgba(255,69,58,0.5)',  text: '#ff453a', fill: '#ff453a' },
+    tesla_lr:  { bg: 'rgba(255,159,10,0.25)', border: 'rgba(255,159,10,0.5)', text: '#ff9f0a', fill: '#ff9f0a' },
+    ioniq5:    { bg: 'rgba(100,210,255,0.25)', border: 'rgba(100,210,255,0.5)', text: '#64d2ff', fill: '#64d2ff' },
+    ioniq5_58: { bg: 'rgba(90,200,250,0.25)', border: 'rgba(90,200,250,0.5)', text: '#5ac8fa', fill: '#5ac8fa' },
+    megane:    { bg: 'rgba(208,112,255,0.25)', border: 'rgba(208,112,255,0.5)', text: '#d070ff', fill: '#d070ff' }
 };
 
 function wMonths(c) { return (c.ry + c.wy - 2028) * 12 + (c.rm - 12); }
@@ -513,8 +532,8 @@ function moVal(price, resale) {
     return Math.round(diff / M);
 }
 
-function brandCls(b) { return 'c-' + (b === 'ioniq5' ? 'ioniq' : b); }
-function brandBgCls(b) { return 'bg-' + (b === 'ioniq5' ? 'ioniq' : b); }
+function brandCls(b) { return 'c-' + b; }
+function brandBgCls(b) { return 'bg-' + b; }
 
 // ========== S1: PÓDIO GLOBAL ==========
 function renderPodium() {
@@ -577,9 +596,17 @@ function renderPodium() {
 
     // Stats grid — brand domination
     var brandWins = {};
+    var brandNames = {
+        tesla: 'Tesla SR/RWD',
+        tesla_lr: 'Tesla LR',
+        ioniq5: 'IONIQ 5 LR',
+        ioniq5_58: 'IONIQ 5 58k',
+        megane: 'Megane'
+    };
+
     carStats.forEach(function(s) {
         var b = s.car.brand;
-        if (!brandWins[b]) brandWins[b] = { wins: 0, name: b === 'tesla' ? 'Tesla' : (b === 'ioniq5' ? 'IONIQ 5' : 'Megane') };
+        if (!brandWins[b]) brandWins[b] = { wins: 0, name: brandNames[b] || b };
         brandWins[b].wins += (s.wins || 0);
     });
 
@@ -587,7 +614,15 @@ function renderPodium() {
     Object.keys(brandWins).forEach(function(b){ totalCells += brandWins[b].wins; });
 
     var statsHtml = '';
-    ['tesla', 'ioniq5', 'megane'].forEach(function(b) {
+    ['tesla', 'tesla_lr', 'ioniq5', 'ioniq5_58', 'megane'].forEach(function(b) {
+        var bw = brandWins[b] || { wins: 0, name: brandNames[b] };
+        var pct = totalCells > 0 ? Math.round(bw.wins / totalCells * 100) : 0;
+        var bc = BRAND_COLORS[b];
+        statsHtml += '<div class="stat-card" style="border-left:3px solid ' + bc.fill + '">';
+        statsHtml += '<div class="stat-value" style="color:' + bc.text + '">' + pct + '%</div>';
+        statsHtml += '<div class="stat-label">' + bw.name + ' vence em ' + bw.wins + '/' + totalCells + ' cenários</div>';
+        statsHtml += '</div>';
+    });
         var bw = brandWins[b] || { wins: 0, name: b };
         var pct = totalCells > 0 ? Math.round(bw.wins / totalCells * 100) : 0;
         var bc = BRAND_COLORS[b];
@@ -649,7 +684,7 @@ function renderWinnerMap() {
 
             if (best) {
                 var bc = BRAND_COLORS[best.brand];
-                var shortName = best.brand === 'tesla' ? 'T' : (best.brand === 'ioniq5' ? 'I' : 'M');
+                var shortName = best.brand === 'tesla' ? 'T-LFP' : (best.brand === 'tesla_lr' ? 'T-LR' : (best.brand === 'ioniq5' ? 'I-LR' : (best.brand === 'ioniq5_58' ? 'I-58' : 'Meg')));
                 shortName += "'" + (best.y % 100);
 
                 // Find 2nd place

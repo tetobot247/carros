@@ -267,7 +267,9 @@ table.hm-table td:first-child {
 }
 
 .b-tesla { background: rgba(255, 69, 58, 0.15); color: #ff453a; border: 1px solid rgba(255, 69, 58, 0.3); }
+.b-tesla_lr { background: rgba(255, 159, 10, 0.15); color: #ff9f0a; border: 1px solid rgba(255, 159, 10, 0.3); }
 .b-ioniq { background: rgba(100, 210, 255, 0.15); color: #64d2ff; border: 1px solid rgba(100, 210, 255, 0.3); }
+.b-ioniq5_58 { background: rgba(90, 200, 250, 0.15); color: #5ac8fa; border: 1px solid rgba(90, 200, 250, 0.3); }
 .b-megane { background: rgba(208, 112, 255, 0.15); color: #d070ff; border: 1px solid rgba(208, 112, 255, 0.3); }
 
 /* Tooltip Flutuante Personalizado */
@@ -372,19 +374,32 @@ var WS = [
 
 var KM = [35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115];
 var PR = [];
-for (var pVal = 21000; pVal <= 35000; pVal += 1000) PR.push(pVal);
+for (var pVal = 21000; pVal <= 42000; pVal += 1000) PR.push(pVal);
 
 var CARS = [
+    // TESLA MODEL 3 SR / RWD (LFP)
     { id: 'tesla_2021', n: 'Tesla Model 3 SR+ LFP', y: 2021, brand: 'tesla', lfp: true, ry: 2021, rm: 12, wy: 8, wk: 192000, b35: 18300, step: 300, jump: 400 },
     { id: 'tesla_2022', n: 'Tesla Model 3 RWD LFP', y: 2022, brand: 'tesla', lfp: true, ry: 2022, rm: 6, wy: 8, wk: 192000, b35: 19800, step: 300, jump: 400 },
     { id: 'tesla_2023', n: 'Tesla Model 3 RWD LFP', y: 2023, brand: 'tesla', lfp: true, ry: 2023, rm: 6, wy: 8, wk: 192000, b35: 21500, step: 350, jump: 400 },
     { id: 'tesla_2024', n: 'Tesla Model 3 Highland', y: 2024, brand: 'tesla', lfp: true, ry: 2024, rm: 3, wy: 8, wk: 192000, b35: 24500, step: 400, jump: 500 },
 
+    // TESLA MODEL 3 LONG RANGE AWD (NMC)
+    { id: 'tesla_lr_2021', n: 'Tesla Model 3 LR AWD', y: 2021, brand: 'tesla_lr', lfp: false, ry: 2021, rm: 9, wy: 8, wk: 192000, b35: 20000, step: 350, jump: 450 },
+    { id: 'tesla_lr_2022', n: 'Tesla Model 3 LR AWD', y: 2022, brand: 'tesla_lr', lfp: false, ry: 2022, rm: 6, wy: 8, wk: 192000, b35: 21800, step: 350, jump: 450 },
+    { id: 'tesla_lr_2023', n: 'Tesla Model 3 LR AWD', y: 2023, brand: 'tesla_lr', lfp: false, ry: 2023, rm: 6, wy: 8, wk: 192000, b35: 24000, step: 400, jump: 450 },
+    { id: 'tesla_lr_2024', n: 'Tesla Model 3 Highland LR', y: 2024, brand: 'tesla_lr', lfp: false, ry: 2024, rm: 3, wy: 8, wk: 192000, b35: 27500, step: 450, jump: 550 },
+
+    // IONIQ 5 58 kWh (STANDARD RANGE)
+    { id: 'ioniq5_58_2021', n: 'IONIQ 5 58 kWh Standard', y: 2021, brand: 'ioniq5_58', lfp: false, ry: 2021, rm: 11, wy: 8, wk: 160000, b35: 13500, step: 450, jump: 500 },
+    { id: 'ioniq5_58_2022', n: 'IONIQ 5 58 kWh Standard', y: 2022, brand: 'ioniq5_58', lfp: false, ry: 2022, rm: 7, wy: 8, wk: 160000, b35: 15000, step: 450, jump: 500 },
+
+    // IONIQ 5 LONG RANGE
     { id: 'ioniq_2021', n: 'IONIQ 5 72.6 kWh', y: 2021, brand: 'ioniq5', lfp: false, ry: 2021, rm: 11, wy: 8, wk: 160000, b35: 16000, step: 500, jump: 500 },
     { id: 'ioniq_2022', n: 'IONIQ 5 72.6 kWh', y: 2022, brand: 'ioniq5', lfp: false, ry: 2022, rm: 7, wy: 8, wk: 160000, b35: 17500, step: 500, jump: 500 },
     { id: 'ioniq_2023', n: 'IONIQ 5 77.4 kWh', y: 2023, brand: 'ioniq5', lfp: false, ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 19800, step: 500, jump: 500 },
     { id: 'ioniq_2024', n: 'IONIQ 5 84 kWh Facelift', y: 2024, brand: 'ioniq5', lfp: false, ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 23200, step: 500, jump: 600 },
 
+    // MEGANE E-TECH
     { id: 'megane_2021', n: 'Megane E-Tech EV60', y: 2021, brand: 'megane', lfp: false, ry: 2021, rm: 12, wy: 8, wk: 160000, b35: 15800, step: 500, jump: 500 },
     { id: 'megane_2022', n: 'Megane E-Tech EV60', y: 2022, brand: 'megane', lfp: false, ry: 2022, rm: 9, wy: 8, wk: 160000, b35: 16500, step: 500, jump: 500 },
     { id: 'megane_2023', n: 'Megane E-Tech EV60', y: 2023, brand: 'megane', lfp: false, ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 18500, step: 500, jump: 500 },

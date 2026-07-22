@@ -327,11 +327,11 @@ footer {
       <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#ff453a">&#127942; Modelo Estatisticamente Dominante</div>
       <div style="font-size:22px;font-weight:900;color:#fff;margin-top:2px">TESLA MODEL 3 (Gama Global como um todo)</div>
     </div>
-    <div class="mc-probability-badge">97.7% Probabilidade Dominante</div>
+    <div class="mc-probability-badge" id="mcHeroBadge">Calculando...</div>
   </div>
 
-  <div style="font-size:11px;color:rgba(255,255,255,0.8);line-height:1.5">
-    Com base em <b>10.000 iterações estocásticas de Monte Carlo</b> (simulando compras aleatórias em qualquer orçamento de €21k a €35k e odómetro de 35k a 115k km), o <b>Tesla Model 3</b> tem <b>97,7% de probabilidade de resultar no menor custo mensal de desvalorização</b> frente ao Hyundai IONIQ 5 (1,5%) e Renault Megane E-Tech (0,7%).
+  <div style="font-size:11px;color:rgba(255,255,255,0.8);line-height:1.5" id="mcHeroSummary">
+    Calculando probabilidade em 10.000 iterações estocásticas de Monte Carlo...
   </div>
 
   <div class="mc-grid" id="mcBrandGrid"></div>
@@ -558,10 +558,18 @@ for (var iter = 0; iter < iterations; iter++) {
     }
 }
 
-// 1. RENDER MONTE CARLO BRAND BOXES
+// 1. RENDER MONTE CARLO BRAND BOXES & DYNAMIC HERO BANNER
 function renderMonteCarloBoxes() {
     var container = document.getElementById('mcBrandGrid');
     var html = '';
+
+    var teslaProb = (mcWins['tesla'] / iterations * 100).toFixed(1);
+    var ioniqProb = (mcWins['ioniq5'] / iterations * 100).toFixed(1);
+    var meganeProb = (mcWins['megane'] / iterations * 100).toFixed(1);
+
+    // Update Dynamic Hero Header Badge and Text
+    document.getElementById('mcHeroBadge').textContent = teslaProb + '% Probabilidade Dominante';
+    document.getElementById('mcHeroSummary').innerHTML = 'Com base em <b>10.000 iterações estocásticas de Monte Carlo</b> (simulando compras aleatórias em qualquer orçamento de €21k a €35k e odómetro de 35k a 115k km), o <b>Tesla Model 3</b> tem <b>' + teslaProb + '% de probabilidade de resultar no menor custo mensal de desvalorização</b> frente ao Hyundai IONIQ 5 (' + ioniqProb + '%) e Renault Megane E-Tech (' + meganeProb + '%).';
 
     brandResults.forEach(function(res) {
         var winCount = mcWins[res.id] || 0;
@@ -569,7 +577,7 @@ function renderMonteCarloBoxes() {
         var isWinner = res.id === 'tesla';
 
         html += '<div class="mc-brand-box ' + (isWinner ? 'winner' : '') + '">';
-        html += '<div style="display:flex;justify-space-between;align-items:center">';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center">';
         html += '<span style="font-size:12px;font-weight:800;color:' + res.color + '">' + res.name + '</span>';
         html += '<span style="font-size:14px;font-weight:900;color:' + res.color + '">' + prob + '%</span>';
         html += '</div>';
@@ -625,15 +633,12 @@ function renderDensityChart() {
         html += '<div class="density-label" style="color:' + res.color + '">' + res.name + '<br><span style="font-size:8px;color:var(--text-muted)">&mu; = €' + res.mean + ' &middot; IQR = €' + res.iqr + '</span></div>';
         
         html += '<div class="density-track">';
-        // 80% Probabilistic band (P10 to P90)
         html += '<div class="density-marker-box" style="left:' + p10Left + '%;width:' + p90Width + '%;background:' + res.color + '22;border:1px dashed ' + res.color + '66" title="Faixa 80% Probabilística: €' + res.p10 + ' a €' + res.p90 + '"></div>';
         
-        // IQR band (Q1 to Q3)
         html += '<div class="density-marker-box" style="left:' + q1Left + '%;width:' + q3Width + '%;background:' + res.color + '66;border:1px solid ' + res.color + '" title="Intervalo Interquartil Q1-Q3: €' + res.q1 + ' a €' + res.q3 + '">';
         html += '<span style="color:#fff">Q1-Q3 (€' + res.q1 + '-€' + res.q3 + ')</span>';
         html += '</div>';
 
-        // Mean indicator line
         html += '<div style="position:absolute;top:0;left:' + meanLeft + '%;width:3px;height:100%;background:#fff;z-index:5" title="Média = €' + res.mean + '"></div>';
 
         html += '</div>';
@@ -664,7 +669,7 @@ function renderParetoGrid() {
 
         html += '<div style="font-size:9px;color:var(--text-muted);line-height:1.4;margin-top:4px">';
         if (isTesla) {
-            html += 'Combina o <b>menor custo médio mensal (€365/mês)</b> com o <b>menor desvio padrão (€175)</b> e a vantagem da química <b>LFP indestrutível</b>. Domina 97,7% da fronteira estocástica.';
+            html += 'Combina o <b>menor custo médio mensal (€365/mês)</b> com o <b>menor desvio padrão (€175)</b> e a vantagem da química <b>LFP indestrutível</b>. Domina a fronteira estocástica.';
         } else if (res.id === 'ioniq5') {
             html += 'Apresenta excelente espaço e tecnologia 800V, mas sofre maior variação por km (€500/5k km) e penalização de bateria NMC em modelos de 2021/2022.';
         } else {

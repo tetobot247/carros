@@ -233,6 +233,11 @@ table.hm-table td:first-child {
   border-radius: 2px;
   cursor: pointer;
   transition: transform 0.15s ease, filter 0.15s ease;
+  position: relative;
+}
+
+.px-block.has-w-pen {
+  border-bottom: 2px solid #ffd60a;
 }
 
 .px-block:hover {
@@ -255,6 +260,16 @@ table.hm-table td:first-child {
 .b-tesla { background: rgba(255, 69, 58, 0.15); color: #ff453a; border: 1px solid rgba(255, 69, 58, 0.3); }
 .b-ioniq { background: rgba(100, 210, 255, 0.15); color: #64d2ff; border: 1px solid rgba(100, 210, 255, 0.3); }
 .b-megane { background: rgba(208, 112, 255, 0.15); color: #d070ff; border: 1px solid rgba(208, 112, 255, 0.3); }
+
+.w-badge {
+  font-size: 8px;
+  color: #ffd60a;
+  background: rgba(255, 214, 10, 0.12);
+  border: 1px solid rgba(255, 214, 10, 0.25);
+  border-radius: 3px;
+  padding: 0 3px;
+  margin-left: 3px;
+}
 
 /* Tooltip Flutuante Personalizado */
 .custom-tooltip {
@@ -293,7 +308,7 @@ footer {
 <div class="top-bar">
   <div>
     <h1>&#9889; Mapa de Calor Mestre — Minimização de Custo Mensal</h1>
-    <div class="sub">3.060 Pontos de Dados Visuais (12 Modelos &times; 15 Preços &times; 17 Quilometragens) Sem Necessidade de Filtros</div>
+    <div class="sub">3.060 Pontos de Dados Visuais com Indicador Subtil de Garantia (&#9889;)</div>
   </div>
   <a href="mega-matriz-todas-ofertas.html" class="nav-link">&rarr; Ver Mega-Matriz de Números</a>
 </div>
@@ -312,12 +327,13 @@ footer {
   <div class="h-item"><div class="h-box" style="background:#ff9f0a"></div> Elevado (€300 - €400/mês)</div>
   <div class="h-item"><div class="h-box" style="background:#ff453a"></div> Caro (&gt; €400/mês)</div>
   <div class="h-item"><div class="h-box" style="background:rgba(255,255,255,0.1)"></div> Irrealista (Preço &le; Revenda)</div>
+  <div class="h-item"><span style="color:#ffd60a;font-weight:900">&#9889;</span> <span>Traço Amarelo / &#9889;: Penalização de Garantia Aplicada</span></div>
 </div>
 
 <!-- O MATRIZ MESTRE HEATMAP -->
 <div class="heatmap-card">
   <div style="font-size:13px;font-weight:800;margin-bottom:4px">&#128506;\uFE0F Matriz de Densidade Visual (Todos os 12 Veículos vs Quilometragem)</div>
-  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">Cada célula contém uma barra de 15 blocos (€21k a €35k). Passe o cursor por cima de qualquer bloco para ver a oferta exata!</div>
+  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">Cada célula contém uma barra de 15 blocos (€21k a €35k). Passe o cursor por cima de qualquer bloco para ver a oferta exata e o estado da garantia!</div>
 
   <table class="hm-table">
     <thead>
@@ -330,7 +346,7 @@ footer {
 <!-- Tooltip Flutuante -->
 <div class="custom-tooltip" id="tooltip"></div>
 
-<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Mapa de Calor Mestre de Minimização de Custo</footer>
+<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Mapa de Calor Mestre de Minimização com Indicador de Garantia</footer>
 
 <script>
 (function(){
@@ -424,7 +440,9 @@ function getBlockColor(v) {
 
 function getBrandBadge(c) {
     var cls = 'b-' + c.brand;
-    return '<span class="brand-badge ' + cls + '">' + c.n + ' (' + c.y + ')</span>';
+    var pen = wPenalty(c);
+    var wTag = pen > 0 ? '<span class="w-badge" title="Perda de garantia de bateria em 2028 (-' + pen + '€)">&#9889;</span>' : '';
+    return '<span class="brand-badge ' + cls + '">' + c.n + ' (' + c.y + ')' + wTag + '</span>';
 }
 
 // 1. LEADERBOARD TOP MINIMIZADORES
@@ -449,10 +467,12 @@ function renderLeaderboard() {
     var html = '';
 
     top5.forEach(function(item, idx) {
+        var pen = wPenalty(item.car);
+        var wTag = pen > 0 ? ' <span style="color:#ffd60a">&#9889; (-' + pen + '€)</span>' : '';
         html += '<div class="lb-item">';
         html += '<span class="lb-rank">#' + (idx + 1) + '</span>';
         html += '<span class="lb-cost">€' + item.cost + '<span style="font-size:10px;font-weight:400">/mês</span></span>';
-        html += '<span class="lb-model">' + item.car.n + ' (' + item.car.y + ')</span>';
+        html += '<span class="lb-model">' + item.car.n + ' (' + item.car.y + ')' + wTag + '</span>';
         html += '<span class="lb-meta">Compra: €' + item.price.toLocaleString('pt-PT') + ' &middot; ' + item.km + 'k km</span>';
         html += '<span class="lb-meta">Revenda 2028: €' + item.resale.toLocaleString('pt-PT') + '</span>';
         html += '</div>';
@@ -474,6 +494,7 @@ function renderHeatmap() {
     var tbHtml = '';
 
     CARS.forEach(function(c) {
+        var pen = wPenalty(c);
         tbHtml += '<tr>';
         tbHtml += '<td>' + getBrandBadge(c) + '</td>';
 
@@ -484,9 +505,9 @@ function renderHeatmap() {
             PR.forEach(function(p) {
                 var m = moVal(p, r);
                 var bg = getBlockColor(m);
-                var pen = wPenalty(c);
+                var penCls = (pen > 0) ? 'has-w-pen' : '';
 
-                tbHtml += '<div class="px-block" style="background:' + bg + '" ';
+                tbHtml += '<div class="px-block ' + penCls + '" style="background:' + bg + '" ';
                 tbHtml += 'data-name="' + c.n + ' (' + c.y + ')" ';
                 tbHtml += 'data-price="' + p + '" ';
                 tbHtml += 'data-km="' + k + '" ';
@@ -513,7 +534,7 @@ window.showTooltip = function(e, el) {
     var price = Number(el.getAttribute('data-price')).toLocaleString('pt-PT');
     var km = el.getAttribute('data-km');
     var resale = Number(el.getAttribute('data-resale')).toLocaleString('pt-PT');
-    var pen = el.getAttribute('data-pen');
+    var pen = Number(el.getAttribute('data-pen'));
     var cost = el.getAttribute('data-cost');
 
     var html = '';
@@ -521,7 +542,11 @@ window.showTooltip = function(e, el) {
     if (cost !== 'N/A') {
         html += '<div class="tt-cost">€' + cost + '<span style="font-size:11px;font-weight:500;color:#fff"> / mês</span></div>';
         html += '<div>Compra: <b>€' + price + '</b> &middot; Odómetro: <b>' + km + '.000 km</b></div>';
-        html += '<div style="font-size:9px;color:rgba(255,255,255,0.6)">Revenda Dez/2028: €' + resale + ' (Pen. Garantia: -' + pen + '€)</div>';
+        if (pen > 0) {
+            html += '<div style="font-size:9px;color:#ffd60a;margin-top:2px">&#9889; <b>Perda de Garantia da Bateria em 2028</b>: Penalização de -' + pen + '€ aplicada na revenda (€' + resale + ')</div>';
+        } else {
+            html += '<div style="font-size:9px;color:#30d158;margin-top:2px">&check; <b>Garantia Confortável</b> em 2028 (Revenda: €' + resale + ')</div>';
+        }
     } else {
         html += '<div style="color:#ff453a;font-weight:700;margin-top:2px">Combinação Irrealista</div>';
         html += '<div style="font-size:9px;color:var(--text-muted)">Preço de compra (€' + price + ') igual ou inferior à revenda (€' + resale + ')</div>';
@@ -545,8 +570,8 @@ document.addEventListener('mousemove', function(e) {
 function updateTooltipPos(e) {
     var x = e.clientX + 14;
     var y = e.clientY + 14;
-    if (x + 220 > window.innerWidth) x = e.clientX - 230;
-    if (y + 120 > window.innerHeight) y = e.clientY - 130;
+    if (x + 240 > window.innerWidth) x = e.clientX - 250;
+    if (y + 130 > window.innerHeight) y = e.clientY - 140;
     tooltipEl.style.left = x + 'px';
     tooltipEl.style.top = y + 'px';
 }

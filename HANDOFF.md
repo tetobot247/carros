@@ -10,19 +10,13 @@
 
 ### Arquivos Principais
 
-1. **`mega-matriz-todas-ofertas.html` (Mega-Matriz Granular Reunida com Filtro por Custo Médio Mensal €/mês)**
+1. **`mega-matriz-todas-ofertas.html` (Mega-Matriz Granular Reunida com Indicador de Perda de Garantia ⚡)**
+   - **Indicador Visual Subtil de Perda de Garantia (⚡):** Todas as células e badges dos modelos que sofrem penalização de garantia de bateria em Dez/2028 (menos de 24m restantes) contêm o símbolo subtil **⚡** e um sublinhado dourado discreto.
    - **Exibe TODOS os 12 modelos/anos (2021-2024) simultaneamente na mesma página**.
-   - **Filtro de Faixa de Custo Médio Mensal (€/mês):** Permite filtrar instantaneamente o orçamento pretendido através de presets:
-     - `Super Económico (< €200/mês)`
-     - `Excelente (€200 - €300/mês)`
-     - `Médio (€300 - €400/mês)`
-     - `Superior (> €400/mês)`
-     - Ou seletores personalizados de Custo Mínimo e Custo Máximo em €/mês.
-   - **Atenuação Visual Instantânea:** As células dentro do orçamento pretendido mantêm o seu brilho colorido, enquanto células fora da faixa de custo ficam suavemente atenuadas, destacando imediatamente onde estão as melhores ofertas em todas as tabelas!
-   - **Granularidade de €1.000 em €1.000:** 15 níveis de preço de compra &times; 17 colunas de quilometragem.
+   - **Filtro de Faixa de Custo Médio Mensal (€/mês):** Permite filtrar instantaneamente o orçamento pretendido.
 
 2. **`mapa-calor-minimizacao-custo.html` (Mapa de Calor Mestre)**
-   - Matrix visual de densidade sem filtros com 3.060 pontos de dados e tooltips em hover.
+   - Matrix visual de densidade sem filtros com 3.060 pontos de dados, tooltips em hover e indicador subtil de garantia ⚡.
 
 3. **`diagrama-referencia-ofertas.html` (Diagrama Mestre & Avaliador)**
    - Matriz 15x17 com widget avaliador de ofertas de mercado.

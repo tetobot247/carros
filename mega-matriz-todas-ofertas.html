@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mega-Matriz Granular — Todos os Elétricos (€1.000 em €1.000)</title>
+<title>Mega-Matriz Granular — Todos os Elétricos (Filtro por Custo Mensal)</title>
 
 <style>
 :root {
@@ -39,7 +39,7 @@ header {
 h1 {
   font-size: 22px;
   font-weight: 800;
-  background: linear-gradient(135deg, #ffffff 0%, #a1a1a1 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #30d158 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 4px;
@@ -77,18 +77,18 @@ h1 {
   box-shadow: 0 0 12px rgba(48, 209, 88, 0.3);
 }
 
-/* PAINEL FILTRO DE RANGE DE PREÇOS OPCIONAL */
-.range-filter-card {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
+/* PAINEL FILTRO DE FAIXA DE CUSTO MÉDIO MENSAL (€/MÊS) */
+.cost-filter-card {
+  background: linear-gradient(135deg, rgba(48,209,88,0.08) 0%, rgba(0,0,0,0.5) 100%);
+  border: 1px solid rgba(48, 209, 88, 0.3);
   backdrop-filter: blur(20px);
   border-radius: 16px;
-  padding: 12px 18px;
+  padding: 14px 18px;
   width: 100%;
   max-width: 1400px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .filter-row {
@@ -102,9 +102,9 @@ h1 {
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  color: var(--text-muted);
-  font-weight: 700;
-  min-width: 140px;
+  color: #30d158;
+  font-weight: 800;
+  min-width: 160px;
 }
 
 .btn-pill {
@@ -125,14 +125,14 @@ h1 {
 }
 
 .btn-pill.active {
-  background: #ffd60a;
+  background: #30d158;
   color: #000;
-  border-color: #ffd60a;
+  border-color: #30d158;
   font-weight: 800;
-  box-shadow: 0 0 12px rgba(255, 214, 10, 0.3);
+  box-shadow: 0 0 12px rgba(48, 209, 88, 0.4);
 }
 
-select {
+select, input {
   background: rgba(0, 0, 0, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: #fff;
@@ -143,37 +143,9 @@ select {
   outline: none;
 }
 
-select:focus {
-  border-color: #ffd60a;
+select:focus, input:focus {
+  border-color: #30d158;
 }
-
-/* Atalhos Rápidos de Navegação em Preço */
-.price-nav-bar {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 100%;
-  max-width: 1400px;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  padding: 8px 12px;
-  border-radius: 12px;
-}
-
-.p-chip {
-  font-size: 9px;
-  font-weight: 700;
-  padding: 3px 7px;
-  border-radius: 6px;
-  text-decoration: none;
-  color: #ffd60a;
-  background: rgba(255, 214, 10, 0.08);
-  border: 1px solid rgba(255, 214, 10, 0.2);
-  transition: all 0.15s ease;
-}
-
-.p-chip:hover { background: rgba(255, 214, 10, 0.2); transform: scale(1.05); }
 
 /* Badges e Indicators */
 .badge-car {
@@ -260,6 +232,12 @@ table.mega-table td:first-child {
   font-weight: 700;
   font-size: 9px;
   min-width: 38px;
+  transition: all 0.2s ease;
+}
+
+.cell-dimmed {
+  opacity: 0.12;
+  filter: grayscale(1);
 }
 
 .cell-na {
@@ -322,52 +300,51 @@ footer {
 
 <div class="top-bar">
   <div>
-    <h1>&#9889; Mega-Matriz Granular Reunida (€1.000 em €1.000)</h1>
+    <h1>&#9889; Mega-Matriz Granular Reunida (1000 em 1000)</h1>
     <div class="sub">15 Níveis de Preço de Compra (€21k a €35k) &times; 17 Quilometragens (35k a 115k km) para TODOS os 12 Veículos</div>
   </div>
-  <a href="matrizes-km-granular-v3.html" class="nav-link">&rarr; Ver Matrizes v3</a>
+  <a href="mapa-calor-minimizacao-custo.html" class="nav-link">&rarr; Ver Mapa de Calor</a>
 </div>
 
-<!-- PAINEL DE FILTRO OPCIONAL DE RANGE DE PREÇOS DE COMPRA -->
-<div class="range-filter-card">
+<!-- PAINEL DE FILTRO DE FAIXA DE CUSTO MÉDIO MENSAL (€/MÊS) -->
+<div class="cost-filter-card">
   <div class="filter-row">
-    <span class="filter-label">&#127899; Range de Preço:</span>
-    <button class="btn-pill active" onclick="setPresetRange(21000, 35000, this)">Todos (€21k - €35k)</button>
-    <button class="btn-pill" onclick="setPresetRange(21000, 25000, this)">Económicos (€21k - €25k)</button>
-    <button class="btn-pill" onclick="setPresetRange(26000, 30000, this)">Intermédios (€26k - €30k)</button>
-    <button class="btn-pill" onclick="setPresetRange(31000, 35000, this)">Seminovos (€31k - €35k)</button>
+    <span class="filter-label">&#128178; Faixa Custo Mensal:</span>
+    <button class="btn-pill active" onclick="setCostPreset(0, 9999, this)">Todos os Custos (€0 - €700+)</button>
+    <button class="btn-pill" onclick="setCostPreset(0, 200, this)">Super Económico (&lt; €200/mês)</button>
+    <button class="btn-pill" onclick="setCostPreset(200, 300, this)">Excelente (€200 - €300/mês)</button>
+    <button class="btn-pill" onclick="setCostPreset(300, 400, this)">Médio (€300 - €400/mês)</button>
+    <button class="btn-pill" onclick="setCostPreset(400, 9999, this)">Superior (&gt; €400/mês)</button>
   </div>
 
   <div class="filter-row">
-    <span class="filter-label">Personalizado:</span>
-    <span>De:</span>
-    <select id="minPriceSelect" onchange="onCustomRangeChange()"></select>
-    <span>Até:</span>
-    <select id="maxPriceSelect" onchange="onCustomRangeChange()"></select>
-    <span style="font-size:10px;color:var(--text-muted);margin-left:8px" id="activeRangeLabel">Exibindo 15 níveis de preço</span>
+    <span class="filter-label">Personalizado (€/mês):</span>
+    <span>Mínimo:</span>
+    <input type="number" id="minCostInput" value="0" step="25" min="0" max="800" style="width:75px" oninput="onCustomCostChange()">
+    <span>€/mês &nbsp;&nbsp; Máximo:</span>
+    <input type="number" id="maxCostInput" value="800" step="25" min="0" max="800" style="width:75px" oninput="onCustomCostChange()">
+    <span>€/mês</span>
+    <span style="font-size:10px;color:#30d158;font-weight:700;margin-left:10px" id="activeCostLabel">Destacando todas as ofertas</span>
   </div>
 </div>
-
-<!-- Atalhos Rápidos por Preço -->
-<div class="price-nav-bar" id="priceNavChips"></div>
 
 <!-- PARTE 1: MEGA-TABELA REUNIDA COM PASSO DE 1000 EM 1000 -->
 <div class="mega-table-card">
-  <div style="font-size:14px;font-weight:800;margin-bottom:4px">&#128202; Visão Cruzada Granular Reunida (Filtrada por Range de Preço)</div>
-  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">Cada bloco exibe o custo mensal exato (€/mês) para todos os modelos na mesma quilometragem de compra.</div>
+  <div style="font-size:14px;font-weight:800;margin-bottom:4px">&#128202; Visão Cruzada Granular Reunida (Filtrada por Custo Mensal em €/mês)</div>
+  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">Valores fora da faixa selecionada ficam atenuados para destacar imediatamente as melhores opções para o seu orçamento.</div>
 
   <div id="megaTableContainer"></div>
 </div>
 
 <!-- PARTE 2: FEED COMPLETO DE TODAS AS 12 MATRIZES GRANULARES INDIVIDUAIS -->
 <div style="width:100%;max-width:1400px;margin-top:10px">
-  <div style="font-size:15px;font-weight:800;margin-bottom:4px">&#128269; As 12 Matrizes Granulares Completas (Filtradas por Range de Preço)</div>
-  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">Todas as matrizes granulares completas exibidas no mesmo feed continuo.</div>
+  <div style="font-size:15px;font-weight:800;margin-bottom:4px">&#128269; As 12 Matrizes Granulares Completas (Foco no Custo Mensal Pretendido)</div>
+  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">Todas as matrizes exibidas simultaneamente com destaque visual nas células do orçamento.</div>
 
   <div class="all-cards-feed" id="allCardsFeed"></div>
 </div>
 
-<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Granularidade Total €1.000 em €1.000</footer>
+<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Filtro por Faixa de Custo Médio Mensal</footer>
 
 <script>
 (function(){
@@ -393,8 +370,8 @@ for (var pVal = 21000; pVal <= 35000; pVal += 1000) {
     ALL_PRICES.push(pVal);
 }
 
-var currentMinPrice = 21000;
-var currentMaxPrice = 35000;
+var minCostFilter = 0;
+var maxCostFilter = 9999;
 
 var CARS = [
     // TESLA
@@ -416,26 +393,11 @@ var CARS = [
     { id: 'megane_2024', n: 'Megane E-Tech EV60', y: 2024, brand: 'megane', lfp: false, ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 21000, step: 500, jump: 600 }
 ];
 
-function populateDropdowns() {
-    var minSel = document.getElementById('minPriceSelect');
-    var maxSel = document.getElementById('maxPriceSelect');
-    var hMin = '', hMax = '';
-
-    ALL_PRICES.forEach(function(p) {
-        var fmtP = '€' + p.toLocaleString('pt-PT');
-        hMin += '<option value="' + p + '"' + (p === currentMinPrice ? ' selected' : '') + '>' + fmtP + '</option>';
-        hMax += '<option value="' + p + '"' + (p === currentMaxPrice ? ' selected' : '') + '>' + fmtP + '</option>';
-    });
-
-    minSel.innerHTML = hMin;
-    maxSel.innerHTML = hMax;
-}
-
-window.setPresetRange = function(minP, maxP, btn) {
-    currentMinPrice = minP;
-    currentMaxPrice = maxP;
-    document.getElementById('minPriceSelect').value = minP;
-    document.getElementById('maxPriceSelect').value = maxP;
+window.setCostPreset = function(minC, maxC, btn) {
+    minCostFilter = minC;
+    maxCostFilter = maxC;
+    document.getElementById('minCostInput').value = minC;
+    document.getElementById('maxCostInput').value = (maxC === 9999 ? 800 : maxC);
 
     var btns = btn.parentElement.querySelectorAll('.btn-pill');
     btns.forEach(function(b){ b.classList.remove('active'); });
@@ -444,30 +406,24 @@ window.setPresetRange = function(minP, maxP, btn) {
     renderAll();
 };
 
-window.onCustomRangeChange = function() {
-    var minP = Number(document.getElementById('minPriceSelect').value);
-    var maxP = Number(document.getElementById('maxPriceSelect').value);
+window.onCustomCostChange = function() {
+    var minC = Number(document.getElementById('minCostInput').value);
+    var maxC = Number(document.getElementById('maxCostInput').value);
 
-    if (minP > maxP) {
-        var tmp = minP; minP = maxP; maxP = tmp;
-        document.getElementById('minPriceSelect').value = minP;
-        document.getElementById('maxPriceSelect').value = maxP;
+    if (minC > maxC) {
+        var tmp = minC; minC = maxC; maxC = tmp;
+        document.getElementById('minCostInput').value = minC;
+        document.getElementById('maxCostInput').value = maxC;
     }
 
-    currentMinPrice = minP;
-    currentMaxPrice = maxP;
+    minCostFilter = minC;
+    maxCostFilter = (maxC >= 800 ? 9999 : maxC);
 
-    var btns = document.querySelectorAll('.range-filter-card .btn-pill');
+    var btns = document.querySelectorAll('.cost-filter-card .btn-pill');
     btns.forEach(function(b){ b.classList.remove('active'); });
 
     renderAll();
 };
-
-function getFilteredPrices() {
-    return ALL_PRICES.filter(function(p) {
-        return p >= currentMinPrice && p <= currentMaxPrice;
-    });
-}
 
 function wMonths(c) {
     return (c.ry + c.wy - 2028) * 12 + (c.rm - 12);
@@ -518,28 +474,24 @@ function col(v) {
     return 'rgb(' + Math.round(255 * t) + ',' + Math.round(255 * (1 - t)) + ',50)';
 }
 
+function isCostInFilter(m) {
+    if (m === null) return false;
+    return (m >= minCostFilter && m <= maxCostFilter);
+}
+
 function getBadge(c) {
     var cls = 'b-' + c.brand;
     return '<span class="badge-car ' + cls + '">' + c.n + ' (' + c.y + ')</span>';
 }
 
-function renderNavChips(prices) {
-    var container = document.getElementById('priceNavChips');
-    var html = '<span style="font-size:9px;color:var(--text-muted);font-weight:700;margin-right:4px">Saltar para Preço:</span>';
-    prices.forEach(function(p) {
-        html += '<a href="#p_' + p + '" class="p-chip">€' + p.toLocaleString('pt-PT') + '</a>';
-    });
-    container.innerHTML = html;
-}
-
-function renderMegaTable(prices) {
+function renderMegaTable() {
     var container = document.getElementById('megaTableContainer');
     var html = '';
 
-    prices.forEach(function(price) {
+    ALL_PRICES.forEach(function(price) {
         html += '<div class="price-section-header" id="p_' + price + '">';
         html += '<span>&#127991; Seção Preço de Compra: €' + price.toLocaleString('pt-PT') + '</span>';
-        html += '<span style="font-size:10px;font-weight:400;color:rgba(255,255,255,0.6)">Comparativo granular de todos os 12 veículos</span>';
+        html += '<span style="font-size:10px;font-weight:400;color:rgba(255,255,255,0.6)">Comparativo em tempo real de todos os 12 veículos</span>';
         html += '</div>';
 
         html += '<table class="mega-table"><thead><tr>';
@@ -557,7 +509,9 @@ function renderMegaTable(prices) {
                 var r = aResale(c, KM[ki]);
                 var m = moVal(price, r);
                 if (m !== null) {
-                    html += '<td><span class="cell-pill" style="background:' + col(m) + ';color:#000">' + m + '€</span></td>';
+                    var match = isCostInFilter(m);
+                    var dimCls = match ? '' : 'cell-dimmed';
+                    html += '<td><span class="cell-pill ' + dimCls + '" style="background:' + col(m) + ';color:#000">' + m + '€</span></td>';
                 } else {
                     html += '<td><span class="cell-na">&mdash;</span></td>';
                 }
@@ -571,7 +525,7 @@ function renderMegaTable(prices) {
     container.innerHTML = html;
 }
 
-function renderAllCardsFeed(prices) {
+function renderAllCardsFeed() {
     var container = document.getElementById('allCardsFeed');
     var html = '';
 
@@ -597,13 +551,15 @@ function renderAllCardsFeed(prices) {
         }
         html += '</tr></thead><tbody>';
 
-        prices.forEach(function(p) {
+        ALL_PRICES.forEach(function(p) {
             html += '<tr><td>€' + (p/1000).toFixed(0) + 'k</td>';
             for (var ki = 0; ki < KM.length; ki++) {
                 var r = aResale(c, KM[ki]);
                 var m = moVal(p, r);
                 if (m !== null) {
-                    html += '<td><span class="cell-pill" style="background:' + col(m) + ';color:#000">' + m + '</span></td>';
+                    var match = isCostInFilter(m);
+                    var dimCls = match ? '' : 'cell-dimmed';
+                    html += '<td><span class="cell-pill ' + dimCls + '" style="background:' + col(m) + ';color:#000">' + m + '</span></td>';
                 } else {
                     html += '<td><span class="cell-na">&mdash;</span></td>';
                 }
@@ -625,14 +581,12 @@ function renderAllCardsFeed(prices) {
 }
 
 function renderAll() {
-    var filteredPrices = getFilteredPrices();
-    document.getElementById('activeRangeLabel').textContent = 'Exibindo ' + filteredPrices.length + ' níveis de preço (€' + currentMinPrice.toLocaleString('pt-PT') + ' a €' + currentMaxPrice.toLocaleString('pt-PT') + ')';
-    renderNavChips(filteredPrices);
-    renderMegaTable(filteredPrices);
-    renderAllCardsFeed(filteredPrices);
+    var maxDisp = (maxCostFilter === 9999 ? '€700+' : '€' + maxCostFilter);
+    document.getElementById('activeCostLabel').textContent = 'Foco em Custo Mensal entre €' + minCostFilter + ' e ' + maxDisp + '/mês';
+    renderMegaTable();
+    renderAllCardsFeed();
 }
 
-populateDropdowns();
 renderAll();
 
 })();

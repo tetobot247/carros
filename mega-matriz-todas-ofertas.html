@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mega-Matriz Reunida — Todos os Elétricos na Mesma Visualização</title>
+
+<style>
+:root {
+  --bg: #06070a;
+  --card-bg: rgba(255, 255, 255, 0.03);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --text: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.45);
+  
+  --tesla-color: #ff453a;
+  --ioniq-color: #64d2ff;
+  --megane-color: #d070ff;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+header {
+  text-align: center;
+  max-width: 1200px;
+}
+
+h1 {
+  font-size: 22px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffffff 0%, #a1a1a1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 4px;
+}
+
+.sub {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1400px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.nav-link {
+  color: #30d158;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(48, 209, 88, 0.1);
+  border: 1px solid rgba(48, 209, 88, 0.2);
+  padding: 6px 12px;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  background: rgba(48, 209, 88, 0.2);
+  box-shadow: 0 0 12px rgba(48, 209, 88, 0.3);
+}
+
+/* Atalhos Rápidos para Saltos */
+.quick-jump-bar {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  max-width: 1400px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  padding: 8px 12px;
+  border-radius: 12px;
+}
+
+.jump-chip {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #fff;
+  transition: all 0.15s ease;
+}
+
+.chip-tesla { background: rgba(255, 69, 58, 0.15); border: 1px solid rgba(255, 69, 58, 0.3); color: #ff453a; }
+.chip-ioniq { background: rgba(100, 210, 255, 0.15); border: 1px solid rgba(100, 210, 255, 0.3); color: #64d2ff; }
+.chip-megane { background: rgba(208, 112, 255, 0.15); border: 1px solid rgba(208, 112, 255, 0.3); color: #d070ff; }
+
+.jump-chip:hover { transform: scale(1.05); }
+
+/* Badges e Tags */
+.badge-car {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.b-tesla { background: rgba(255, 69, 58, 0.15); color: #ff453a; border: 1px solid rgba(255, 69, 58, 0.3); }
+.b-ioniq { background: rgba(100, 210, 255, 0.15); color: #64d2ff; border: 1px solid rgba(100, 210, 255, 0.3); }
+.b-megane { background: rgba(208, 112, 255, 0.15); color: #d070ff; border: 1px solid rgba(208, 112, 255, 0.3); }
+
+/* MEGA TABELA REUNIDA COMPLETA */
+.mega-table-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(24px);
+  border-radius: 16px;
+  padding: 16px;
+  width: 100%;
+  max-width: 1400px;
+  overflow-x: auto;
+}
+
+.price-section-header {
+  background: rgba(255, 214, 10, 0.08);
+  border-left: 4px solid #ffd60a;
+  padding: 8px 12px;
+  margin: 16px 0 8px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #ffd60a;
+  border-radius: 0 8px 8px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+table.mega-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9px;
+  min-width: 950px;
+}
+
+table.mega-table th {
+  color: var(--text-muted);
+  padding: 6px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  text-align: center;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+table.mega-table th:first-child {
+  text-align: left;
+  min-width: 180px;
+}
+
+table.mega-table td {
+  padding: 4px 2px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  font-weight: 600;
+}
+
+table.mega-table td:first-child {
+  text-align: left;
+  position: sticky;
+  left: 0;
+  background: #06070a;
+  z-index: 2;
+}
+
+.cell-pill {
+  display: inline-block;
+  padding: 3px 6px;
+  border-radius: 5px;
+  font-weight: 700;
+  font-size: 9px;
+  min-width: 38px;
+}
+
+.cell-na {
+  color: rgba(255, 255, 255, 0.15);
+  font-style: italic;
+  font-size: 9px;
+}
+
+/* FEED COMPLETO DE TODAS AS MATRIZES INDIVIDUAIS (12 CARDS EXIBIDOS JUNTOS) */
+.all-cards-feed {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 16px;
+  width: 100%;
+  max-width: 1400px;
+}
+
+.granular-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-x: auto;
+  position: relative;
+}
+
+.granular-card.border-tesla { border-top: 3px solid #ff453a; }
+.granular-card.border-ioniq { border-top: 3px solid #64d2ff; }
+.granular-card.border-megane { border-top: 3px solid #d070ff; }
+
+.granular-card h3 {
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.w-info {
+  font-size: 8px;
+  color: var(--text-muted);
+  background: rgba(255,255,255,0.04);
+  padding: 4px 6px;
+  border-radius: 6px;
+}
+
+footer {
+  font-size: 9px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 16px;
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div>
+    <h1>&#9889; Mega-Matriz Reunida de Todos os Elétricos</h1>
+    <div class="sub">12 Modelos/Anos (2021–2024) e Todas as Combinações de Preço x Quilometragem na Mesma Página</div>
+  </div>
+  <a href="matrizes-km-granular-v3.html" class="nav-link">&rarr; Ver Matrizes Interativas v3</a>
+</div>
+
+<!-- Atalhos Rápidos para Navegação Direta -->
+<div class="quick-jump-bar">
+  <span style="font-size:9px;color:var(--text-muted);font-weight:700;margin-right:4px">Ir para:</span>
+  <a href="#tesla_2021" class="jump-chip chip-tesla">Tesla 2021</a>
+  <a href="#tesla_2022" class="jump-chip chip-tesla">Tesla 2022</a>
+  <a href="#tesla_2023" class="jump-chip chip-tesla">Tesla 2023</a>
+  <a href="#tesla_2024" class="jump-chip chip-tesla">Tesla 2024</a>
+  <a href="#ioniq_2021" class="jump-chip chip-ioniq">IONIQ 2021</a>
+  <a href="#ioniq_2022" class="jump-chip chip-ioniq">IONIQ 2022</a>
+  <a href="#ioniq_2023" class="jump-chip chip-ioniq">IONIQ 2023</a>
+  <a href="#ioniq_2024" class="jump-chip chip-ioniq">IONIQ 2024</a>
+  <a href="#megane_2021" class="jump-chip chip-megane">Megane 2021</a>
+  <a href="#megane_2022" class="jump-chip chip-megane">Megane 2022</a>
+  <a href="#megane_2023" class="jump-chip chip-megane">Megane 2023</a>
+  <a href="#megane_2024" class="jump-chip chip-megane">Megane 2024</a>
+</div>
+
+<!-- PARTE 1: MEGA-TABELA REUNIDA AGRUPADA POR PREÇO DE COMPRA -->
+<div class="mega-table-card">
+  <div style="font-size:14px;font-weight:800;margin-bottom:6px">&#128202; Visão Cruzada Reunida (Todos os 12 Veículos por Faixa de Preço)</div>
+  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">Consulte diretamente qualquer combinação de Preço de Compra (€21k a €35k) vs Quilometragem (35k a 115k km) para todos os modelos ao mesmo tempo.</div>
+
+  <div id="megaTableContainer"></div>
+</div>
+
+<!-- PARTE 2: FEED INTEGRAL DE TODAS AS 12 MATRIZES GRANULARES INDIVIDUAIS -->
+<div style="width:100%;max-width:1400px;margin-top:10px">
+  <div style="font-size:15px;font-weight:800;margin-bottom:4px">&#128269; Todas as 12 Matrizes Granulares Detalhadas Exibidas em Simultâneo</div>
+  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">Cada card contém a tabela granular completa (Preços de €21k a €35k x Quilometragens de 35k a 115k km) com o valor de revenda ajustado em rodapé.</div>
+
+  <div class="all-cards-feed" id="allCardsFeed"></div>
+</div>
+
+<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Mega-Matriz Reunida sem Omissões</footer>
+
+<script>
+(function(){
+'use strict';
+
+var M = 28;
+var TKM = 21000;
+var LFPR = 0.5;
+
+var WS = [
+    {m: 24, p: 0},
+    {m: 18, p: 750},
+    {m: 12, p: 1500},
+    {m: 6,  p: 2000},
+    {m: 0,  p: 2500},
+    {m: -999, p: 3000}
+];
+
+var KM = [35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115];
+var PR = [21000, 23000, 25000, 27000, 29000, 31000, 33000, 35000];
+
+var CARS = [
+    // TESLA
+    { id: 'tesla_2021', n: 'Tesla Model 3 SR+ LFP', y: 2021, brand: 'tesla', lfp: true, ry: 2021, rm: 12, wy: 8, wk: 192000, b35: 18300, step: 300, jump: 400 },
+    { id: 'tesla_2022', n: 'Tesla Model 3 RWD LFP', y: 2022, brand: 'tesla', lfp: true, ry: 2022, rm: 6, wy: 8, wk: 192000, b35: 19800, step: 300, jump: 400 },
+    { id: 'tesla_2023', n: 'Tesla Model 3 RWD LFP', y: 2023, brand: 'tesla', lfp: true, ry: 2023, rm: 6, wy: 8, wk: 192000, b35: 21500, step: 350, jump: 400 },
+    { id: 'tesla_2024', n: 'Tesla Model 3 Highland', y: 2024, brand: 'tesla', lfp: true, ry: 2024, rm: 3, wy: 8, wk: 192000, b35: 24500, step: 400, jump: 500 },
+
+    // IONIQ 5
+    { id: 'ioniq_2021', n: 'IONIQ 5 72.6 kWh', y: 2021, brand: 'ioniq5', lfp: false, ry: 2021, rm: 11, wy: 8, wk: 160000, b35: 17000, step: 500, jump: 500 },
+    { id: 'ioniq_2022', n: 'IONIQ 5 72.6 kWh', y: 2022, brand: 'ioniq5', lfp: false, ry: 2022, rm: 7, wy: 8, wk: 160000, b35: 17500, step: 500, jump: 500 },
+    { id: 'ioniq_2023', n: 'IONIQ 5 77.4 kWh', y: 2023, brand: 'ioniq5', lfp: false, ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 19800, step: 500, jump: 500 },
+    { id: 'ioniq_2024', n: 'IONIQ 5 84 kWh Facelift', y: 2024, brand: 'ioniq5', lfp: false, ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 23200, step: 500, jump: 600 },
+
+    // MEGANE
+    { id: 'megane_2021', n: 'Megane E-Tech EV60', y: 2021, brand: 'megane', lfp: false, ry: 2021, rm: 12, wy: 8, wk: 160000, b35: 15800, step: 500, jump: 500 },
+    { id: 'megane_2022', n: 'Megane E-Tech EV60', y: 2022, brand: 'megane', lfp: false, ry: 2022, rm: 9, wy: 8, wk: 160000, b35: 16500, step: 500, jump: 500 },
+    { id: 'megane_2023', n: 'Megane E-Tech EV60', y: 2023, brand: 'megane', lfp: false, ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 18500, step: 500, jump: 500 },
+    { id: 'megane_2024', n: 'Megane E-Tech EV60', y: 2024, brand: 'megane', lfp: false, ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 21000, step: 500, jump: 600 }
+];
+
+function wMonths(c) {
+    return (c.ry + c.wy - 2028) * 12 + (c.rm - 12);
+}
+
+function wPenalty(c) {
+    var m = wMonths(c);
+    var p = 3000;
+    for (var i = 0; i < WS.length; i++) {
+        if (m >= WS[i].m) { p = WS[i].p; break; }
+    }
+    if (c.lfp && p > 0) p = Math.round(p * LFPR);
+    return p;
+}
+
+function getBaseResale(c, k) {
+    var idx = KM.indexOf(k);
+    var res = c.b35;
+    for (var i = 0; i < idx; i++) {
+        var stepKm = KM[i + 1];
+        var isJump = (stepKm > 95);
+        var drop = c.step + (isJump && KM[i] === 90 ? c.jump : 0);
+        res -= drop;
+    }
+    return res;
+}
+
+function aResale(c, k) {
+    var p = wPenalty(c);
+    var fkm = k * 1000 + TKM;
+    if (fkm > c.wk) {
+        var kp = 3000;
+        if (c.lfp) kp = Math.round(kp * LFPR);
+        p = Math.max(p, kp);
+    }
+    return Math.max(0, getBaseResale(c, k) - p);
+}
+
+function moVal(price, resale) {
+    var diff = price - resale;
+    if (diff <= 0) return null;
+    return Math.round(diff / M);
+}
+
+function col(v) {
+    if (v === null) return 'rgba(255,255,255,0.15)';
+    var t = Math.max(0, Math.min(1, (v - 100) / 600));
+    return 'rgb(' + Math.round(255 * t) + ',' + Math.round(255 * (1 - t)) + ',50)';
+}
+
+function getBadge(c) {
+    var cls = 'b-' + c.brand;
+    return '<span class="badge-car ' + cls + '">' + c.n + ' (' + c.y + ')</span>';
+}
+
+// 1. RENDERIZAR MEGA-TABELA REUNIDA POR PREÇO
+function renderMegaTable() {
+    var container = document.getElementById('megaTableContainer');
+    var html = '';
+
+    PR.forEach(function(price) {
+        html += '<div class="price-section-header">';
+        html += '<span>&#127991; Seção Preço de Compra: €' + price.toLocaleString('pt-PT') + '</span>';
+        html += '<span style="font-size:10px;font-weight:400;color:rgba(255,255,255,0.6)">Comparativo em tempo real de todos os 12 veículos</span>';
+        html += '</div>';
+
+        html += '<table class="mega-table"><thead><tr>';
+        html += '<th>Veículo &amp; Ano</th>';
+        for (var ki = 0; ki < KM.length; ki++) {
+            html += '<th>' + KM[ki] + 'k km</th>';
+        }
+        html += '</tr></thead><tbody>';
+
+        CARS.forEach(function(c) {
+            html += '<tr>';
+            html += '<td>' + getBadge(c) + '</td>';
+
+            for (var ki = 0; ki < KM.length; ki++) {
+                var r = aResale(c, KM[ki]);
+                var m = moVal(price, r);
+                if (m !== null) {
+                    html += '<td><span class="cell-pill" style="background:' + col(m) + ';color:#000">' + m + '€</span></td>';
+                } else {
+                    html += '<td><span class="cell-na">&mdash;</span></td>';
+                }
+            }
+            html += '</tr>';
+        });
+
+        html += '</tbody></table>';
+    });
+
+    container.innerHTML = html;
+}
+
+// 2. RENDERIZAR FEED INTEGRAL COM TODAS AS 12 MATRIZES GRANULARES
+function renderAllCardsFeed() {
+    var container = document.getElementById('allCardsFeed');
+    var html = '';
+
+    var allPrices = [21000, 23000, 25000, 27000, 29000, 31000, 33000, 35000];
+
+    CARS.forEach(function(c) {
+        var pen = wPenalty(c);
+        var wm = wMonths(c);
+        var borderCls = 'border-' + c.brand;
+
+        html += '<div class="granular-card ' + borderCls + '" id="' + c.id + '">';
+        html += '<h3>';
+        html += getBadge(c);
+        html += '<span style="font-size:10px;color:#ffd60a">Penalização: -' + pen + '€</span>';
+        html += '</h3>';
+
+        html += '<div class="w-info">';
+        html += 'Garantia bateria em Dez/2028: <b>' + (wm > 0 ? wm + 'm restantes' : 'Expirada') + '</b>';
+        if (c.lfp) html += ' &middot; <span style="color:#30d158">Bateria LFP (50% redutor)</span>';
+        html += '</div>';
+
+        html += '<table class="mega-table"><thead><tr><th>€\\km</th>';
+        for (var ki = 0; ki < KM.length; ki++) {
+            html += '<th>' + KM[ki] + 'k</th>';
+        }
+        html += '</tr></thead><tbody>';
+
+        allPrices.forEach(function(p) {
+            html += '<tr><td>€' + (p/1000).toFixed(0) + 'k</td>';
+            for (var ki = 0; ki < KM.length; ki++) {
+                var r = aResale(c, KM[ki]);
+                var m = moVal(p, r);
+                if (m !== null) {
+                    html += '<td><span class="cell-pill" style="background:' + col(m) + ';color:#000">' + m + '</span></td>';
+                } else {
+                    html += '<td><span class="cell-na">&mdash;</span></td>';
+                }
+            }
+            html += '</tr>';
+        });
+
+        html += '<tr style="border-top:1px solid rgba(255,255,255,0.15)"><td style="color:var(--text-muted);font-style:italic">Revenda</td>';
+        for (var ki = 0; ki < KM.length; ki++) {
+            var r = aResale(c, KM[ki]);
+            html += '<td style="color:rgba(255,255,255,0.4);font-size:8px">' + (r/1000).toFixed(1) + 'k</td>';
+        }
+        html += '</tr>';
+
+        html += '</tbody></table></div>';
+    });
+
+    container.innerHTML = html;
+}
+
+renderMegaTable();
+renderAllCardsFeed();
+
+})();
+</script>
+
+</body>
+</html>

@@ -10,21 +10,17 @@
 
 ### Arquivos Principais
 
-1. **`diagrama-referencia-ofertas.html` (NOVO - Diagrama Mestre de Referência & Avaliador de Ofertas)**
-   - **Diagrama Mestre de Referência:** Tabela 15x17 cobrindo todas as combinações de Preço de Compra (€21k a €35k) vs Quilometragem (35k a 115k km) para qualquer modelo/ano (2021-2024).
-   - **Código de Cores de Qualidade do Negócio:**
-     - 🟢 **Excelente:** `< €200/mês`
-     - 🟢 **Bom:** `€200 - €275/mês`
-     - 🟡 **Razoável:** `€275 - €350/mês`
-     - 🟠 **Elevado:** `€350 - €450/mês`
-     - 🔴 **Mau Negócio:** `> €450/mês`
-   - **Avaliador Rápido de Ofertas (Widget):** Permite inserir qualquer anúncio de mercado (Modelo, Preço e Km) e dá um verdito instantâneo com destaque da célula exata no diagrama.
+1. **`mega-matriz-todas-ofertas.html` (NOVO - Mega-Matriz Reunida de Todos os Elétricos)**
+   - **Exibe TODOS os 12 modelos/anos (2021-2024) simultaneamente na mesma página**, sem omissões.
+   - **Visão 1 (Tabela Cruzada Reunida):** Agrupa todas as marcas como linhas sob cada seção de Preço de Compra (€21k a €35k) para comparação direta de células de km (35k a 115k).
+   - **Visão 2 (Feed Integral das 12 Matrizes):** Renderiza todas as 12 tabelas granulares completas no mesmo feed continuo com links de atalho rápido.
+   - **Indicadores Visuais:** Badges de cor neon distintas (🔴 Tesla, 🔵 IONIQ 5, 🟣 Megane).
 
-2. **`matrizes-unificadas-granulares.html` (Matriz Granular Unificada)**
-   - Reúne todos os dados granulares com indicadores visuais de cor por marca (🔴 Tesla, 🔵 IONIQ 5, 🟣 Megane).
+2. **`diagrama-referencia-ofertas.html` (Diagrama Mestre & Avaliador)**
+   - Matriz 15x17 com widget avaliador de ofertas de mercado.
 
-3. **`matrizes-km-granular-v3.html` (Versão 3 — Matrizes por Card)**
-   - Visualização por cards dinâmicos.
+3. **`matrizes-unificadas-granulares.html` e `matrizes-km-granular-v3.html`**
+   - Interfaces alternativas de visualização.
 
 4. **`valores-revenda.json` (Base de Dados JSON)**
    - Estrutura JSON com dados completos das 12 variantes (2021-2024).

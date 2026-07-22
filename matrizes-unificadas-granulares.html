@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Matriz Granular Unificada — Todos os Elétricos</title>
+
+<style>
+:root {
+  --bg: #08090d;
+  --card-bg: rgba(255, 255, 255, 0.04);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --text: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.45);
+  
+  --tesla-color: #ff3b30;
+  --ioniq-color: #32ade6;
+  --megane-color: #af52de;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+header {
+  text-align: center;
+  max-width: 1000px;
+}
+
+h1 {
+  font-size: 22px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffffff 0%, #a1a1a1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 4px;
+}
+
+.sub {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Painel de Controlo & Filtros */
+.controls-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  padding: 14px 18px;
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.control-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.control-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  font-weight: 700;
+  min-width: 130px;
+}
+
+.btn-pill {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-pill:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.btn-pill.active {
+  background: #30d158;
+  color: #000;
+  border-color: #30d158;
+  font-weight: 700;
+  box-shadow: 0 0 12px rgba(48, 209, 88, 0.3);
+}
+
+/* Badges de Identificação de Modelo */
+.model-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.ind-tesla {
+  background: rgba(255, 59, 48, 0.15);
+  border: 1px solid rgba(255, 59, 48, 0.3);
+  color: #ff453a;
+}
+
+.ind-ioniq {
+  background: rgba(50, 173, 230, 0.15);
+  border: 1px solid rgba(50, 173, 230, 0.3);
+  color: #64d2ff;
+}
+
+.ind-megane {
+  background: rgba(175, 82, 222, 0.15);
+  border: 1px solid rgba(175, 82, 222, 0.3);
+  color: #d070ff;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-tesla { background: #ff3b30; box-shadow: 0 0 6px #ff3b30; }
+.dot-ioniq { background: #32ade6; box-shadow: 0 0 6px #32ade6; }
+.dot-megane { background: #af52de; box-shadow: 0 0 6px #af52de; }
+
+/* Tabela Granular Unificada */
+.table-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(24px);
+  border-radius: 16px;
+  padding: 16px;
+  width: 100%;
+  max-width: 1200px;
+  overflow-x: auto;
+}
+
+.table-header-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.table-title {
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-inline {
+  display: flex;
+  gap: 12px;
+  font-size: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9px;
+  min-width: 800px;
+}
+
+th {
+  color: var(--text-muted);
+  padding: 6px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+th:first-child { text-align: left; }
+
+td {
+  padding: 5px 3px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-weight: 600;
+}
+
+td:first-child {
+  text-align: left;
+  position: sticky;
+  left: 0;
+  background: #08090d;
+  z-index: 2;
+  white-space: nowrap;
+}
+
+.cell-pill {
+  display: inline-block;
+  padding: 3px 6px;
+  border-radius: 5px;
+  font-weight: 700;
+  font-size: 9px;
+  min-width: 38px;
+}
+
+.cell-na {
+  color: rgba(255, 255, 255, 0.2);
+  font-style: italic;
+  font-size: 9px;
+}
+
+/* Vista em Grelha Granular Lado a Lado (Split View) */
+.split-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 14px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.split-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-x: auto;
+}
+
+.split-card.border-tesla { border-top: 3px solid #ff3b30; }
+.split-card.border-ioniq { border-top: 3px solid #32ade6; }
+.split-card.border-megane { border-top: 3px solid #af52de; }
+
+footer {
+  font-size: 9px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 12px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>&#9889; Matriz Granular Unificada Multi-Modelo</h1>
+  <div class="sub">Todos os Dados Granulares (Preço x Km x Garantia) Reunidos Numa Só Visualização Comparativa</div>
+</header>
+
+<!-- Painel de Controlo -->
+<div class="controls-card">
+  <div class="control-row">
+    <span class="control-label">Modo de Visualização:</span>
+    <button class="btn-pill active" onclick="setViewMode('unified_table', this)">Tabela Cruzada Unificada</button>
+    <button class="btn-pill" onclick="setViewMode('side_by_side', this)">Matrizes Granulares Lado a Lado</button>
+  </div>
+
+  <div class="control-row" id="priceControlRow">
+    <span class="control-label">Preço de Compra:</span>
+    <button class="btn-pill active" onclick="setPriceFilter('realistic', this)">Realista por Ano (Recomendado)</button>
+    <button class="btn-pill" onclick="setPriceFilter(23000, this)">€23.000</button>
+    <button class="btn-pill" onclick="setPriceFilter(25000, this)">€25.000</button>
+    <button class="btn-pill" onclick="setPriceFilter(28000, this)">€28.000</button>
+    <button class="btn-pill" onclick="setPriceFilter(32000, this)">€32.000</button>
+  </div>
+
+  <div class="control-row">
+    <span class="control-label">Filtrar por Ano:</span>
+    <button class="btn-pill active" onclick="setYearFilter('all', this)">Todos os Anos (2021-2024)</button>
+    <button class="btn-pill" onclick="setYearFilter(2021, this)">2021</button>
+    <button class="btn-pill" onclick="setYearFilter(2022, this)">2022</button>
+    <button class="btn-pill" onclick="setYearFilter(2023, this)">2023</button>
+    <button class="btn-pill" onclick="setYearFilter(2024, this)">2024</button>
+  </div>
+</div>
+
+<div id="mainApp" style="width:100%;max-width:1200px"></div>
+
+<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Visualização Granular Unificada</footer>
+
+<script>
+(function(){
+'use strict';
+
+var M = 28;
+var TKM = 21000;
+var LFPR = 0.5;
+
+var WS = [
+    {m: 24, p: 0},
+    {m: 18, p: 750},
+    {m: 12, p: 1500},
+    {m: 6,  p: 2000},
+    {m: 0,  p: 2500},
+    {m: -999, p: 3000}
+];
+
+var REALISTIC_PRICES = {
+    2021: 24000,
+    2022: 26000,
+    2023: 29000,
+    2024: 33000
+};
+
+var KM = [35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115];
+var PR = [];
+for (var i = 21000; i <= 35000; i += 1000) PR.push(i);
+
+var CARS = [
+    // --- TESLA MODEL 3 ---
+    { id: 'tesla_2021', n: 'Tesla Model 3 SR+ LFP', y: 2021, brand: 'tesla', lfp: true, ry: 2021, rm: 12, wy: 8, wk: 192000, b35: 18300, step: 300, jump: 400 },
+    { id: 'tesla_2022', n: 'Tesla Model 3 RWD LFP', y: 2022, brand: 'tesla', lfp: true, ry: 2022, rm: 6, wy: 8, wk: 192000, b35: 19800, step: 300, jump: 400 },
+    { id: 'tesla_2023', n: 'Tesla Model 3 RWD LFP', y: 2023, brand: 'tesla', lfp: true, ry: 2023, rm: 6, wy: 8, wk: 192000, b35: 21500, step: 350, jump: 400 },
+    { id: 'tesla_2024', n: 'Tesla Model 3 Highland', y: 2024, brand: 'tesla', lfp: true, ry: 2024, rm: 3, wy: 8, wk: 192000, b35: 24500, step: 400, jump: 500 },
+
+    // --- IONIQ 5 ---
+    { id: 'ioniq_2021', n: 'IONIQ 5 72.6 kWh', y: 2021, brand: 'ioniq5', lfp: false, ry: 2021, rm: 11, wy: 8, wk: 160000, b35: 17000, step: 500, jump: 500 },
+    { id: 'ioniq_2022', n: 'IONIQ 5 72.6 kWh', y: 2022, brand: 'ioniq5', lfp: false, ry: 2022, rm: 7, wy: 8, wk: 160000, b35: 17500, step: 500, jump: 500 },
+    { id: 'ioniq_2023', n: 'IONIQ 5 77.4 kWh', y: 2023, brand: 'ioniq5', lfp: false, ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 19800, step: 500, jump: 500 },
+    { id: 'ioniq_2024', n: 'IONIQ 5 84 kWh Facelift', y: 2024, brand: 'ioniq5', lfp: false, ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 23200, step: 500, jump: 600 },
+
+    // --- MEGANE E-TECH ---
+    { id: 'megane_2021', n: 'Megane E-Tech EV60', y: 2021, brand: 'megane', lfp: false, ry: 2021, rm: 12, wy: 8, wk: 160000, b35: 15800, step: 500, jump: 500 },
+    { id: 'megane_2022', n: 'Megane E-Tech EV60', y: 2022, brand: 'megane', lfp: false, ry: 2022, rm: 9, wy: 8, wk: 160000, b35: 16500, step: 500, jump: 500 },
+    { id: 'megane_2023', n: 'Megane E-Tech EV60', y: 2023, brand: 'megane', lfp: false, ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 18500, step: 500, jump: 500 },
+    { id: 'megane_2024', n: 'Megane E-Tech EV60', y: 2024, brand: 'megane', lfp: false, ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 21000, step: 500, jump: 600 }
+];
+
+var viewMode = 'unified_table';
+var priceFilter = 'realistic';
+var yearFilter = 'all';
+
+function wMonths(c) {
+    return (c.ry + c.wy - 2028) * 12 + (c.rm - 12);
+}
+
+function wPenalty(c) {
+    var m = wMonths(c);
+    var p = 3000;
+    for (var i = 0; i < WS.length; i++) {
+        if (m >= WS[i].m) { p = WS[i].p; break; }
+    }
+    if (c.lfp && p > 0) p = Math.round(p * LFPR);
+    return p;
+}
+
+function getBaseResale(c, k) {
+    var idx = KM.indexOf(k);
+    var res = c.b35;
+    for (var i = 0; i < idx; i++) {
+        var stepKm = KM[i + 1];
+        var isJump = (stepKm > 95);
+        var drop = c.step + (isJump && KM[i] === 90 ? c.jump : 0);
+        res -= drop;
+    }
+    return res;
+}
+
+function aResale(c, k) {
+    var p = wPenalty(c);
+    var fkm = k * 1000 + TKM;
+    if (fkm > c.wk) {
+        var kp = 3000;
+        if (c.lfp) kp = Math.round(kp * LFPR);
+        p = Math.max(p, kp);
+    }
+    return Math.max(0, getBaseResale(c, k) - p);
+}
+
+function moVal(price, resale) {
+    var diff = price - resale;
+    if (diff <= 0) return null;
+    return Math.round(diff / M);
+}
+
+function col(v) {
+    if (v === null) return 'rgba(255,255,255,0.15)';
+    var t = Math.max(0, Math.min(1, (v - 100) / 600));
+    return 'rgb(' + Math.round(255 * t) + ',' + Math.round(255 * (1 - t)) + ',50)';
+}
+
+function getBadgeHtml(c) {
+    var cls = 'ind-' + c.brand;
+    var dotCls = 'dot-' + c.brand;
+    return '<span class="model-indicator ' + cls + '"><span class="dot ' + dotCls + '"></span>' + c.n + ' <span style="opacity:0.8">(' + c.y + ')</span></span>';
+}
+
+window.setViewMode = function(mode, btn) {
+    viewMode = mode;
+    updateButtons(btn);
+    renderApp();
+};
+
+window.setPriceFilter = function(price, btn) {
+    priceFilter = price;
+    updateButtons(btn);
+    renderApp();
+};
+
+window.setYearFilter = function(year, btn) {
+    yearFilter = year;
+    updateButtons(btn);
+    renderApp();
+};
+
+function updateButtons(clickedBtn) {
+    var parent = clickedBtn.parentElement;
+    var btns = parent.querySelectorAll('.btn-pill');
+    btns.forEach(function(b){ b.classList.remove('active'); });
+    clickedBtn.classList.add('active');
+}
+
+function filterCarsList() {
+    return CARS.filter(function(c) {
+        return yearFilter === 'all' || c.y == yearFilter;
+    });
+}
+
+function renderUnifiedTable() {
+    var list = filterCarsList();
+    var h = '<div class="table-card">';
+    h += '<div class="table-header-box">';
+    h += '<div class="table-title">&#128202; Matriz Cruzada Unificada (€/mês por Km de Compra)</div>';
+    h += '<div class="legend-inline">';
+    h += '<span style="color:#ff453a">&#9679; Tesla</span>';
+    h += '<span style="color:#64d2ff">&#9679; IONIQ 5</span>';
+    h += '<span style="color:#d070ff">&#9679; Megane</span>';
+    h += '</div></div>';
+
+    h += '<table><thead><tr>';
+    h += '<th>Modelo &amp; Ano</th>';
+    h += '<th>Preço Compra</th>';
+    h += '<th>Penalização</th>';
+    for (var ki = 0; ki < KM.length; ki++) {
+        h += '<th>' + KM[ki] + 'k</th>';
+    }
+    h += '</tr></thead><tbody>';
+
+    list.forEach(function(c) {
+        var price = (priceFilter === 'realistic') ? REALISTIC_PRICES[c.y] : Number(priceFilter);
+        var pen = wPenalty(c);
+
+        h += '<tr>';
+        h += '<td>' + getBadgeHtml(c) + '</td>';
+        h += '<td style="color:#ffd60a;font-weight:700">\u20AC' + price.toLocaleString('pt-PT') + '</td>';
+        h += '<td style="color:var(--text-muted);font-size:8px">-' + pen + '\u20AC</td>';
+
+        for (var ki = 0; ki < KM.length; ki++) {
+            var r = aResale(c, KM[ki]);
+            var m = moVal(price, r);
+            if (m !== null) {
+                h += '<td><span class="cell-pill" style="background:' + col(m) + ';color:#000">' + m + '</span></td>';
+            } else {
+                h += '<td><span class="cell-na">&mdash;</span></td>';
+            }
+        }
+        h += '</tr>';
+    });
+
+    h += '</tbody></table></div>';
+    return h;
+}
+
+function renderSideBySide() {
+    var list = filterCarsList();
+    var h = '<div class="split-grid">';
+
+    list.forEach(function(c) {
+        var price = (priceFilter === 'realistic') ? REALISTIC_PRICES[c.y] : Number(priceFilter);
+        var pen = wPenalty(c);
+        var borderCls = 'border-' + c.brand;
+
+        h += '<div class="split-card ' + borderCls + '">';
+        h += '<div style="display:flex;justify-content:space-between;align-items:center">';
+        h += getBadgeHtml(c);
+        h += '<span style="font-size:10px;color:#ffd60a;font-weight:700">Compra: \u20AC' + price.toLocaleString('pt-PT') + '</span>';
+        h += '</div>';
+
+        h += '<table><thead><tr><th>Km</th><th>Revenda</th><th>Pen.</th><th>\u20AC/mês</th></tr></thead><tbody>';
+
+        for (var ki = 0; ki < KM.length; ki++) {
+            var k = KM[ki];
+            var r = aResale(c, k);
+            var m = moVal(price, r);
+
+            h += '<tr>';
+            h += '<td>' + k + 'k km</td>';
+            h += '<td style="color:var(--text-muted)">\u20AC' + r.toLocaleString('pt-PT') + '</td>';
+            h += '<td style="color:rgba(255,255,255,0.3)">-' + pen + '\u20AC</td>';
+            if (m !== null) {
+                h += '<td><span class="cell-pill" style="background:' + col(m) + ';color:#000">' + m + '\u20AC</span></td>';
+            } else {
+                h += '<td><span class="cell-na">&mdash;</span></td>';
+            }
+            h += '</tr>';
+        }
+
+        h += '</tbody></table></div>';
+    });
+
+    h += '</div>';
+    return h;
+}
+
+function renderApp() {
+    var el = document.getElementById('mainApp');
+    if (viewMode === 'unified_table') {
+        el.innerHTML = renderUnifiedTable();
+    } else {
+        el.innerHTML = renderSideBySide();
+    }
+}
+
+renderApp();
+
+})();
+</script>
+</body>
+</html>

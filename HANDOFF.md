@@ -10,11 +10,12 @@
 
 ### Arquivos Principais
 
-1. **`mega-matriz-todas-ofertas.html` (NOVO - Mega-Matriz Reunida de Todos os Elétricos)**
-   - **Exibe TODOS os 12 modelos/anos (2021-2024) simultaneamente na mesma página**, sem omissões.
-   - **Visão 1 (Tabela Cruzada Reunida):** Agrupa todas as marcas como linhas sob cada seção de Preço de Compra (€21k a €35k) para comparação direta de células de km (35k a 115k).
-   - **Visão 2 (Feed Integral das 12 Matrizes):** Renderiza todas as 12 tabelas granulares completas no mesmo feed continuo com links de atalho rápido.
-   - **Indicadores Visuais:** Badges de cor neon distintas (🔴 Tesla, 🔵 IONIQ 5, 🟣 Megane).
+1. **`mega-matriz-todas-ofertas.html` (NOVO - Mega-Matriz Granular Reunida de €1.000 em €1.000)**
+   - **Granularidade Máxima de Preços:** 15 níveis de Preço de Compra (**€21.000, €22.000, €23.000, ..., €35.000**) &times; 17 colunas de Quilometragem (35k a 115k km).
+   - **Exibe TODOS os 12 modelos/anos (2021-2024) simultaneamente na mesma página** (total de 3.060 pontos de dados calculados e validados).
+   - **Visão 1 (Tabela Cruzada por Preço):** 15 seções de preço reunindo todos os modelos lado a lado.
+   - **Visão 2 (Feed Integral das 12 Matrizes):** Renderiza todas as 12 tabelas granulares 15x17 completas.
+   - **Navegação Direta:** Bar com chips atalhos para saltar diretamente para qualquer valor de preço de compra (€21k a €35k).
 
 2. **`diagrama-referencia-ofertas.html` (Diagrama Mestre & Avaliador)**
    - Matriz 15x17 com widget avaliador de ofertas de mercado.
@@ -37,4 +38,5 @@
 - **Uso:** 750 km/mês (+21.000 km adicionados).
 - **Local:** Porto, Portugal.
 - **Anos Cobertos:** 2021, 2022, 2023, 2024.
+- **Passo de Preço:** €1.000 em €1.000 (€21k a €35k).
 - **Sem Custo Negativo:** Se `Preço_Compra ≤ Revenda_Ajustada`, a célula exibe `—` (Irrealista).

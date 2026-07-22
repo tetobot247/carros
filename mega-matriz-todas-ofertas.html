@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mega-Matriz Reunida — Todos os Elétricos na Mesma Visualização</title>
+<title>Mega-Matriz Granular — Todos os Elétricos (€1.000 em €1.000)</title>
 
 <style>
 :root {
@@ -33,7 +33,7 @@ body {
 
 header {
   text-align: center;
-  max-width: 1200px;
+  max-width: 1400px;
 }
 
 h1 {
@@ -77,10 +77,10 @@ h1 {
   box-shadow: 0 0 12px rgba(48, 209, 88, 0.3);
 }
 
-/* Atalhos Rápidos para Saltos */
-.quick-jump-bar {
+/* Atalhos Rápidos de Navegação em Preço */
+.price-nav-bar {
   display: flex;
-  gap: 6px;
+  gap: 4px;
   flex-wrap: wrap;
   justify-content: center;
   width: 100%;
@@ -91,23 +91,21 @@ h1 {
   border-radius: 12px;
 }
 
-.jump-chip {
+.p-chip {
   font-size: 9px;
   font-weight: 700;
-  padding: 3px 8px;
+  padding: 3px 7px;
   border-radius: 6px;
   text-decoration: none;
-  color: #fff;
+  color: #ffd60a;
+  background: rgba(255, 214, 10, 0.08);
+  border: 1px solid rgba(255, 214, 10, 0.2);
   transition: all 0.15s ease;
 }
 
-.chip-tesla { background: rgba(255, 69, 58, 0.15); border: 1px solid rgba(255, 69, 58, 0.3); color: #ff453a; }
-.chip-ioniq { background: rgba(100, 210, 255, 0.15); border: 1px solid rgba(100, 210, 255, 0.3); color: #64d2ff; }
-.chip-megane { background: rgba(208, 112, 255, 0.15); border: 1px solid rgba(208, 112, 255, 0.3); color: #d070ff; }
+.p-chip:hover { background: rgba(255, 214, 10, 0.2); transform: scale(1.05); }
 
-.jump-chip:hover { transform: scale(1.05); }
-
-/* Badges e Tags */
+/* Badges e Indicators */
 .badge-car {
   display: inline-flex;
   align-items: center;
@@ -123,7 +121,7 @@ h1 {
 .b-ioniq { background: rgba(100, 210, 255, 0.15); color: #64d2ff; border: 1px solid rgba(100, 210, 255, 0.3); }
 .b-megane { background: rgba(208, 112, 255, 0.15); color: #d070ff; border: 1px solid rgba(208, 112, 255, 0.3); }
 
-/* MEGA TABELA REUNIDA COMPLETA */
+/* MEGA TABELA REUNIDA COMPLETA (15 PREÇOS DE 1000 EM 1000) */
 .mega-table-card {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
@@ -139,7 +137,7 @@ h1 {
   background: rgba(255, 214, 10, 0.08);
   border-left: 4px solid #ffd60a;
   padding: 8px 12px;
-  margin: 16px 0 8px;
+  margin: 18px 0 8px;
   font-size: 12px;
   font-weight: 800;
   color: #ffd60a;
@@ -200,7 +198,7 @@ table.mega-table td:first-child {
   font-size: 9px;
 }
 
-/* FEED COMPLETO DE TODAS AS MATRIZES INDIVIDUAIS (12 CARDS EXIBIDOS JUNTOS) */
+/* FEED COMPLETO DE TODAS AS 12 MATRIZES GRANULARES INDIVIDUAIS */
 .all-cards-feed {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
@@ -254,46 +252,49 @@ footer {
 
 <div class="top-bar">
   <div>
-    <h1>&#9889; Mega-Matriz Reunida de Todos os Elétricos</h1>
-    <div class="sub">12 Modelos/Anos (2021–2024) e Todas as Combinações de Preço x Quilometragem na Mesma Página</div>
+    <h1>&#9889; Mega-Matriz Granular Reunida (1000 em 1000)</h1>
+    <div class="sub">15 Níveis de Preço de Compra (€21k a €35k) &times; 17 Quilometragens (35k a 115k km) para TODOS os 12 Veículos</div>
   </div>
-  <a href="matrizes-km-granular-v3.html" class="nav-link">&rarr; Ver Matrizes Interativas v3</a>
+  <a href="matrizes-km-granular-v3.html" class="nav-link">&rarr; Ver Matrizes v3</a>
 </div>
 
-<!-- Atalhos Rápidos para Navegação Direta -->
-<div class="quick-jump-bar">
-  <span style="font-size:9px;color:var(--text-muted);font-weight:700;margin-right:4px">Ir para:</span>
-  <a href="#tesla_2021" class="jump-chip chip-tesla">Tesla 2021</a>
-  <a href="#tesla_2022" class="jump-chip chip-tesla">Tesla 2022</a>
-  <a href="#tesla_2023" class="jump-chip chip-tesla">Tesla 2023</a>
-  <a href="#tesla_2024" class="jump-chip chip-tesla">Tesla 2024</a>
-  <a href="#ioniq_2021" class="jump-chip chip-ioniq">IONIQ 2021</a>
-  <a href="#ioniq_2022" class="jump-chip chip-ioniq">IONIQ 2022</a>
-  <a href="#ioniq_2023" class="jump-chip chip-ioniq">IONIQ 2023</a>
-  <a href="#ioniq_2024" class="jump-chip chip-ioniq">IONIQ 2024</a>
-  <a href="#megane_2021" class="jump-chip chip-megane">Megane 2021</a>
-  <a href="#megane_2022" class="jump-chip chip-megane">Megane 2022</a>
-  <a href="#megane_2023" class="jump-chip chip-megane">Megane 2023</a>
-  <a href="#megane_2024" class="jump-chip chip-megane">Megane 2024</a>
+<!-- Atalhos Rápidos por Preço -->
+<div class="price-nav-bar">
+  <span style="font-size:9px;color:var(--text-muted);font-weight:700;margin-right:4px">Saltar para Preço:</span>
+  <a href="#p_21000" class="p-chip">€21.000</a>
+  <a href="#p_22000" class="p-chip">€22.000</a>
+  <a href="#p_23000" class="p-chip">€23.000</a>
+  <a href="#p_24000" class="p-chip">€24.000</a>
+  <a href="#p_25000" class="p-chip">€25.000</a>
+  <a href="#p_26000" class="p-chip">€26.000</a>
+  <a href="#p_27000" class="p-chip">€27.000</a>
+  <a href="#p_28000" class="p-chip">€28.000</a>
+  <a href="#p_29000" class="p-chip">€29.000</a>
+  <a href="#p_30000" class="p-chip">€30.000</a>
+  <a href="#p_31000" class="p-chip">€31.000</a>
+  <a href="#p_32000" class="p-chip">€32.000</a>
+  <a href="#p_33000" class="p-chip">€33.000</a>
+  <a href="#p_34000" class="p-chip">€34.000</a>
+  <a href="#p_35000" class="p-chip">€35.000</a>
 </div>
 
-<!-- PARTE 1: MEGA-TABELA REUNIDA AGRUPADA POR PREÇO DE COMPRA -->
+<!-- PARTE 1: MEGA-TABELA REUNIDA COM PASSO DE 1000 EM 1000 -->
 <div class="mega-table-card">
-  <div style="font-size:14px;font-weight:800;margin-bottom:6px">&#128202; Visão Cruzada Reunida (Todos os 12 Veículos por Faixa de Preço)</div>
-  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">Consulte diretamente qualquer combinação de Preço de Compra (€21k a €35k) vs Quilometragem (35k a 115k km) para todos os modelos ao mesmo tempo.</div>
+  <div style="font-size:14px;font-weight:800;margin-bottom:4px">&#128202; Visão Cruzada Granular Reunida (15 Preços &times; 12 Veículos)</div>
+  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">Cada bloco exibe o custo mensal exato (€/mês) para todos os modelos na mesma quilometragem de compra.</div>
 
   <div id="megaTableContainer"></div>
 </div>
 
-<!-- PARTE 2: FEED INTEGRAL DE TODAS AS 12 MATRIZES GRANULARES INDIVIDUAIS -->
+<!-- PARTE 2: FEED COMPLETO DE TODAS AS 12 MATRIZES GRANULARES INDIVIDUAIS (15 LINHAS DE PREÇO CADA) -->
 <div style="width:100%;max-width:1400px;margin-top:10px">
-  <div style="font-size:15px;font-weight:800;margin-bottom:4px">&#128269; Todas as 12 Matrizes Granulares Detalhadas Exibidas em Simultâneo</div>
-  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">Cada card contém a tabela granular completa (Preços de €21k a €35k x Quilometragens de 35k a 115k km) com o valor de revenda ajustado em rodapé.</div>
+  <div style="font-size:15px;font-weight:800;margin-bottom:4px">&#128269; As 12 Matrizes Granulares Completas (15 linhas de €1.000 em €1.000 cada)</div>
+  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">Todas as matrizes granulares 15x17 completas exibidas na mesma página.</div>
 
   <div class="all-cards-feed" id="allCardsFeed"></div>
 </div>
 
-<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Mega-Matriz Reunida sem Omissões</footer>
+<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Granularidade Total €1.000 em €1.000</footer>
 
 <script>
 (function(){
@@ -313,7 +314,12 @@ var WS = [
 ];
 
 var KM = [35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115];
-var PR = [21000, 23000, 25000, 27000, 29000, 31000, 33000, 35000];
+
+// PASSO GRANULAR DE €1.000 EM €1.000 (15 NÍVEIS DE PREÇO)
+var PR = [];
+for (var pVal = 21000; pVal <= 35000; pVal += 1000) {
+    PR.push(pVal);
+}
 
 var CARS = [
     // TESLA
@@ -389,15 +395,15 @@ function getBadge(c) {
     return '<span class="badge-car ' + cls + '">' + c.n + ' (' + c.y + ')</span>';
 }
 
-// 1. RENDERIZAR MEGA-TABELA REUNIDA POR PREÇO
+// 1. RENDERIZAR MEGA-TABELA REUNIDA (15 NÍVEIS DE PREÇO DE 1000 EM 1000)
 function renderMegaTable() {
     var container = document.getElementById('megaTableContainer');
     var html = '';
 
     PR.forEach(function(price) {
-        html += '<div class="price-section-header">';
+        html += '<div class="price-section-header" id="p_' + price + '">';
         html += '<span>&#127991; Seção Preço de Compra: €' + price.toLocaleString('pt-PT') + '</span>';
-        html += '<span style="font-size:10px;font-weight:400;color:rgba(255,255,255,0.6)">Comparativo em tempo real de todos os 12 veículos</span>';
+        html += '<span style="font-size:10px;font-weight:400;color:rgba(255,255,255,0.6)">Comparativo granular de todos os 12 veículos</span>';
         html += '</div>';
 
         html += '<table class="mega-table"><thead><tr>';
@@ -429,12 +435,10 @@ function renderMegaTable() {
     container.innerHTML = html;
 }
 
-// 2. RENDERIZAR FEED INTEGRAL COM TODAS AS 12 MATRIZES GRANULARES
+// 2. RENDERIZAR FEED INTEGRAL COM TODAS AS 12 MATRIZES GRANULARES INDIVIDUAIS (15 PREÇOS CADA)
 function renderAllCardsFeed() {
     var container = document.getElementById('allCardsFeed');
     var html = '';
-
-    var allPrices = [21000, 23000, 25000, 27000, 29000, 31000, 33000, 35000];
 
     CARS.forEach(function(c) {
         var pen = wPenalty(c);
@@ -458,7 +462,7 @@ function renderAllCardsFeed() {
         }
         html += '</tr></thead><tbody>';
 
-        allPrices.forEach(function(p) {
+        PR.forEach(function(p) {
             html += '<tr><td>€' + (p/1000).toFixed(0) + 'k</td>';
             for (var ki = 0; ki < KM.length; ki++) {
                 var r = aResale(c, KM[ki]);

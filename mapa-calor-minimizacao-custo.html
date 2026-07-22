@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mapa de Calor Mestre — Minimização de Custo Mensal (Proximidade Garantia HV)</title>
+<title>Mapa de Calor Mestre — Minimização de Custo Mensal (Garantia Dupla: Tempo &amp; Km)</title>
 
 <style>
 :root {
@@ -307,7 +307,7 @@ footer {
 <div class="top-bar">
   <div>
     <h1>&#9889; Mapa de Calor Mestre — Minimização de Custo Mensal</h1>
-    <div class="sub">3.060 Pontos de Dados Visuais com Indicador Progressivo de Garantia da BATERIA HV (&lt;6m, &lt;12m, &lt;18m)</div>
+    <div class="sub">3.060 Pontos de Dados Visuais com Avaliação Dupla da Garantia da BATERIA HV (Tempo &amp; Odómetro)</div>
   </div>
   <a href="mega-matriz-todas-ofertas.html" class="nav-link">&rarr; Ver Mega-Matriz de Números</a>
 </div>
@@ -326,7 +326,7 @@ footer {
   <div class="h-item"><div class="h-box" style="background:#ff9f0a"></div> €300-€400/mês</div>
   <div class="h-item"><div class="h-box" style="background:#ff453a"></div> &gt; €400/mês</div>
   <div style="border-left:1px solid rgba(255,255,255,0.15);padding-left:10px;margin-left:4px;display:flex;gap:8px;align-items:center">
-    <span style="font-weight:800;color:#fff">Bateria HV em Dez/2028:</span>
+    <span style="font-weight:800;color:#fff">Garantia Bateria HV (O que ocorrer 1º):</span>
     <span class="w-badge-pill w-exp">&#9889; 0m</span>
     <span class="w-badge-pill w-6m">&#9889; &lt;6m</span>
     <span class="w-badge-pill w-12m">&#9889; &lt;12m</span>
@@ -351,7 +351,7 @@ footer {
 <!-- Tooltip Flutuante -->
 <div class="custom-tooltip" id="tooltip"></div>
 
-<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Indicador Progressivo de Garantia da Bateria</footer>
+<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Sistema Duplo de Expiração de Garantia da Bateria</footer>
 
 <script>
 (function(){
@@ -443,18 +443,35 @@ function getBlockColor(v) {
     return '#ff453a';
 }
 
-function getWarrantyBadge(c) {
-    var m = wMonths(c);
-    if (m <= 0) return '<span class="w-badge-pill w-exp" title="Garantia Bateria Expirada">&#9889; 0m</span>';
-    if (m < 6)  return '<span class="w-badge-pill w-6m" title="Garantia Bateria Crítica (<6m restantes)">&#9889; &lt;6m</span>';
-    if (m < 12) return '<span class="w-badge-pill w-12m" title="Garantia Bateria Próxima do Fim (' + m + 'm restantes)">&#9889; &lt;12m</span>';
-    if (m < 18) return '<span class="w-badge-pill w-18m" title="Garantia Bateria Atenção (' + m + 'm restantes)">&#9889; &lt;18m</span>';
-    return '<span class="w-badge-pill w-ok" title="Garantia Bateria Confortável (' + m + 'm restantes)">&check; &ge;18m</span>';
+function getEffectiveWarranty(c, buyKm) {
+    var mTime = wMonths(c);
+    var saleKm = buyKm * 1000 + TKM;
+    var kmLeft = c.wk - saleKm;
+    var mKm = Math.floor(kmLeft / 750);
+    var effMonths = Math.min(mTime, mKm);
+    
+    return {
+        mTime: mTime,
+        saleKm: saleKm,
+        kmLeft: kmLeft,
+        effMonths: effMonths,
+        limitingFactor: (mKm < mTime) ? 'Quilometragem' : 'Tempo'
+    };
 }
 
-function getBrandBadge(c) {
+function getWarrantyBadge(c, buyKm) {
+    var wObj = getEffectiveWarranty(c, buyKm || 35);
+    var m = wObj.effMonths;
+    if (m <= 0) return '<span class="w-badge-pill w-exp" title="Garantia Bateria Expirada">&#9889; 0m</span>';
+    if (m < 6)  return '<span class="w-badge-pill w-6m" title="Garantia Bateria Crítica (<6m ou <4.5k km restantes)">&#9889; &lt;6m</span>';
+    if (m < 12) return '<span class="w-badge-pill w-12m" title="Garantia Bateria Próxima do Fim (' + m + 'm equivalentes restantes)">&#9889; &lt;12m</span>';
+    if (m < 18) return '<span class="w-badge-pill w-18m" title="Garantia Bateria Atenção (' + m + 'm equivalentes restantes)">&#9889; &lt;18m</span>';
+    return '<span class="w-badge-pill w-ok" title="Garantia Bateria Confortável (' + m + 'm equivalentes restantes)">&check; &ge;18m</span>';
+}
+
+function getBrandBadge(c, buyKm) {
     var cls = 'b-' + c.brand;
-    return '<span class="brand-badge ' + cls + '">' + c.n + ' (' + c.y + ') ' + getWarrantyBadge(c) + '</span>';
+    return '<span class="brand-badge ' + cls + '">' + c.n + ' (' + c.y + ') ' + getWarrantyBadge(c, buyKm) + '</span>';
 }
 
 // 1. LEADERBOARD TOP MINIMIZADORES
@@ -479,11 +496,10 @@ function renderLeaderboard() {
     var html = '';
 
     top5.forEach(function(item, idx) {
-        var wm = wMonths(item.car);
         html += '<div class="lb-item">';
         html += '<span class="lb-rank">#' + (idx + 1) + '</span>';
         html += '<span class="lb-cost">€' + item.cost + '<span style="font-size:10px;font-weight:400">/mês</span></span>';
-        html += '<span class="lb-model">' + item.car.n + ' (' + item.car.y + ') ' + getWarrantyBadge(item.car) + '</span>';
+        html += '<span class="lb-model">' + item.car.n + ' (' + item.car.y + ') ' + getWarrantyBadge(item.car, item.km) + '</span>';
         html += '<span class="lb-meta">Compra: €' + item.price.toLocaleString('pt-PT') + ' &middot; ' + item.km + 'k km</span>';
         html += '<span class="lb-meta">Revenda 2028: €' + item.resale.toLocaleString('pt-PT') + '</span>';
         html += '</div>';
@@ -505,12 +521,13 @@ function renderHeatmap() {
     var tbHtml = '';
 
     CARS.forEach(function(c) {
-        var wm = wMonths(c);
         tbHtml += '<tr>';
-        tbHtml += '<td>' + getBrandBadge(c) + '</td>';
+        tbHtml += '<td>' + getBrandBadge(c, 35) + '</td>';
 
         KM.forEach(function(k) {
             var r = aResale(c, k);
+            var wObj = getEffectiveWarranty(c, k);
+
             tbHtml += '<td><div class="pixel-strip">';
 
             PR.forEach(function(p) {
@@ -522,7 +539,9 @@ function renderHeatmap() {
                 tbHtml += 'data-price="' + p + '" ';
                 tbHtml += 'data-km="' + k + '" ';
                 tbHtml += 'data-resale="' + r + '" ';
-                tbHtml += 'data-wm="' + wm + '" ';
+                tbHtml += 'data-wm="' + wObj.effMonths + '" ';
+                tbHtml += 'data-kmleft="' + (wObj.kmLeft/1000).toFixed(0) + '" ';
+                tbHtml += 'data-limiter="' + wObj.limitingFactor + '" ';
                 tbHtml += 'data-cost="' + (m !== null ? m : 'N/A') + '" ';
                 tbHtml += 'onmouseenter="showTooltip(event, this)" onmouseleave="hideTooltip()"></div>';
             });
@@ -545,6 +564,8 @@ window.showTooltip = function(e, el) {
     var km = el.getAttribute('data-km');
     var resale = Number(el.getAttribute('data-resale')).toLocaleString('pt-PT');
     var wm = Number(el.getAttribute('data-wm'));
+    var kmleft = el.getAttribute('data-kmleft');
+    var limiter = el.getAttribute('data-limiter');
     var cost = el.getAttribute('data-cost');
 
     var html = '';
@@ -554,13 +575,14 @@ window.showTooltip = function(e, el) {
         html += '<div>Compra: <b>€' + price + '</b> &middot; Odómetro: <b>' + km + '.000 km</b></div>';
         
         var wText = '';
-        if (wm <= 0) wText = '<span style="color:#ff453a">&#9889; <b>Garantia Bateria Expirada (0m)</b></span>';
-        else if (wm < 6) wText = '<span style="color:#ff3b30">&#9889; <b>Garantia Bateria Crítica</b> (&lt; 6 meses: ' + wm + 'm restantes em 2028)</span>';
-        else if (wm < 12) wText = '<span style="color:#ff9f0a">&#9889; <b>Garantia Bateria Próxima do Fim</b> (&lt; 12 meses: ' + wm + 'm restantes em 2028)</span>';
-        else if (wm < 18) wText = '<span style="color:#ffd60a">&#9889; <b>Garantia Bateria em Atenção</b> (&lt; 18 meses: ' + wm + 'm restantes em 2028)</span>';
-        else wText = '<span style="color:#30d158">&check; <b>Garantia Bateria Confortável</b> (&ge; 18 meses: ' + wm + 'm restantes em 2028)</span>';
+        if (wm <= 0) wText = '<span style="color:#ff453a">&#9889; <b>Garantia Bateria Expirada</b></span>';
+        else if (wm < 6) wText = '<span style="color:#ff3b30">&#9889; <b>Garantia Bateria Crítica</b> (&lt;6m equivalentes)</span>';
+        else if (wm < 12) wText = '<span style="color:#ff9f0a">&#9889; <b>Garantia Bateria Próxima do Fim</b> (&lt;12m equivalentes)</span>';
+        else if (wm < 18) wText = '<span style="color:#ffd60a">&#9889; <b>Garantia Bateria em Atenção</b> (&lt;18m equivalentes)</span>';
+        else wText = '<span style="color:#30d158">&check; <b>Garantia Bateria Confortável</b> (&ge;18m equivalentes)</span>';
 
-        html += '<div style="font-size:9px;margin-top:2px">' + wText + ' &middot; Revenda 2028: €' + resale + '</div>';
+        html += '<div style="font-size:9px;margin-top:2px">' + wText + ' &middot; Margem no Odómetro em 2028: <b>' + kmleft + 'k km</b> (Limitação: <b>' + limiter + '</b>)</div>';
+        html += '<div style="font-size:9px;color:rgba(255,255,255,0.6)">Revenda Estimada 2028: €' + resale + '</div>';
     } else {
         html += '<div style="color:#ff453a;font-weight:700;margin-top:2px">Combinação Irrealista</div>';
         html += '<div style="font-size:9px;color:var(--text-muted)">Preço de compra (€' + price + ') igual ou inferior à revenda (€' + resale + ')</div>';

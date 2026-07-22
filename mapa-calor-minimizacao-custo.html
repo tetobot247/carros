@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mapa de Calor Mestre — Minimização de Custo Mensal (Estado da Bateria)</title>
+<title>Mapa de Calor Mestre — Minimização de Custo Mensal (Proximidade Garantia HV)</title>
 
 <style>
 :root {
@@ -143,7 +143,7 @@ h1 {
 /* Legenda de Cores do Mapa de Calor */
 .heatmap-legend {
   display: flex;
-  gap: 14px;
+  gap: 12px;
   flex-wrap: wrap;
   justify-content: center;
   font-size: 10px;
@@ -167,6 +167,19 @@ h1 {
   height: 14px;
   border-radius: 3px;
 }
+
+.w-badge-pill {
+  font-size: 8px;
+  font-weight: 800;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.w-exp { color: #ff453a; background: rgba(255,69,58,0.2); border: 1px solid rgba(255,69,58,0.4); }
+.w-6m  { color: #ff3b30; background: rgba(255,59,48,0.18); border: 1px solid rgba(255,59,48,0.35); }
+.w-12m { color: #ff9f0a; background: rgba(255,159,10,0.18); border: 1px solid rgba(255,159,10,0.35); }
+.w-18m { color: #ffd60a; background: rgba(255,214,10,0.18); border: 1px solid rgba(255,214,10,0.35); }
+.w-ok  { color: #30d158; background: rgba(48,209,88,0.15); border: 1px solid rgba(48,209,88,0.3); }
 
 /* O MATRIZ MESTRE HEATMAP */
 .heatmap-card {
@@ -236,10 +249,6 @@ table.hm-table td:first-child {
   position: relative;
 }
 
-.px-block.has-w-expired {
-  border-bottom: 2px solid #ff453a;
-}
-
 .px-block:hover {
   transform: scale(1.6);
   z-index: 10;
@@ -260,16 +269,6 @@ table.hm-table td:first-child {
 .b-tesla { background: rgba(255, 69, 58, 0.15); color: #ff453a; border: 1px solid rgba(255, 69, 58, 0.3); }
 .b-ioniq { background: rgba(100, 210, 255, 0.15); color: #64d2ff; border: 1px solid rgba(100, 210, 255, 0.3); }
 .b-megane { background: rgba(208, 112, 255, 0.15); color: #d070ff; border: 1px solid rgba(208, 112, 255, 0.3); }
-
-.w-badge {
-  font-size: 8px;
-  color: #ff453a;
-  background: rgba(255, 69, 58, 0.15);
-  border: 1px solid rgba(255, 69, 58, 0.4);
-  border-radius: 3px;
-  padding: 0 3px;
-  margin-left: 3px;
-}
 
 /* Tooltip Flutuante Personalizado */
 .custom-tooltip {
@@ -308,7 +307,7 @@ footer {
 <div class="top-bar">
   <div>
     <h1>&#9889; Mapa de Calor Mestre — Minimização de Custo Mensal</h1>
-    <div class="sub">3.060 Pontos de Dados Visuais (Sinalização Exclusiva para Garantia de Bateria 100% Expirada)</div>
+    <div class="sub">3.060 Pontos de Dados Visuais com Indicador Progressivo de Garantia da BATERIA HV (&lt;6m, &lt;12m, &lt;18m)</div>
   </div>
   <a href="mega-matriz-todas-ofertas.html" class="nav-link">&rarr; Ver Mega-Matriz de Números</a>
 </div>
@@ -321,19 +320,25 @@ footer {
 
 <!-- LEGENDA DO MAPA DE CALOR -->
 <div class="heatmap-legend">
-  <div class="h-item"><div class="h-box" style="background:#30d158"></div> Mínimo Absoluto (&lt; €150/mês)</div>
-  <div class="h-item"><div class="h-box" style="background:#a3e635"></div> Excelente (€150 - €220/mês)</div>
-  <div class="h-item"><div class="h-box" style="background:#ffd60a"></div> Razoável (€220 - €300/mês)</div>
-  <div class="h-item"><div class="h-box" style="background:#ff9f0a"></div> Elevado (€300 - €400/mês)</div>
-  <div class="h-item"><div class="h-box" style="background:#ff453a"></div> Caro (&gt; €400/mês)</div>
-  <div class="h-item"><div class="h-box" style="background:rgba(255,255,255,0.1)"></div> Irrealista (Preço &le; Revenda)</div>
-  <div class="h-item"><span style="color:#ff453a;font-weight:900">&#9889;</span> <span style="color:#ff453a;font-weight:700">&#9889; Marcado EXCLUSIVAMENTE se a Garantia da Bateria estiver 100% EXPIRADA (0 meses)</span></div>
+  <div class="h-item"><div class="h-box" style="background:#30d158"></div> &lt; €150/mês</div>
+  <div class="h-item"><div class="h-box" style="background:#a3e635"></div> €150-€220/mês</div>
+  <div class="h-item"><div class="h-box" style="background:#ffd60a"></div> €220-€300/mês</div>
+  <div class="h-item"><div class="h-box" style="background:#ff9f0a"></div> €300-€400/mês</div>
+  <div class="h-item"><div class="h-box" style="background:#ff453a"></div> &gt; €400/mês</div>
+  <div style="border-left:1px solid rgba(255,255,255,0.15);padding-left:10px;margin-left:4px;display:flex;gap:8px;align-items:center">
+    <span style="font-weight:800;color:#fff">Bateria HV em Dez/2028:</span>
+    <span class="w-badge-pill w-exp">&#9889; 0m</span>
+    <span class="w-badge-pill w-6m">&#9889; &lt;6m</span>
+    <span class="w-badge-pill w-12m">&#9889; &lt;12m</span>
+    <span class="w-badge-pill w-18m">&#9889; &lt;18m</span>
+    <span class="w-badge-pill w-ok">&check; &ge;18m</span>
+  </div>
 </div>
 
 <!-- O MATRIZ MESTRE HEATMAP -->
 <div class="heatmap-card">
   <div style="font-size:13px;font-weight:800;margin-bottom:4px">&#128506;\uFE0F Matriz de Densidade Visual (Todos os 12 Veículos vs Quilometragem)</div>
-  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">Cada célula contém uma barra de 15 blocos (€21k a €35k). Passe o cursor por cima de qualquer bloco para ver a oferta exata!</div>
+  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">Cada célula contém uma barra de 15 blocos (€21k a €35k). Passe o cursor por cima de qualquer bloco para ver a oferta exata e o nível de garantia da bateria!</div>
 
   <table class="hm-table">
     <thead>
@@ -346,7 +351,7 @@ footer {
 <!-- Tooltip Flutuante -->
 <div class="custom-tooltip" id="tooltip"></div>
 
-<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Sinalização Exclusiva para Garantia de Bateria Expirada</footer>
+<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Indicador Progressivo de Garantia da Bateria</footer>
 
 <script>
 (function(){
@@ -438,12 +443,18 @@ function getBlockColor(v) {
     return '#ff453a';
 }
 
+function getWarrantyBadge(c) {
+    var m = wMonths(c);
+    if (m <= 0) return '<span class="w-badge-pill w-exp" title="Garantia Bateria Expirada">&#9889; 0m</span>';
+    if (m < 6)  return '<span class="w-badge-pill w-6m" title="Garantia Bateria Crítica (<6m restantes)">&#9889; &lt;6m</span>';
+    if (m < 12) return '<span class="w-badge-pill w-12m" title="Garantia Bateria Próxima do Fim (' + m + 'm restantes)">&#9889; &lt;12m</span>';
+    if (m < 18) return '<span class="w-badge-pill w-18m" title="Garantia Bateria Atenção (' + m + 'm restantes)">&#9889; &lt;18m</span>';
+    return '<span class="w-badge-pill w-ok" title="Garantia Bateria Confortável (' + m + 'm restantes)">&check; &ge;18m</span>';
+}
+
 function getBrandBadge(c) {
     var cls = 'b-' + c.brand;
-    var wm = wMonths(c);
-    var isExpired = (wm <= 0);
-    var wTag = isExpired ? '<span class="w-badge" title="Garantia Bateria Expirada">&#9889; EXPIRADA</span>' : '';
-    return '<span class="brand-badge ' + cls + '">' + c.n + ' (' + c.y + ')' + wTag + '</span>';
+    return '<span class="brand-badge ' + cls + '">' + c.n + ' (' + c.y + ') ' + getWarrantyBadge(c) + '</span>';
 }
 
 // 1. LEADERBOARD TOP MINIMIZADORES
@@ -469,12 +480,10 @@ function renderLeaderboard() {
 
     top5.forEach(function(item, idx) {
         var wm = wMonths(item.car);
-        var isExpired = (wm <= 0);
-        var wTag = isExpired ? ' <span style="color:#ff453a">&#9889; (Bateria Expirada)</span>' : '';
         html += '<div class="lb-item">';
         html += '<span class="lb-rank">#' + (idx + 1) + '</span>';
         html += '<span class="lb-cost">€' + item.cost + '<span style="font-size:10px;font-weight:400">/mês</span></span>';
-        html += '<span class="lb-model">' + item.car.n + ' (' + item.car.y + ')' + wTag + '</span>';
+        html += '<span class="lb-model">' + item.car.n + ' (' + item.car.y + ') ' + getWarrantyBadge(item.car) + '</span>';
         html += '<span class="lb-meta">Compra: €' + item.price.toLocaleString('pt-PT') + ' &middot; ' + item.km + 'k km</span>';
         html += '<span class="lb-meta">Revenda 2028: €' + item.resale.toLocaleString('pt-PT') + '</span>';
         html += '</div>';
@@ -497,8 +506,6 @@ function renderHeatmap() {
 
     CARS.forEach(function(c) {
         var wm = wMonths(c);
-        var isExpired = (wm <= 0);
-
         tbHtml += '<tr>';
         tbHtml += '<td>' + getBrandBadge(c) + '</td>';
 
@@ -509,9 +516,8 @@ function renderHeatmap() {
             PR.forEach(function(p) {
                 var m = moVal(p, r);
                 var bg = getBlockColor(m);
-                var expCls = isExpired ? 'has-w-expired' : '';
 
-                tbHtml += '<div class="px-block ' + expCls + '" style="background:' + bg + '" ';
+                tbHtml += '<div class="px-block" style="background:' + bg + '" ';
                 tbHtml += 'data-name="' + c.n + ' (' + c.y + ')" ';
                 tbHtml += 'data-price="' + p + '" ';
                 tbHtml += 'data-km="' + k + '" ';
@@ -546,11 +552,15 @@ window.showTooltip = function(e, el) {
     if (cost !== 'N/A') {
         html += '<div class="tt-cost">€' + cost + '<span style="font-size:11px;font-weight:500;color:#fff"> / mês</span></div>';
         html += '<div>Compra: <b>€' + price + '</b> &middot; Odómetro: <b>' + km + '.000 km</b></div>';
-        if (wm <= 0) {
-            html += '<div style="font-size:9px;color:#ff453a;margin-top:2px">&#9889; <b>Garantia da Bateria Expirada (0m)</b> em Dez/2028 (Revenda: €' + resale + ')</div>';
-        } else {
-            html += '<div style="font-size:9px;color:#30d158;margin-top:2px">&check; <b>Garantia da Bateria Activa</b> em Dez/2028 (' + wm + 'm restantes)</div>';
-        }
+        
+        var wText = '';
+        if (wm <= 0) wText = '<span style="color:#ff453a">&#9889; <b>Garantia Bateria Expirada (0m)</b></span>';
+        else if (wm < 6) wText = '<span style="color:#ff3b30">&#9889; <b>Garantia Bateria Crítica</b> (&lt; 6 meses: ' + wm + 'm restantes em 2028)</span>';
+        else if (wm < 12) wText = '<span style="color:#ff9f0a">&#9889; <b>Garantia Bateria Próxima do Fim</b> (&lt; 12 meses: ' + wm + 'm restantes em 2028)</span>';
+        else if (wm < 18) wText = '<span style="color:#ffd60a">&#9889; <b>Garantia Bateria em Atenção</b> (&lt; 18 meses: ' + wm + 'm restantes em 2028)</span>';
+        else wText = '<span style="color:#30d158">&check; <b>Garantia Bateria Confortável</b> (&ge; 18 meses: ' + wm + 'm restantes em 2028)</span>';
+
+        html += '<div style="font-size:9px;margin-top:2px">' + wText + ' &middot; Revenda 2028: €' + resale + '</div>';
     } else {
         html += '<div style="color:#ff453a;font-weight:700;margin-top:2px">Combinação Irrealista</div>';
         html += '<div style="font-size:9px;color:var(--text-muted)">Preço de compra (€' + price + ') igual ou inferior à revenda (€' + resale + ')</div>';

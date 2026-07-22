@@ -10,14 +10,18 @@
 
 ### Arquivos Principais
 
-1. **`mega-matriz-todas-ofertas.html` (Mega-Matriz Granular Reunida com Estado Real da Garantia da Bateria)**
-   - **Regra Estrita de Sinalização de Perda de Garantia da Bateria (`meses_restantes <= 0`):** O símbolo **⚡** é reservado EXCLUSIVAMENTE para situações em que a Garantia da Bateria esteja 100% expirada (0 meses).
-   - **Garantia Activa em Todos os Veículos (2021-2024):** Como todos os veículos de 2021 a 2024 (com 8 anos de garantia da bateria) expiram em 2029 ou mais tarde, na venda em Dezembro/2028 todos mantêm garantia activa de fábrica (entre 11m e 39m restantes). Por isso, nenhum modelo é indevidamente marcado com `⚡` como "garantia expirada".
+1. **`mega-matriz-todas-ofertas.html` (Mega-Matriz Granular Reunida com Indicadores Progressivos da Garantia da BATERIA HV)**
+   - **Indicadores Visuais Progressivos de Proximidade do Fim de Garantia:**
+     - 🛑 **`⚡ 0m`**: Expirada (0 meses)
+     - 🔴 **`⚡ <6m`**: Crítica (&lt; 6 meses restantes)
+     - 🟠 **`⚡ <12m`**: Próxima (&lt; 12 meses restantes)
+     - 🟡 **`⚡ <18m`**: Atenção (&lt; 18 meses restantes)
+     - 🟢 **`✔ >=18m`**: Confortável (&ge; 18 meses restantes)
    - **Exibe TODOS os 12 modelos/anos (2021-2024) simultaneamente na mesma página**.
    - **Filtro de Faixa de Custo Médio Mensal (€/mês):** Permite filtrar instantaneamente o orçamento pretendido.
 
 2. **`mapa-calor-minimizacao-custo.html` (Mapa de Calor Mestre)**
-   - Matrix visual de densidade sem filtros com 3.060 pontos de dados, tooltips em hover e regra estrita de garantia expirada `⚡` (apenas se 0m).
+   - Matrix visual de densidade sem filtros com 3.060 pontos de dados, tooltips em hover e indicadores progressivos de proximidade de fim de garantia.
 
 3. **`diagrama-referencia-ofertas.html` (Diagrama Mestre & Avaliador)**
    - Matriz 15x17 com widget avaliador de ofertas de mercado.

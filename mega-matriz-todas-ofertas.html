@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mega-Matriz Granular — Todos os Elétricos</title>
+<title>Mega-Matriz Granular — Todos os Elétricos (Proximidade de Perda de Garantia HV)</title>
 
 <style>
 :root {
@@ -147,10 +147,10 @@ select:focus, input:focus {
   border-color: #30d158;
 }
 
-/* LEGENDA DA BATERIA */
+/* LEGENDA PROGRESSIVA DA PROXIMIDADE DE PERDA DE GARANTIA DA BATERIA */
 .visual-legend-bar {
   display: flex;
-  gap: 14px;
+  gap: 12px;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
@@ -158,7 +158,7 @@ select:focus, input:focus {
   color: var(--text-muted);
   background: var(--card-bg);
   border: 1px solid var(--card-border);
-  padding: 6px 14px;
+  padding: 8px 14px;
   border-radius: 10px;
   width: 100%;
   max-width: 1400px;
@@ -170,6 +170,19 @@ select:focus, input:focus {
   gap: 4px;
   font-weight: 600;
 }
+
+.w-badge-pill {
+  font-size: 8px;
+  font-weight: 800;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.w-exp { color: #ff453a; background: rgba(255,69,58,0.2); border: 1px solid rgba(255,69,58,0.4); }
+.w-6m  { color: #ff3b30; background: rgba(255,59,48,0.18); border: 1px solid rgba(255,59,48,0.35); }
+.w-12m { color: #ff9f0a; background: rgba(255,159,10,0.18); border: 1px solid rgba(255,159,10,0.35); }
+.w-18m { color: #ffd60a; background: rgba(255,214,10,0.18); border: 1px solid rgba(255,214,10,0.35); }
+.w-ok  { color: #30d158; background: rgba(48,209,88,0.15); border: 1px solid rgba(48,209,88,0.3); }
 
 /* Badges e Indicators */
 .badge-car {
@@ -258,12 +271,8 @@ table.mega-table td:first-child {
   border-radius: 5px;
   font-weight: 700;
   font-size: 9px;
-  min-width: 38px;
+  min-width: 42px;
   transition: all 0.2s ease;
-}
-
-.cell-pill.has-w-expired {
-  box-shadow: inset 0 -2px 0 #ff453a;
 }
 
 .cell-dimmed {
@@ -331,8 +340,8 @@ footer {
 
 <div class="top-bar">
   <div>
-    <h1>&#9889; Mega-Matriz Granular Reunida (1000 em 1000)</h1>
-    <div class="sub">15 Níveis de Preço de Compra (€21k a €35k) &times; 17 Quilometragens (35k a 115k km) para TODOS os 12 Veículos</div>
+    <h1>&#9889; Mega-Matriz Granular Reunida (Proximidade de Perda de Garantia HV)</h1>
+    <div class="sub">Indicadores Progressivos de Proximidade de Fim de Garantia da Bateria (&lt;6m, &lt;12m, &lt;18m)</div>
   </div>
   <a href="mapa-calor-minimizacao-custo.html" class="nav-link">&rarr; Ver Mapa de Calor</a>
 </div>
@@ -359,16 +368,20 @@ footer {
   </div>
 </div>
 
-<!-- LEGENDA DA BATERIA -->
+<!-- LEGENDA PROGRESSIVA DE PROXIMIDADE DE EXPIRAÇÃO DA GARANTIA DA BATERIA -->
 <div class="visual-legend-bar">
-  <div class="v-item"><span style="color:#30d158;font-weight:800">&check; Garantia Activa:</span> <span style="color:var(--text-muted)">Todos os modelos 2021 a 2024 mantêm Garantia da Bateria HV activa na venda em Dez/2028 (11m a 39m restantes)</span></div>
-  <div class="v-item"><span style="color:#ff453a;font-weight:800">&#9889; Símbolo &#9889;:</span> <span style="color:var(--text-muted)">Marcado EXCLUSIVAMENTE se a Garantia da Bateria estiver 100% Expirada (0 meses)</span></div>
+  <span style="font-weight:800;color:#fff">Proximidade de Fim da Garantia da Bateria em Dez/2028:</span>
+  <div class="v-item"><span class="w-badge-pill w-exp">&#9889; 0m</span> Expirada</div>
+  <div class="v-item"><span class="w-badge-pill w-6m">&#9889; &lt;6m</span> Crítica (&lt;6 meses)</div>
+  <div class="v-item"><span class="w-badge-pill w-12m">&#9889; &lt;12m</span> Próxima (&lt;12 meses)</div>
+  <div class="v-item"><span class="w-badge-pill w-18m">&#9889; &lt;18m</span> Atenção (&lt;18 meses)</div>
+  <div class="v-item"><span class="w-badge-pill w-ok">&check; &ge;18m</span> Confortável (&ge;18 meses)</div>
 </div>
 
 <!-- PARTE 1: MEGA-TABELA REUNIDA COM PASSO DE 1000 EM 1000 -->
 <div class="mega-table-card">
-  <div style="font-size:14px;font-weight:800;margin-bottom:4px">&#128202; Visão Cruzada Granular Reunida (Custo Mensal em €/mês)</div>
-  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">Todas as ofertas exibidas em tempo real. Passe o cursor por cima para ver a revenda e os meses de garantia da bateria restantes.</div>
+  <div style="font-size:14px;font-weight:800;margin-bottom:4px">&#128202; Visão Cruzada Granular Reunida (Com Níveis de Proximidade da Garantia HV)</div>
+  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">Os selos visuais indicam quão perto a Garantia da Bateria está de caducar na data de revenda em Dezembro de 2028.</div>
 
   <div id="megaTableContainer"></div>
 </div>
@@ -376,12 +389,12 @@ footer {
 <!-- PARTE 2: FEED COMPLETO DE TODAS AS 12 MATRIZES GRANULARES INDIVIDUAIS -->
 <div style="width:100%;max-width:1400px;margin-top:10px">
   <div style="font-size:15px;font-weight:800;margin-bottom:4px">&#128269; As 12 Matrizes Granulares Completas</div>
-  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">Todas as 12 matrizes granulares 15x17 completas exibidas na mesma página.</div>
+  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">Todas as 12 matrizes granulares completas com nível de proximidade de garantia.</div>
 
   <div class="all-cards-feed" id="allCardsFeed"></div>
 </div>
 
-<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Estado Real da Garantia da Bateria</footer>
+<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Indicador Progressivo de Proximidade de Fim da Garantia da Bateria</footer>
 
 <script>
 (function(){
@@ -516,12 +529,19 @@ function isCostInFilter(m) {
     return (m >= minCostFilter && m <= maxCostFilter);
 }
 
+// PROXIMIDADE DE PERDA DE GARANTIA DA BATERIA (BADGES & PILLS)
+function getWarrantyBadge(c) {
+    var m = wMonths(c);
+    if (m <= 0) return '<span class="w-badge-pill w-exp" title="Garantia Bateria Expirada">&#9889; 0m</span>';
+    if (m < 6)  return '<span class="w-badge-pill w-6m" title="Garantia Bateria Crítica (<6m restantes)">&#9889; &lt;6m</span>';
+    if (m < 12) return '<span class="w-badge-pill w-12m" title="Garantia Bateria Próxima do Fim (' + m + 'm restantes)">&#9889; &lt;12m</span>';
+    if (m < 18) return '<span class="w-badge-pill w-18m" title="Garantia Bateria Atenção (' + m + 'm restantes)">&#9889; &lt;18m</span>';
+    return '<span class="w-badge-pill w-ok" title="Garantia Bateria Confortável (' + m + 'm restantes)">&check; &ge;18m</span>';
+}
+
 function getBadge(c) {
     var cls = 'b-' + c.brand;
-    var wm = wMonths(c);
-    var isExpired = (wm <= 0);
-    var wTag = isExpired ? '<span class="w-badge" style="color:#ff453a;border-color:rgba(255,69,58,0.4);background:rgba(255,69,58,0.15)" title="Garantia da Bateria 100% Expirada em 2028">&#9889; EXPIRADA</span>' : '';
-    return '<span class="badge-car ' + cls + '">' + c.n + ' (' + c.y + ')' + wTag + '</span>';
+    return '<span class="badge-car ' + cls + '">' + c.n + ' (' + c.y + ') ' + getWarrantyBadge(c) + '</span>';
 }
 
 function renderMegaTable() {
@@ -542,9 +562,8 @@ function renderMegaTable() {
         html += '</tr></thead><tbody>';
 
         CARS.forEach(function(c) {
-            var pen = wPenalty(c);
             var wm = wMonths(c);
-            var isExpired = (wm <= 0);
+            var pen = wPenalty(c);
 
             html += '<tr>';
             html += '<td>' + getBadge(c) + '</td>';
@@ -555,9 +574,15 @@ function renderMegaTable() {
                 if (m !== null) {
                     var match = isCostInFilter(m);
                     var dimCls = match ? '' : 'cell-dimmed';
-                    var expCls = isExpired ? 'has-w-expired' : '';
-                    var wIcon = isExpired ? '<span class="w-icon" style="color:#ff453a" title="Garantia da Bateria Expirada em 2028">&#9889;</span>' : '';
-                    html += '<td><span class="cell-pill ' + dimCls + ' ' + expCls + '" style="background:' + col(m) + ';color:#000" title="Revenda: €' + r + ' (Garantia Bateria: ' + wm + 'm restantes em 2028)">' + m + '€' + wIcon + '</span></td>';
+                    
+                    // Indicador subtil visual por nivel
+                    var wTagSubtle = '';
+                    if (wm <= 0) wTagSubtle = '<span style="color:#ff453a;font-size:8px;font-weight:900">&#9889;</span>';
+                    else if (wm < 6) wTagSubtle = '<span style="color:#ff3b30;font-size:8px;font-weight:900">&#9889;</span>';
+                    else if (wm < 12) wTagSubtle = '<span style="color:#ff9f0a;font-size:8px;font-weight:900">&#9889;</span>';
+                    else if (wm < 18) wTagSubtle = '<span style="color:#ffd60a;font-size:8px;font-weight:900">&#9889;</span>';
+
+                    html += '<td><span class="cell-pill ' + dimCls + '" style="background:' + col(m) + ';color:#000" title="Revenda 2028: €' + r + ' (Garantia Bateria: ' + wm + 'm restantes em 2028, Pen: -' + pen + '€)">' + m + '€' + wTagSubtle + '</span></td>';
                 } else {
                     html += '<td><span class="cell-na">&mdash;</span></td>';
                 }
@@ -578,17 +603,16 @@ function renderAllCardsFeed() {
     CARS.forEach(function(c) {
         var pen = wPenalty(c);
         var wm = wMonths(c);
-        var isExpired = (wm <= 0);
         var borderCls = 'border-' + c.brand;
 
         html += '<div class="granular-card ' + borderCls + '" id="' + c.id + '">';
         html += '<h3>';
         html += getBadge(c);
-        html += '<span style="font-size:10px;color:' + (isExpired ? '#ff453a' : '#30d158') + '">' + (isExpired ? 'Bateria Sem Garantia &#9889;' : 'Garantia Activa: ' + wm + 'm restantes') + '</span>';
+        html += '<span style="font-size:10px;color:rgba(255,255,255,0.7)">Penalização: -' + pen + '€</span>';
         html += '</h3>';
 
         html += '<div class="w-info">';
-        html += 'Garantia da Bateria HV em Dez/2028: <b style="color:' + (isExpired ? '#ff453a' : '#30d158') + '">' + (wm > 0 ? wm + 'm restantes (ACTIVA)' : 'EXPIRADA (0m)') + '</b>';
+        html += 'Garantia da Bateria HV em Dez/2028: <b>' + wm + ' meses restantes</b> &middot; Nível: ' + getWarrantyBadge(c);
         if (c.lfp) html += ' &middot; <span style="color:#30d158">Bateria LFP</span>';
         html += '</div>';
 
@@ -606,9 +630,14 @@ function renderAllCardsFeed() {
                 if (m !== null) {
                     var match = isCostInFilter(m);
                     var dimCls = match ? '' : 'cell-dimmed';
-                    var expCls = isExpired ? 'has-w-expired' : '';
-                    var wIcon = isExpired ? '<span class="w-icon" style="color:#ff453a">&#9889;</span>' : '';
-                    html += '<td><span class="cell-pill ' + dimCls + ' ' + expCls + '" style="background:' + col(m) + ';color:#000">' + m + wIcon + '</span></td>';
+                    
+                    var wTagSubtle = '';
+                    if (wm <= 0) wTagSubtle = '<span style="color:#ff453a;font-size:8px;font-weight:900">&#9889;</span>';
+                    else if (wm < 6) wTagSubtle = '<span style="color:#ff3b30;font-size:8px;font-weight:900">&#9889;</span>';
+                    else if (wm < 12) wTagSubtle = '<span style="color:#ff9f0a;font-size:8px;font-weight:900">&#9889;</span>';
+                    else if (wm < 18) wTagSubtle = '<span style="color:#ffd60a;font-size:8px;font-weight:900">&#9889;</span>';
+
+                    html += '<td><span class="cell-pill ' + dimCls + '" style="background:' + col(m) + ';color:#000">' + m + wTagSubtle + '</span></td>';
                 } else {
                     html += '<td><span class="cell-na">&mdash;</span></td>';
                 }

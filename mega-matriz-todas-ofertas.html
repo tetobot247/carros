@@ -77,6 +77,76 @@ h1 {
   box-shadow: 0 0 12px rgba(48, 209, 88, 0.3);
 }
 
+/* PAINEL FILTRO DE RANGE DE PREÇOS OPCIONAL */
+.range-filter-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  padding: 12px 18px;
+  width: 100%;
+  max-width: 1400px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filter-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  font-weight: 700;
+  min-width: 140px;
+}
+
+.btn-pill {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-pill:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.btn-pill.active {
+  background: #ffd60a;
+  color: #000;
+  border-color: #ffd60a;
+  font-weight: 800;
+  box-shadow: 0 0 12px rgba(255, 214, 10, 0.3);
+}
+
+select {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  outline: none;
+}
+
+select:focus {
+  border-color: #ffd60a;
+}
+
 /* Atalhos Rápidos de Navegação em Preço */
 .price-nav-bar {
   display: flex;
@@ -121,7 +191,7 @@ h1 {
 .b-ioniq { background: rgba(100, 210, 255, 0.15); color: #64d2ff; border: 1px solid rgba(100, 210, 255, 0.3); }
 .b-megane { background: rgba(208, 112, 255, 0.15); color: #d070ff; border: 1px solid rgba(208, 112, 255, 0.3); }
 
-/* MEGA TABELA REUNIDA COMPLETA (15 PREÇOS DE 1000 EM 1000) */
+/* MEGA TABELA REUNIDA COMPLETA */
 .mega-table-card {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
@@ -252,44 +322,47 @@ footer {
 
 <div class="top-bar">
   <div>
-    <h1>&#9889; Mega-Matriz Granular Reunida (1000 em 1000)</h1>
+    <h1>&#9889; Mega-Matriz Granular Reunida (€1.000 em €1.000)</h1>
     <div class="sub">15 Níveis de Preço de Compra (€21k a €35k) &times; 17 Quilometragens (35k a 115k km) para TODOS os 12 Veículos</div>
   </div>
   <a href="matrizes-km-granular-v3.html" class="nav-link">&rarr; Ver Matrizes v3</a>
 </div>
 
-<!-- Atalhos Rápidos por Preço -->
-<div class="price-nav-bar">
-  <span style="font-size:9px;color:var(--text-muted);font-weight:700;margin-right:4px">Saltar para Preço:</span>
-  <a href="#p_21000" class="p-chip">€21.000</a>
-  <a href="#p_22000" class="p-chip">€22.000</a>
-  <a href="#p_23000" class="p-chip">€23.000</a>
-  <a href="#p_24000" class="p-chip">€24.000</a>
-  <a href="#p_25000" class="p-chip">€25.000</a>
-  <a href="#p_26000" class="p-chip">€26.000</a>
-  <a href="#p_27000" class="p-chip">€27.000</a>
-  <a href="#p_28000" class="p-chip">€28.000</a>
-  <a href="#p_29000" class="p-chip">€29.000</a>
-  <a href="#p_30000" class="p-chip">€30.000</a>
-  <a href="#p_31000" class="p-chip">€31.000</a>
-  <a href="#p_32000" class="p-chip">€32.000</a>
-  <a href="#p_33000" class="p-chip">€33.000</a>
-  <a href="#p_34000" class="p-chip">€34.000</a>
-  <a href="#p_35000" class="p-chip">€35.000</a>
+<!-- PAINEL DE FILTRO OPCIONAL DE RANGE DE PREÇOS DE COMPRA -->
+<div class="range-filter-card">
+  <div class="filter-row">
+    <span class="filter-label">&#127899; Range de Preço:</span>
+    <button class="btn-pill active" onclick="setPresetRange(21000, 35000, this)">Todos (€21k - €35k)</button>
+    <button class="btn-pill" onclick="setPresetRange(21000, 25000, this)">Económicos (€21k - €25k)</button>
+    <button class="btn-pill" onclick="setPresetRange(26000, 30000, this)">Intermédios (€26k - €30k)</button>
+    <button class="btn-pill" onclick="setPresetRange(31000, 35000, this)">Seminovos (€31k - €35k)</button>
+  </div>
+
+  <div class="filter-row">
+    <span class="filter-label">Personalizado:</span>
+    <span>De:</span>
+    <select id="minPriceSelect" onchange="onCustomRangeChange()"></select>
+    <span>Até:</span>
+    <select id="maxPriceSelect" onchange="onCustomRangeChange()"></select>
+    <span style="font-size:10px;color:var(--text-muted);margin-left:8px" id="activeRangeLabel">Exibindo 15 níveis de preço</span>
+  </div>
 </div>
+
+<!-- Atalhos Rápidos por Preço -->
+<div class="price-nav-bar" id="priceNavChips"></div>
 
 <!-- PARTE 1: MEGA-TABELA REUNIDA COM PASSO DE 1000 EM 1000 -->
 <div class="mega-table-card">
-  <div style="font-size:14px;font-weight:800;margin-bottom:4px">&#128202; Visão Cruzada Granular Reunida (15 Preços &times; 12 Veículos)</div>
+  <div style="font-size:14px;font-weight:800;margin-bottom:4px">&#128202; Visão Cruzada Granular Reunida (Filtrada por Range de Preço)</div>
   <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">Cada bloco exibe o custo mensal exato (€/mês) para todos os modelos na mesma quilometragem de compra.</div>
 
   <div id="megaTableContainer"></div>
 </div>
 
-<!-- PARTE 2: FEED COMPLETO DE TODAS AS 12 MATRIZES GRANULARES INDIVIDUAIS (15 LINHAS DE PREÇO CADA) -->
+<!-- PARTE 2: FEED COMPLETO DE TODAS AS 12 MATRIZES GRANULARES INDIVIDUAIS -->
 <div style="width:100%;max-width:1400px;margin-top:10px">
-  <div style="font-size:15px;font-weight:800;margin-bottom:4px">&#128269; As 12 Matrizes Granulares Completas (15 linhas de €1.000 em €1.000 cada)</div>
-  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">Todas as matrizes granulares 15x17 completas exibidas na mesma página.</div>
+  <div style="font-size:15px;font-weight:800;margin-bottom:4px">&#128269; As 12 Matrizes Granulares Completas (Filtradas por Range de Preço)</div>
+  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px">Todas as matrizes granulares completas exibidas no mesmo feed continuo.</div>
 
   <div class="all-cards-feed" id="allCardsFeed"></div>
 </div>
@@ -315,11 +388,13 @@ var WS = [
 
 var KM = [35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115];
 
-// PASSO GRANULAR DE €1.000 EM €1.000 (15 NÍVEIS DE PREÇO)
-var PR = [];
+var ALL_PRICES = [];
 for (var pVal = 21000; pVal <= 35000; pVal += 1000) {
-    PR.push(pVal);
+    ALL_PRICES.push(pVal);
 }
+
+var currentMinPrice = 21000;
+var currentMaxPrice = 35000;
 
 var CARS = [
     // TESLA
@@ -340,6 +415,59 @@ var CARS = [
     { id: 'megane_2023', n: 'Megane E-Tech EV60', y: 2023, brand: 'megane', lfp: false, ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 18500, step: 500, jump: 500 },
     { id: 'megane_2024', n: 'Megane E-Tech EV60', y: 2024, brand: 'megane', lfp: false, ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 21000, step: 500, jump: 600 }
 ];
+
+function populateDropdowns() {
+    var minSel = document.getElementById('minPriceSelect');
+    var maxSel = document.getElementById('maxPriceSelect');
+    var hMin = '', hMax = '';
+
+    ALL_PRICES.forEach(function(p) {
+        var fmtP = '€' + p.toLocaleString('pt-PT');
+        hMin += '<option value="' + p + '"' + (p === currentMinPrice ? ' selected' : '') + '>' + fmtP + '</option>';
+        hMax += '<option value="' + p + '"' + (p === currentMaxPrice ? ' selected' : '') + '>' + fmtP + '</option>';
+    });
+
+    minSel.innerHTML = hMin;
+    maxSel.innerHTML = hMax;
+}
+
+window.setPresetRange = function(minP, maxP, btn) {
+    currentMinPrice = minP;
+    currentMaxPrice = maxP;
+    document.getElementById('minPriceSelect').value = minP;
+    document.getElementById('maxPriceSelect').value = maxP;
+
+    var btns = btn.parentElement.querySelectorAll('.btn-pill');
+    btns.forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+
+    renderAll();
+};
+
+window.onCustomRangeChange = function() {
+    var minP = Number(document.getElementById('minPriceSelect').value);
+    var maxP = Number(document.getElementById('maxPriceSelect').value);
+
+    if (minP > maxP) {
+        var tmp = minP; minP = maxP; maxP = tmp;
+        document.getElementById('minPriceSelect').value = minP;
+        document.getElementById('maxPriceSelect').value = maxP;
+    }
+
+    currentMinPrice = minP;
+    currentMaxPrice = maxP;
+
+    var btns = document.querySelectorAll('.range-filter-card .btn-pill');
+    btns.forEach(function(b){ b.classList.remove('active'); });
+
+    renderAll();
+};
+
+function getFilteredPrices() {
+    return ALL_PRICES.filter(function(p) {
+        return p >= currentMinPrice && p <= currentMaxPrice;
+    });
+}
 
 function wMonths(c) {
     return (c.ry + c.wy - 2028) * 12 + (c.rm - 12);
@@ -395,12 +523,20 @@ function getBadge(c) {
     return '<span class="badge-car ' + cls + '">' + c.n + ' (' + c.y + ')</span>';
 }
 
-// 1. RENDERIZAR MEGA-TABELA REUNIDA (15 NÍVEIS DE PREÇO DE 1000 EM 1000)
-function renderMegaTable() {
+function renderNavChips(prices) {
+    var container = document.getElementById('priceNavChips');
+    var html = '<span style="font-size:9px;color:var(--text-muted);font-weight:700;margin-right:4px">Saltar para Preço:</span>';
+    prices.forEach(function(p) {
+        html += '<a href="#p_' + p + '" class="p-chip">€' + p.toLocaleString('pt-PT') + '</a>';
+    });
+    container.innerHTML = html;
+}
+
+function renderMegaTable(prices) {
     var container = document.getElementById('megaTableContainer');
     var html = '';
 
-    PR.forEach(function(price) {
+    prices.forEach(function(price) {
         html += '<div class="price-section-header" id="p_' + price + '">';
         html += '<span>&#127991; Seção Preço de Compra: €' + price.toLocaleString('pt-PT') + '</span>';
         html += '<span style="font-size:10px;font-weight:400;color:rgba(255,255,255,0.6)">Comparativo granular de todos os 12 veículos</span>';
@@ -435,8 +571,7 @@ function renderMegaTable() {
     container.innerHTML = html;
 }
 
-// 2. RENDERIZAR FEED INTEGRAL COM TODAS AS 12 MATRIZES GRANULARES INDIVIDUAIS (15 PREÇOS CADA)
-function renderAllCardsFeed() {
+function renderAllCardsFeed(prices) {
     var container = document.getElementById('allCardsFeed');
     var html = '';
 
@@ -462,7 +597,7 @@ function renderAllCardsFeed() {
         }
         html += '</tr></thead><tbody>';
 
-        PR.forEach(function(p) {
+        prices.forEach(function(p) {
             html += '<tr><td>€' + (p/1000).toFixed(0) + 'k</td>';
             for (var ki = 0; ki < KM.length; ki++) {
                 var r = aResale(c, KM[ki]);
@@ -489,8 +624,16 @@ function renderAllCardsFeed() {
     container.innerHTML = html;
 }
 
-renderMegaTable();
-renderAllCardsFeed();
+function renderAll() {
+    var filteredPrices = getFilteredPrices();
+    document.getElementById('activeRangeLabel').textContent = 'Exibindo ' + filteredPrices.length + ' níveis de preço (€' + currentMinPrice.toLocaleString('pt-PT') + ' a €' + currentMaxPrice.toLocaleString('pt-PT') + ')';
+    renderNavChips(filteredPrices);
+    renderMegaTable(filteredPrices);
+    renderAllCardsFeed(filteredPrices);
+}
+
+populateDropdowns();
+renderAll();
 
 })();
 </script>

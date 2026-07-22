@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Matrizes Depreciação v2</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:12px;color:#fff;display:flex;flex-direction:column;align-items:center;gap:14px}
+h1{font-size:18px;font-weight:700;text-align:center;opacity:.9;margin-top:6px}
+.sub{font-size:10px;color:rgba(255,255,255,.35);text-align:center}
+.card{background:rgba(255,255,255,.06);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:12px 8px;width:100%;max-width:100%;overflow-x:auto}
+h2{font-size:12px;font-weight:600;display:flex;align-items:center;gap:5px;margin-bottom:2px;white-space:nowrap}
+.tag{font-size:9px;color:rgba(255,255,255,.4);background:rgba(255,255,255,.08);padding:2px 6px;border-radius:4px;font-weight:400}
+.best{font-size:10px;color:#30d158;margin:2px 0 1px}
+.bdet{font-size:9px;color:rgba(255,255,255,.4);margin:0 0 6px}
+table{width:100%;border-collapse:collapse;font-size:9px;min-width:620px}
+th{color:rgba(255,255,255,.45);padding:2px 2px;border-bottom:1px solid rgba(255,255,255,.08);text-align:center;font-size:8px;font-weight:500}
+th:first-child{text-align:left;color:rgba(255,255,255,.3);min-width:38px;font-size:7px;position:sticky;left:0;background:#000;z-index:1}
+td{padding:2px 2px;text-align:center;border-bottom:1px solid rgba(255,255,255,.04);font-size:9px;font-weight:500}
+td:first-child{color:rgba(255,255,255,.4);font-weight:500;text-align:left;font-size:8px;white-space:nowrap;position:sticky;left:0;background:#000;z-index:1}
+.rrow td{border-top:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.3);font-size:8px;font-weight:400;font-style:italic}
+.rrow td:first-child{color:rgba(255,255,255,.2);font-size:7px;font-style:italic}
+.wbox{border:1px solid;border-radius:8px;padding:5px 8px;margin:4px 0 4px;font-size:9px;color:rgba(255,255,255,.55);line-height:1.6}
+.wbox b{font-weight:600}
+.lfp{font-size:8px;color:rgba(255,255,255,.25)}
+.summ{font-size:9px;color:rgba(255,255,255,.35);margin:2px 0 6px;font-style:italic;line-height:1.4}
+.nota{font-size:9px;color:rgba(255,255,255,.3);margin-top:4px}
+.legend{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;font-size:8px;color:rgba(255,255,255,.35);margin:2px 0}
+.d{width:6px;height:6px;border-radius:50%;display:inline-block;vertical-align:middle;margin-right:1px}
+footer{font-size:8px;color:rgba(255,255,255,.15);text-align:center;padding:6px 0 2px}
+.rank{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin:6px 0 0;padding:6px 0 0;border-top:1px solid rgba(255,255,255,.06)}
+.ri{background:rgba(255,255,255,.04);border-radius:8px;padding:4px 6px;font-size:8px;text-align:center;min-width:60px}
+.rn{font-size:13px;font-weight:700;display:block}
+.rv{display:block;margin-top:1px;font-size:7px}
+.vb{display:inline-block;font-size:8px;color:#ffd60a;background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.15);border-radius:4px;padding:1px 5px;margin-left:6px;vertical-align:middle}
+</style>
+</head>
+<body>
+
+<h1>&#9889; Depreciação Mensal <span class="vb">v2 — c/ garantia bateria</span></h1>
+<div class="sub">28 meses &middot; 750 km/mês &middot; Ago/2026 &rarr; Dez/2028 &middot; Porto</div>
+<div class="legend" id="legend"></div>
+
+<div id="app"></div>
+
+<footer>Consenso: tetoBot + 3 subagentes &middot; Jul/2026 &middot; v2 c/ penalização garantia bateria</footer>
+
+<script>
+(function(){
+'use strict';
+
+// ============================================================
+// CONFIG — ver regras-calculo.md para detalhes completos
+// ============================================================
+var M = 28;            // meses de posse
+var KPM = 750;         // km por mês
+var TKM = M * KPM;     // 21.000 km total adicionado
+var LFPR = 0.5;        // redutor LFP (50%)
+
+// Escala de penalização de garantia (ordenada de melhor a pior)
+var WS = [
+    {m: 24, p: 0},
+    {m: 18, p: 750},
+    {m: 12, p: 1500},
+    {m: 6,  p: 2000},
+    {m: 0,  p: 2500},
+    {m: -999, p: 3000}
+];
+
+// Eixos da tabela
+var KM = [35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115];
+var PR = [];
+for (var i = 21000; i <= 27000; i += 500) PR.push(i);
+
+var MN = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+
+// ============================================================
+// DADOS DOS CARROS
+// Valores de revenda base (em €, múltiplos de 100)
+// extraídos por engenharia reversa do modelo v1
+// ============================================================
+var CARS = [
+    {
+        n: 'IONIQ 5 72.6 kWh', y: 2022, lfp: false,
+        ry: 2022, rm: 7, wy: 8, wk: 160000, v1: 125,
+        r: {35:17500,40:17000,45:16500,50:16000,55:15500,60:15000,65:14500,70:14000,75:13500,80:13000,85:12500,90:12000,95:11000,100:10500,105:10000,110:9500,115:9000},
+        f: ['Garantia standard expirada desde ~2027',
+            'Facelift 2024 com 84 kWh pressiona preços dos usados',
+            'Bateria NMC \u2014 degrada mais que LFP'],
+        s: 'Desvalorização impulsionada pela expiração da garantia standard (~2027), pressão do facelift 2024 com 84 kWh, e sensibilidade da bateria NMC.',
+        nt: '\u26A0\uFE0F Garantia standard expira ~2027 \u2014 18 meses sem cobertura'
+    },
+    {
+        n: 'IONIQ 5 72.6 kWh', y: 2021, lfp: false,
+        ry: 2021, rm: 11, wy: 8, wk: 160000, v1: 143,
+        r: {35:17000,40:16500,45:16000,50:15500,55:15000,60:14500,65:14000,70:13500,75:13000,80:12500,85:12000,90:11500,95:10500,100:10000,105:9500,110:9000,115:8500},
+        f: ['Build anterior \u2014 sem pré-condicionamento de bateria',
+            'Apenas 11 meses de garantia de bateria na venda',
+            '1 ano de idade extra vs modelo 2022'],
+        s: 'Forte desvalorização pela proximidade da expiração da garantia de bateria (apenas 11 meses restantes), build anterior sem pré-condicionamento, e 1 ano de idade adicional.',
+        nt: '\u26A0\uFE0F Garantia bateria expira Nov/2029 \u2014 apenas 11 meses restantes'
+    },
+    {
+        n: 'Megane E-Tech EV60', y: 2022, lfp: false,
+        ry: 2022, rm: 9, wy: 8, wk: 160000, v1: 161,
+        r: {35:16500,40:16000,45:15500,50:15000,55:14500,60:14000,65:13500,70:13000,75:12500,80:12000,85:11500,90:11000,95:10000,100:9500,105:9000,110:8500,115:8000},
+        f: ['Estigma de marca francesa em EVs no mercado PT',
+            'Bateria 60 kWh \u2014 autonomia limitada penaliza revenda',
+            '22 kW AC é diferencial positivo (rede Mobi.E Porto)'],
+        s: 'Desvalorização impulsionada pelo estigma de marca francesa em EVs, bateria de 60 kWh limitada. O carregamento a 22 kW AC na rede Mobi.E do Porto é um diferencial positivo.',
+        nt: '\u26A1 22 kW AC é diferencial no Porto (Mobi.E)'
+    },
+    {
+        n: 'Tesla M3 SR+ LFP', y: 2021, lfp: true,
+        ry: 2021, rm: 12, wy: 8, wk: 192000, v1: 96,
+        r: {35:18300,40:18000,45:17700,50:17400,55:17100,60:16800,65:16500,70:16200,75:15900,80:15600,85:15300,90:15000,95:14300,100:13900,105:13500,110:13000,115:12500},
+        f: ['Bateria LFP \u2014 durabilidade superior (300k+ km)',
+            'Rede Supercharger \u2014 vantagem competitiva na revenda',
+            'Retenção de valor acima da média para EVs usados'],
+        s: 'Desvalorização mais contida graças à bateria LFP (300k+ km de durabilidade), rede Supercharger, e forte retenção de valor. Redutor LFP de 50% aplicado na penalização de garantia.',
+        nt: '\uD83D\uDD0B LFP dura 300k+ km \u2014 barreira dos 100k km é menor'
+    }
+];
+
+// ============================================================
+// FUNÇÕES DE CÁLCULO
+// ============================================================
+
+// Formatar euros: 21000 → "€21.000"
+function fmt(n) {
+    return '\u20AC' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
+// Meses de garantia de bateria restantes em Dez/2028
+function wMonths(c) {
+    return (c.ry + c.wy - 2028) * 12 + (c.rm - 12);
+}
+
+// Data de expiração da garantia: "Jul/2030"
+function wExpiry(c) {
+    return MN[c.rm - 1] + '/' + (c.ry + c.wy);
+}
+
+// Penalização de garantia (com redutor LFP se aplicável)
+function wPenalty(c) {
+    var m = wMonths(c);
+    var p = 3000; // default: expirada
+    for (var i = 0; i < WS.length; i++) {
+        if (m >= WS[i].m) { p = WS[i].p; break; }
+    }
+    if (c.lfp && p > 0) p = Math.round(p * LFPR);
+    return p;
+}
+
+// Label da faixa de garantia
+function wLabel(c) {
+    var m = wMonths(c);
+    if (m >= 24) return '\u226524m';
+    if (m >= 18) return '18-23m';
+    if (m >= 12) return '12-17m';
+    if (m >= 6)  return '6-11m';
+    if (m >= 0)  return '0-5m';
+    return 'Expirada';
+}
+
+// Revenda ajustada (base - penalização, com check de km)
+function aResale(c, k) {
+    var p = wPenalty(c);
+    var fkm = k * 1000 + TKM;
+    if (fkm > c.wk) {
+        var kp = 3000;
+        if (c.lfp) kp = Math.round(kp * LFPR);
+        p = Math.max(p, kp);
+    }
+    return Math.max(0, c.r[k] - p);
+}
+
+// Depreciação mensal
+function mo(price, resale) {
+    return Math.round((price - resale) / M);
+}
+
+// Cor do gradiente (verde → vermelho)
+function col(v) {
+    var t = Math.max(0, Math.min(1, (v - 100) / 600));
+    return 'rgb(' + Math.round(255 * t) + ',' + Math.round(255 * (1 - t)) + ',50)';
+}
+
+// ============================================================
+// RENDERIZAÇÃO
+// ============================================================
+
+function renderLegend() {
+    var el = document.getElementById('legend');
+    var steps = [100, 200, 300, 400, 500, 600, 700];
+    var h = '';
+    for (var i = 0; i < steps.length; i++) {
+        h += '<span><span class="d" style="background:' + col(steps[i]) + '"></span>\u20AC' + steps[i] + '</span>';
+    }
+    el.innerHTML = h;
+}
+
+function renderCard(c) {
+    var pen = wPenalty(c);
+    var wm = wMonths(c);
+    var we = wExpiry(c);
+    var wl = wLabel(c);
+    var mpen = Math.round(pen / M);
+
+    // Encontrar melhor cenário (menor mensal no preço mais baixo)
+    var bM = Infinity, bK = 0;
+    for (var i = 0; i < KM.length; i++) {
+        var r = aResale(c, KM[i]);
+        var m = mo(PR[0], r);
+        if (m < bM) { bM = m; bK = KM[i]; }
+    }
+    var bR = aResale(c, bK);
+    var bP = PR[0];
+    var bD = bP - bR;
+    var bPct = (bD / bP * 100).toFixed(1);
+    var bF = bK + TKM / 1000;
+
+    // Cores da warranty box
+    var wc = pen >= 2000 ? '#ff453a' : pen >= 750 ? '#ffd60a' : '#30d158';
+    var wb = pen >= 2000 ? 'rgba(255,69,58,.08)' : pen >= 750 ? 'rgba(255,200,50,.06)' : 'rgba(48,209,88,.06)';
+    var wbb = pen >= 2000 ? 'rgba(255,69,58,.18)' : pen >= 750 ? 'rgba(255,200,50,.12)' : 'rgba(48,209,88,.15)';
+
+    var h = '';
+    h += '<div class="card">';
+
+    // Título
+    h += '<h2>' + c.n + ' <span class="tag">' + c.y + '</span></h2>';
+
+    // Melhor cenário
+    h += '<div class="best">\uD83C\uDFF7\uFE0F ' + fmt(bP) + '/' + bK + 'k km \u2192 <b>\u20AC' + bM + '/m\u00EAs</b> (' + bF + 'k final)</div>';
+    h += '<div class="bdet">Revenda: ' + fmt(bR) + ' \u00B7 Depr: ' + fmt(bD) + ' (' + bPct + '%) em ' + M + 'm';
+    h += ' \u00B7 <span style="color:rgba(255,255,255,.25)">era \u20AC' + c.v1 + '/m\u00EAs (+\u20AC' + (bM - c.v1) + ')</span></div>';
+
+    // Warranty box
+    h += '<div class="wbox" style="background:' + wb + ';border-color:' + wbb + '">';
+    h += '\uD83D\uDD0B Expira: <b style="color:' + wc + '">' + we + '</b>';
+    h += ' \u00B7 Restam: <b style="color:' + wc + '">' + wm + 'm</b>';
+    h += ' \u00B7 Faixa: ' + wl;
+    h += ' \u00B7 Pen: <b style="color:' + wc + '">-' + fmt(pen) + '</b>';
+    if (c.lfp) h += ' <span class="lfp">(LFP \u00D7' + LFPR + ')</span>';
+    h += ' \u2192 <b>+\u20AC' + mpen + '/m\u00EAs</b></div>';
+
+    // Resumo fatores
+    h += '<div class="summ">' + c.s + ' Penalização garantia: -' + fmt(pen);
+    if (c.lfp) h += ' (com redutor LFP)';
+    h += '.</div>';
+
+    // Tabela
+    h += '<table><tr><th>\u20AC\u2216km</th>';
+    for (var i = 0; i < KM.length; i++) h += '<th>' + KM[i] + 'k</th>';
+    h += '</tr>';
+
+    // Linhas de preço
+    for (var pi = 0; pi < PR.length; pi++) {
+        var p = PR[pi];
+        h += '<tr><td>' + fmt(p) + '</td>';
+        for (var ki = 0; ki < KM.length; ki++) {
+            var r = aResale(c, KM[ki]);
+            var m = mo(p, r);
+            h += '<td style="color:' + col(m) + '">' + m + '</td>';
+        }
+        h += '</tr>';
+    }
+
+    // Linha de revenda ajustada
+    h += '<tr class="rrow"><td>Revenda \u20ACk</td>';
+    for (var ki = 0; ki < KM.length; ki++) {
+        var r = aResale(c, KM[ki]);
+        h += '<td>' + (r / 1000).toFixed(1) + '</td>';
+    }
+    h += '</tr>';
+
+    // Linha de depreciação % (referência: €25.000)
+    h += '<tr class="rrow"><td>Depr % @25k</td>';
+    for (var ki = 0; ki < KM.length; ki++) {
+        var r = aResale(c, KM[ki]);
+        var pct = ((25000 - r) / 25000 * 100).toFixed(0);
+        h += '<td>' + pct + '%</td>';
+    }
+    h += '</tr>';
+
+    h += '</table>';
+    h += '<div class="nota">' + c.nt + '</div>';
+    h += '</div>';
+
+    return h;
+}
+
+function renderRanking() {
+    // Calcular melhor cenário para cada carro
+    var results = [];
+    for (var ci = 0; ci < CARS.length; ci++) {
+        var c = CARS[ci];
+        var bM = Infinity, bK = 0;
+        for (var ki = 0; ki < KM.length; ki++) {
+            var r = aResale(c, KM[ki]);
+            var m = mo(PR[0], r);
+            if (m < bM) { bM = m; bK = KM[ki]; }
+        }
+        results.push({c: c, bM: bM, bK: bK});
+    }
+    results.sort(function(a, b) { return a.bM - b.bM; });
+
+    var rc = ['#ffd60a', '#e0e0e0', '#cd7f32', 'rgba(255,255,255,.5)'];
+
+    var h = '<div class="card"><h2>\uD83C\uDFF7\uFE0F Ranking Sweet Spots <span class="tag">v2</span></h2><div class="rank">';
+    for (var i = 0; i < results.length; i++) {
+        var r = results[i];
+        var delta = r.bM - r.c.v1;
+        h += '<div class="ri">';
+        h += '<span class="rn" style="color:' + rc[i] + '">' + (i + 1) + '</span>';
+        h += '<span style="color:#fff;font-weight:600;font-size:10px">\u20AC' + r.bM + '/m\u00EAs</span>';
+        h += '<span class="rv" style="color:rgba(255,255,255,.4)">\u20AC' + (PR[0] / 1000).toFixed(0) + 'k/' + r.bK + 'k km</span>';
+        h += '<span class="rv" style="color:rgba(255,255,255,.3)">' + r.c.n + ' ' + r.c.y + '</span>';
+        h += '<span class="rv" style="color:rgba(255,255,255,.2)">v1: \u20AC' + r.c.v1 + ' (+\u20AC' + delta + ')</span>';
+        h += '</div>';
+    }
+    h += '</div></div>';
+    return h;
+}
+
+// ============================================================
+// INICIALIZAÇÃO
+// ============================================================
+renderLegend();
+var html = '';
+for (var i = 0; i < CARS.length; i++) {
+    html += renderCard(CARS[i]);
+}
+html += renderRanking();
+document.getElementById('app').innerHTML = html;
+
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Matrizes Depreciação</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:12px;color:#fff;display:flex;flex-direction:column;align-items:center;gap:14px}
+h1{font-size:18px;font-weight:700;text-align:center;opacity:.9;margin-top:6px}
+.sub{font-size:10px;color:rgba(255,255,255,.35);text-align:center}
+.card{background:rgba(255,255,255,.06);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:12px 8px;width:100%;max-width:100%;overflow-x:auto}
+h2{font-size:12px;font-weight:600;display:flex;align-items:center;gap:5px;margin-bottom:2px;white-space:nowrap}
+.tag{font-size:9px;color:rgba(255,255,255,.4);background:rgba(255,255,255,.08);padding:2px 6px;border-radius:4px;font-weight:400}
+.best{font-size:10px;color:#30d158;margin:2px 0 6px}
+table{width:100%;border-collapse:collapse;font-size:9px;min-width:620px}
+th{color:rgba(255,255,255,.45);padding:2px 2px;border-bottom:1px solid rgba(255,255,255,.08);text-align:center;font-size:8px;font-weight:500}
+th:first-child{text-align:left;color:rgba(255,255,255,.3);min-width:38px;font-size:7px;position:sticky;left:0;background:#000;z-index:1}
+td{padding:2px 2px;text-align:center;border-bottom:1px solid rgba(255,255,255,.04);font-size:9px;font-weight:500}
+td:first-child{color:rgba(255,255,255,.4);font-weight:500;text-align:left;font-size:8px;white-space:nowrap;position:sticky;left:0;background:#000;z-index:1}
+.v1{color:#30d158}
+.v2{color:#ffd60a}
+.v3{color:#ff9f0a}
+.v4{color:#ff453a}
+.nota{font-size:9px;color:rgba(255,255,255,.3);margin-top:4px}
+.legend{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;font-size:8px;color:rgba(255,255,255,.35);margin:2px 0}
+.d{width:6px;height:6px;border-radius:50%;display:inline-block;vertical-align:middle;margin-right:1px}
+footer{font-size:8px;color:rgba(255,255,255,.15);text-align:center;padding:6px 0 2px}
+.rank{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin:6px 0 0;padding:6px 0 0;border-top:1px solid rgba(255,255,255,.06)}
+.ri{background:rgba(255,255,255,.04);border-radius:8px;padding:4px 6px;font-size:8px;text-align:center;min-width:60px}
+.rn{font-size:13px;font-weight:700;display:block}
+.rv{display:block;margin-top:1px;font-size:7px}
+</style>
+</head>
+<body>
+<h1>&#9889; Deprecia&ccedil;&atilde;o Mensal</h1>
+<div class=sub>28 meses &middot; 750 km/m&ecirc;s &middot; Ago/2026 &rarr; Dez/2028 &middot; Porto</div>
+<div class=legend>
+<span><span class=d style="background:rgb(0,255,50)"></span>&euro;96</span>
+<span><span class=d style="background:rgb(38,216,50)"></span>&euro;175</span>
+<span><span class=d style="background:rgb(76,178,50)"></span>&euro;281</span>
+<span><span class=d style="background:rgb(127,127,50)"></span>&euro;360</span>
+<span><span class=d style="background:rgb(178,76,50)"></span>&euro;440</span>
+<span><span class=d style="background:rgb(216,38,50)"></span>&euro;519</span>
+<span><span class=d style="background:rgb(255,0,50)"></span>&euro;625</span>
+</div>
+
+<div class=card>
+<h2>IONIQ 5 72.6 kWh <span class=tag>2022</span></h2>
+<div class=best>&#127991; &euro;21.000/35k km &rarr; <strong>&euro;125/m&ecirc;s</strong> (56k final)</div>
+<table>
+<tr><th>&euro;&#8726;km</th><th>35k</th><th>40k</th><th>45k</th><th>50k</th><th>55k</th><th>60k</th><th>65k</th><th>70k</th><th>75k</th><th>80k</th><th>85k</th><th>90k</th><th>95k</th><th>100k</th><th>105k</th><th>110k</th><th>115k</th></tr>
+<tr><td>&euro;21.000</td><td class=v1>125</td><td class=v1>143</td><td class=v1>161</td><td class=v1>179</td><td class=v1>196</td><td class=v2>214</td><td class=v2>232</td><td class=v2>250</td><td class=v2>268</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td></tr>
+<tr><td>&euro;21.500</td><td class=v1>143</td><td class=v1>161</td><td class=v1>179</td><td class=v1>196</td><td class=v2>214</td><td class=v2>232</td><td class=v2>250</td><td class=v3>268</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td></tr>
+<tr><td>&euro;22.000</td><td class=v1>161</td><td class=v1>179</td><td class=v1>196</td><td class=v2>214</td><td class=v2>232</td><td class=v2>250</td><td class=v3>268</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td></tr>
+<tr><td>&euro;22.500</td><td class=v1>179</td><td class=v1>196</td><td class=v2>214</td><td class=v2>232</td><td class=v2>250</td><td class=v3>268</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td><td class=v4>482</td></tr>
+<tr><td>&euro;23.000</td><td class=v1>196</td><td class=v2>214</td><td class=v2>232</td><td class=v2>250</td><td class=v3>268</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td><td class=v4>482</td><td class=v4>500</td></tr>
+<tr><td>&euro;23.500</td><td class=v2>214</td><td class=v2>232</td><td class=v2>250</td><td class=v3>268</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>446</td><td class=v4>464</td><td class=v4>482</td><td class=v4>500</td><td class=v4>518</td></tr>
+<tr><td>&euro;24.000</td><td class=v2>232</td><td class=v2>250</td><td class=v3>268</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>464</td><td class=v4>482</td><td class=v4>500</td><td class=v4>518</td><td class=v4>536</td></tr>
+<tr><td>&euro;24.500</td><td class=v2>250</td><td class=v3>268</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>482</td><td class=v4>500</td><td class=v4>518</td><td class=v4>536</td><td class=v4>554</td></tr>
+<tr><td>&euro;25.000</td><td class=v3>268</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td><td class=v4>500</td><td class=v4>518</td><td class=v4>536</td><td class=v4>554</td><td class=v4>571</td></tr>
+<tr><td>&euro;25.500</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td><td class=v4>482</td><td class=v4>518</td><td class=v4>536</td><td class=v4>554</td><td class=v4>571</td><td class=v4>589</td></tr>
+<tr><td>&euro;26.000</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td><td class=v4>482</td><td class=v4>500</td><td class=v4>536</td><td class=v4>554</td><td class=v4>571</td><td class=v4>589</td><td class=v4>607</td></tr>
+<tr><td>&euro;26.500</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td><td class=v4>482</td><td class=v4>500</td><td class=v4>518</td><td class=v4>554</td><td class=v4>571</td><td class=v4>589</td><td class=v4>607</td><td class=v4>625</td></tr>
+<tr><td>&euro;27.000</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td><td class=v4>482</td><td class=v4>500</td><td class=v4>518</td><td class=v4>536</td><td class=v4>571</td><td class=v4>589</td><td class=v4>607</td><td class=v4>625</td><td class=v4>625</td></tr>
+</table>
+<div class=nota>&#9888;&#65039; Garantia standard expira ~2027 — 18 meses sem cobertura</div>
+</div>
+
+<div class=card>
+<h2>IONIQ 5 72.6 kWh <span class=tag>2021</span></h2>
+<div class=best>&#127991; &euro;21.000/35k km &rarr; <strong>&euro;143/m&ecirc;s</strong> (56k final)</div>
+<table>
+<tr><th>&euro;&#8726;km</th><th>35k</th><th>40k</th><th>45k</th><th>50k</th><th>55k</th><th>60k</th><th>65k</th><th>70k</th><th>75k</th><th>80k</th><th>85k</th><th>90k</th><th>95k</th><th>100k</th><th>105k</th><th>110k</th><th>115k</th></tr>
+<tr><td>&euro;21.000</td><td class=v1>143</td><td class=v1>161</td><td class=v1>179</td><td class=v1>196</td><td class=v2>214</td><td class=v2>232</td><td class=v2>250</td><td class=v3>268</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td></tr>
+<tr><td>&euro;21.500</td><td class=v1>161</td><td class=v1>179</td><td class=v1>196</td><td class=v2>214</td><td class=v2>232</td><td class=v2>250</td><td class=v3>268</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td></tr>
+<tr><td>&euro;22.000</td><td class=v1>179</td><td class=v1>196</td><td class=v2>214</td><td class=v2>232</td><td class=v2>250</td><td class=v3>268</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td><td class=v4>482</td></tr>
+<tr><td>&euro;22.500</td><td class=v1>196</td><td class=v2>214</td><td class=v2>232</td><td class=v2>250</td><td class=v3>268</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td><td class=v4>482</td><td class=v4>500</td></tr>
+<tr><td>&euro;23.000</td><td class=v2>214</td><td class=v2>232</td><td class=v2>250</td><td class=v3>268</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>446</td><td class=v4>464</td><td class=v4>482</td><td class=v4>500</td><td class=v4>518</td></tr>
+<tr><td>&euro;23.500</td><td class=v2>232</td><td class=v2>250</td><td class=v3>268</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>464</td><td class=v4>482</td><td class=v4>500</td><td class=v4>518</td><td class=v4>536</td></tr>
+<tr><td>&euro;24.000</td><td class=v2>250</td><td class=v3>268</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>482</td><td class=v4>500</td><td class=v4>518</td><td class=v4>536</td><td class=v4>554</td></tr>
+<tr><td>&euro;24.500</td><td class=v3>268</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td><td class=v4>500</td><td class=v4>518</td><td class=v4>536</td><td class=v4>554</td><td class=v4>571</td></tr>
+<tr><td>&euro;25.000</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td><td class=v4>482</td><td class=v4>518</td><td class=v4>536</td><td class=v4>554</td><td class=v4>571</td><td class=v4>589</td></tr>
+<tr><td>&euro;25.500</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td><td class=v4>482</td><td class=v4>500</td><td class=v4>536</td><td class=v4>554</td><td class=v4>571</td><td class=v4>589</td><td class=v4>607</td></tr>
+<tr><td>&euro;26.000</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td><td class=v4>482</td><td class=v4>500</td><td class=v4>518</td><td class=v4>554</td><td class=v4>571</td><td class=v4>589</td><td class=v4>607</td><td class=v4>625</td></tr>
+<tr><td>&euro;26.500</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td><td class=v4>482</td><td class=v4>500</td><td class=v4>518</td><td class=v4>536</td><td class=v4>571</td><td class=v4>589</td><td class=v4>607</td><td class=v4>625</td><td class=v4>625</td></tr>
+<tr><td>&euro;27.000</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td><td class=v4>482</td><td class=v4>500</td><td class=v4>518</td><td class=v4>536</td><td class=v4>554</td><td class=v4>589</td><td class=v4>607</td><td class=v4>625</td><td class=v4>625</td><td class=v4>625</td></tr>
+</table>
+<div class=nota>&#9888;&#65039; Garantia bateria expira Nov/2029 — 11 meses</div>
+</div>
+
+<div class=card>
+<h2>Megane E-Tech EV60 <span class=tag>2022</span></h2>
+<div class=best>&#127991; &euro;21.000/35k km &rarr; <strong>&euro;161/m&ecirc;s</strong> (56k final)</div>
+<table>
+<tr><th>&euro;&#8726;km</th><th>35k</th><th>40k</th><th>45k</th><th>50k</th><th>55k</th><th>60k</th><th>65k</th><th>70k</th><th>75k</th><th>80k</th><th>85k</th><th>90k</th><th>95k</th><th>100k</th><th>105k</th><th>110k</th><th>115k</th></tr>
+<tr><td>&euro;21.000</td><td class=v1>161</td><td class=v1>179</td><td class=v1>196</td><td class=v2>214</td><td class=v2>232</td><td class=v2>250</td><td class=v3>268</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td></tr>
+<tr><td>&euro;21.500</td><td class=v1>179</td><td class=v1>196</td><td class=v2>214</td><td class=v2>232</td><td class=v2>250</td><td class=v3>268</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td><td class=v4>482</td></tr>
+<tr><td>&euro;22.000</td><td class=v1>196</td><td class=v2>214</td><td class=v2>232</td><td class=v2>250</td><td class=v3>268</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td><td class=v4>482</td><td class=v4>500</td></tr>
+<tr><td>&euro;22.500</td><td class=v2>214</td><td class=v2>232</td><td class=v2>250</td><td class=v3>268</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>446</td><td class=v4>464</td><td class=v4>482</td><td class=v4>500</td><td class=v4>518</td></tr>
+<tr><td>&euro;23.000</td><td class=v2>232</td><td class=v2>250</td><td class=v3>268</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>464</td><td class=v4>482</td><td class=v4>500</td><td class=v4>518</td><td class=v4>536</td></tr>
+<tr><td>&euro;23.500</td><td class=v2>250</td><td class=v3>268</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>482</td><td class=v4>500</td><td class=v4>518</td><td class=v4>536</td><td class=v4>554</td></tr>
+<tr><td>&euro;24.000</td><td class=v3>268</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td><td class=v4>500</td><td class=v4>518</td><td class=v4>536</td><td class=v4>554</td><td class=v4>571</td></tr>
+<tr><td>&euro;24.500</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td><td class=v4>482</td><td class=v4>518</td><td class=v4>536</td><td class=v4>554</td><td class=v4>571</td><td class=v4>589</td></tr>
+<tr><td>&euro;25.000</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td><td class=v4>482</td><td class=v4>500</td><td class=v4>536</td><td class=v4>554</td><td class=v4>571</td><td class=v4>589</td><td class=v4>607</td></tr>
+<tr><td>&euro;25.500</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td><td class=v4>482</td><td class=v4>500</td><td class=v4>518</td><td class=v4>554</td><td class=v4>571</td><td class=v4>589</td><td class=v4>607</td><td class=v4>625</td></tr>
+<tr><td>&euro;26.000</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td><td class=v4>482</td><td class=v4>500</td><td class=v4>518</td><td class=v4>536</td><td class=v4>571</td><td class=v4>589</td><td class=v4>607</td><td class=v4>625</td><td class=v4>625</td></tr>
+<tr><td>&euro;26.500</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td><td class=v4>482</td><td class=v4>500</td><td class=v4>518</td><td class=v4>536</td><td class=v4>554</td><td class=v4>589</td><td class=v4>607</td><td class=v4>625</td><td class=v4>625</td><td class=v4>625</td></tr>
+<tr><td>&euro;27.000</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td><td class=v4>482</td><td class=v4>500</td><td class=v4>518</td><td class=v4>536</td><td class=v4>554</td><td class=v4>571</td><td class=v4>607</td><td class=v4>625</td><td class=v4>625</td><td class=v4>625</td><td class=v4>625</td></tr>
+</table>
+<div class=nota>&#9889; 22 kW AC &eacute; diferencial no Porto (Mobi.E)</div>
+</div>
+
+<div class=card>
+<h2>Tesla M3 SR+ LFP <span class=tag>2021</span></h2>
+<div class=best>&#127991; &euro;21.000/35k km &rarr; <strong>&euro;96/m&ecirc;s</strong> (56k final)</div>
+<table>
+<tr><th>&euro;&#8726;km</th><th>35k</th><th>40k</th><th>45k</th><th>50k</th><th>55k</th><th>60k</th><th>65k</th><th>70k</th><th>75k</th><th>80k</th><th>85k</th><th>90k</th><th>95k</th><th>100k</th><th>105k</th><th>110k</th><th>115k</th></tr>
+<tr><td>&euro;21.000</td><td class=v1>96</td><td class=v1>107</td><td class=v1>118</td><td class=v1>129</td><td class=v1>139</td><td class=v1>150</td><td class=v1>161</td><td class=v1>171</td><td class=v1>182</td><td class=v1>193</td><td class=v1>204</td><td class=v2>214</td><td class=v2>239</td><td class=v2>254</td><td class=v2>268</td><td class=v3>286</td><td class=v3>304</td></tr>
+<tr><td>&euro;21.500</td><td class=v1>114</td><td class=v1>125</td><td class=v1>136</td><td class=v1>146</td><td class=v1>157</td><td class=v1>168</td><td class=v1>179</td><td class=v1>189</td><td class=v1>200</td><td class=v2>211</td><td class=v2>221</td><td class=v2>232</td><td class=v2>257</td><td class=v3>271</td><td class=v3>286</td><td class=v3>304</td><td class=v3>321</td></tr>
+<tr><td>&euro;22.000</td><td class=v1>132</td><td class=v1>143</td><td class=v1>154</td><td class=v1>164</td><td class=v1>175</td><td class=v1>186</td><td class=v1>196</td><td class=v2>207</td><td class=v2>218</td><td class=v2>229</td><td class=v2>239</td><td class=v2>250</td><td class=v3>275</td><td class=v3>289</td><td class=v3>304</td><td class=v3>321</td><td class=v4>339</td></tr>
+<tr><td>&euro;22.500</td><td class=v1>150</td><td class=v1>161</td><td class=v1>171</td><td class=v1>182</td><td class=v1>193</td><td class=v1>204</td><td class=v2>214</td><td class=v2>225</td><td class=v2>236</td><td class=v2>246</td><td class=v2>257</td><td class=v3>268</td><td class=v3>293</td><td class=v3>307</td><td class=v3>321</td><td class=v4>339</td><td class=v4>357</td></tr>
+<tr><td>&euro;23.000</td><td class=v1>168</td><td class=v1>179</td><td class=v1>189</td><td class=v1>200</td><td class=v2>211</td><td class=v2>221</td><td class=v2>232</td><td class=v2>243</td><td class=v2>254</td><td class=v2>264</td><td class=v3>275</td><td class=v3>286</td><td class=v3>311</td><td class=v3>325</td><td class=v4>339</td><td class=v4>357</td><td class=v4>375</td></tr>
+<tr><td>&euro;23.500</td><td class=v1>186</td><td class=v1>196</td><td class=v2>207</td><td class=v2>218</td><td class=v2>229</td><td class=v2>239</td><td class=v2>250</td><td class=v2>261</td><td class=v3>271</td><td class=v3>282</td><td class=v3>293</td><td class=v3>304</td><td class=v3>329</td><td class=v4>343</td><td class=v4>357</td><td class=v4>375</td><td class=v4>393</td></tr>
+<tr><td>&euro;24.000</td><td class=v1>204</td><td class=v2>214</td><td class=v2>225</td><td class=v2>236</td><td class=v2>246</td><td class=v2>257</td><td class=v3>268</td><td class=v3>279</td><td class=v3>289</td><td class=v3>300</td><td class=v3>311</td><td class=v3>321</td><td class=v4>346</td><td class=v4>361</td><td class=v4>375</td><td class=v4>393</td><td class=v4>411</td></tr>
+<tr><td>&euro;24.500</td><td class=v2>221</td><td class=v2>232</td><td class=v2>243</td><td class=v2>254</td><td class=v2>264</td><td class=v3>275</td><td class=v3>286</td><td class=v3>296</td><td class=v3>307</td><td class=v3>318</td><td class=v3>329</td><td class=v4>339</td><td class=v4>364</td><td class=v4>379</td><td class=v4>393</td><td class=v4>411</td><td class=v4>429</td></tr>
+<tr><td>&euro;25.000</td><td class=v2>239</td><td class=v2>250</td><td class=v2>261</td><td class=v3>271</td><td class=v3>282</td><td class=v3>293</td><td class=v3>304</td><td class=v3>314</td><td class=v3>325</td><td class=v3>336</td><td class=v4>346</td><td class=v4>357</td><td class=v4>382</td><td class=v4>396</td><td class=v4>411</td><td class=v4>429</td><td class=v4>446</td></tr>
+<tr><td>&euro;25.500</td><td class=v2>257</td><td class=v3>268</td><td class=v3>279</td><td class=v3>289</td><td class=v3>300</td><td class=v3>311</td><td class=v3>321</td><td class=v3>332</td><td class=v4>343</td><td class=v4>354</td><td class=v4>364</td><td class=v4>375</td><td class=v4>400</td><td class=v4>414</td><td class=v4>429</td><td class=v4>446</td><td class=v4>464</td></tr>
+<tr><td>&euro;26.000</td><td class=v3>275</td><td class=v3>286</td><td class=v3>296</td><td class=v3>307</td><td class=v3>318</td><td class=v3>329</td><td class=v4>339</td><td class=v4>350</td><td class=v4>361</td><td class=v4>371</td><td class=v4>382</td><td class=v4>393</td><td class=v4>418</td><td class=v4>432</td><td class=v4>446</td><td class=v4>464</td><td class=v4>482</td></tr>
+<tr><td>&euro;26.500</td><td class=v3>293</td><td class=v3>304</td><td class=v3>314</td><td class=v3>325</td><td class=v4>336</td><td class=v4>346</td><td class=v4>357</td><td class=v4>368</td><td class=v4>379</td><td class=v4>389</td><td class=v4>400</td><td class=v4>411</td><td class=v4>436</td><td class=v4>450</td><td class=v4>464</td><td class=v4>482</td><td class=v4>500</td></tr>
+<tr><td>&euro;27.000</td><td class=v3>311</td><td class=v3>321</td><td class=v3>332</td><td class=v4>343</td><td class=v4>354</td><td class=v4>364</td><td class=v4>375</td><td class=v4>386</td><td class=v4>396</td><td class=v4>407</td><td class=v4>418</td><td class=v4>429</td><td class=v4>454</td><td class=v4>468</td><td class=v4>482</td><td class=v4>500</td><td class=v4>518</td></tr>
+</table>
+<div class=nota>&#128268; LFP dura 300k+ km — 100k barrier &eacute; menor</div>
+</div>
+
+<div class=card>
+<h2>&#127991; Ranking Sweet Spots</h2>
+<div class=rank>
+<div class=ri><span class=rn style=color:#ffd60a>1</span><span style="color:#fff;font-weight:600;font-size:10px">&euro;96/m&ecirc;s</span><span class=rv style="color:rgba(255,255,255,.4)">&euro;21k/35k km</span><span class=rv style="color:rgba(255,255,255,.3)">Tesla M3 SR+ LFP 2021</span></div>
+<div class=ri><span class=rn style=color:#e0e0e0>2</span><span style="color:#fff;font-weight:600;font-size:10px">&euro;125/m&ecirc;s</span><span class=rv style="color:rgba(255,255,255,.4)">&euro;21k/35k km</span><span class=rv style="color:rgba(255,255,255,.3)">IONIQ 5 72.6 kWh 2022</span></div>
+<div class=ri><span class=rn style=color:#cd7f32>3</span><span style="color:#fff;font-weight:600;font-size:10px">&euro;143/m&ecirc;s</span><span class=rv style="color:rgba(255,255,255,.4)">&euro;21k/35k km</span><span class=rv style="color:rgba(255,255,255,.3)">IONIQ 5 72.6 kWh 2021</span></div>
+<div class=ri><span class=rn style="color:rgba(255,255,255,.5)">4</span><span style="color:#fff;font-weight:600;font-size:10px">&euro;161/m&ecirc;s</span><span class=rv style="color:rgba(255,255,255,.4)">&euro;21k/35k km</span><span class=rv style="color:rgba(255,255,255,.3)">Megane E-Tech EV60 2022</span></div>
+<div class=ri><span class=rn style="color:rgba(255,255,255,.5)">5</span><span style="color:#fff;font-weight:600;font-size:10px">&euro;179/m&ecirc;s</span><span class=rv style="color:rgba(255,255,255,.4)">&euro;21k/40k km</span><span class=rv style="color:rgba(255,255,255,.3)">Megane E-Tech EV60 2022</span></div>
+</div>
+</div>
+<footer>Consenso: tetoBot + 3 subagentes &middot; Jul/2026</footer>
+</body>
+</html>

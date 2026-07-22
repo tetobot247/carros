@@ -319,6 +319,38 @@ h1 {
   font-weight: 900;
 }
 
+/* CARDS DE EXPLICAÇÃO PRÁTICA E EXEMPLOS REAIS */
+.practical-explanation-card {
+  background: linear-gradient(135deg, rgba(48, 209, 88, 0.06) 0%, rgba(0, 0, 0, 0.4) 100%);
+  border: 1px solid rgba(48, 209, 88, 0.25);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.pe-title {
+  font-size: 11px;
+  font-weight: 800;
+  color: #30d158;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pe-example {
+  background: rgba(0, 0, 0, 0.5);
+  border-left: 3px solid #ffd60a;
+  padding: 8px 12px;
+  border-radius: 0 8px 8px 0;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
 footer {
   font-size: 9px;
   color: var(--text-muted);
@@ -385,6 +417,14 @@ footer {
       <tbody id="statsTableBody"></tbody>
     </table>
   </div>
+
+  <div class="practical-explanation-card">
+    <div class="pe-title">&#128161; O que significa na prática?</div>
+    <div>A <b>Média (&mu;)</b> e a <b>Mediana (Q2)</b> revelam o custo mensal central de desvalorização para cada modelo em 28 meses de posse (+21.000 km). O <b>Desvio Padrão (&sigma;)</b> mede o grau de incerteza: quanto menor o desvio padrão, mais previsível é o custo financeiro.</div>
+    <div class="pe-example">
+      <b>&#128181; Exemplo Prático:</b> O <b>Tesla Model 3</b> tem um custo médio de <b>365€/mês</b> com um desvio padrão de apenas <b>&plusmn;175€</b>. Isto significa que, independentemente do ano (2021 a 2024) ou dos quilómetros de compra (35k a 115k km), o custo real de desvalorização estará quase sempre próximo dos ~360€/mês. Por contraste, o <b>Renault Megane E-Tech</b> custa em média <b>522€/mês</b> — ou seja, ter o Megane representa uma perda adicional de <b>+157€ todos os meses (+4.396€ no final dos 28 meses de posse)</b>.
+    </div>
+  </div>
 </div>
 
 <!-- SEÇÃO 2: DISTRIBUIÇÃO PROBABILÍSTICA DE DENSIDADE (PDF / HISTOGRAMA) -->
@@ -397,6 +437,14 @@ footer {
   </div>
 
   <div class="density-chart-container" id="densityChartContainer"></div>
+
+  <div class="practical-explanation-card">
+    <div class="pe-title">&#128161; O que significa na prática?</div>
+    <div>A barra destacada ao centro (o <b>Intervalo Interquartil Q1-Q3</b>) representa a "zona de conforto" onde <b>50% de todos os compradores reais se vão situar</b>. Quanto mais para a esquerda estiver essa caixa, mais barato é o modelo para a maioria dos compradores.</div>
+    <div class="pe-example">
+      <b>&#128181; Exemplo Prático:</b> No <b>Tesla Model 3</b>, metade de todos os negócios possíveis concentra-se na faixa económica entre <b>230€/mês (Q1) e 499€/mês (Q3)</b>. Já no <b>Hyundai IONIQ 5</b>, a metade dos compradores fica posicionada numa faixa consideravelmente mais cara: entre <b>332€/mês e 643€/mês</b>.
+    </div>
+  </div>
 </div>
 
 <!-- SEÇÃO 3: FRONTEIRA DE EFICIÊNCIA DE PARETO & SCORE RISCO-RETORNO -->
@@ -409,6 +457,14 @@ footer {
   </div>
 
   <div class="pareto-grid" id="paretoGrid"></div>
+
+  <div class="practical-explanation-card">
+    <div class="pe-title">&#128161; O que significa na prática?</div>
+    <div>O <b>Rácio de Sharpe</b> (adaptado de finanças para desvalorização automóvel) mede o "retorno de poupança" ajustado ao risco. Um valor alto (>0.5) significa que o modelo retém muito valor por cada euro investido. Um valor perto de zero ou negativo significa que o comprador assume risco de desvalorização sem receber o desconto correspondente no preço de compra.</div>
+    <div class="pe-example">
+      <b>&#128181; Exemplo Prático:</b> O <b>Tesla Model 3</b> atinge um Rácio de Sharpe excelente de <b>0.77</b> graças à bateria LFP indestrutível e à alta procura na revenda. Ao comprar o <b>Megane E-Tech (Sharpe -0.11)</b> a 24.000€ em 2021, paga quase o mesmo que por um Tesla, mas a revenda em 2028 despenca muito mais rápido, queimando a eficiência do seu capital.
+    </div>
+  </div>
 </div>
 
 <!-- SEÇÃO 4: CURVAS DE PROBABILIDADE ACUMULADA (CDF - CUMULATIVE DISTRIBUTION FUNCTION) -->
@@ -435,6 +491,14 @@ footer {
       <tbody id="cdfTableBody"></tbody>
     </table>
   </div>
+
+  <div class="practical-explanation-card">
+    <div class="pe-title">&#128161; O que significa na prática?</div>
+    <div>Responde à pergunta crucial do comprador: <i>"Se eu definir um teto máximo de custo mensal de X €/mês, qual é a probabilidade matemática de conseguir encontrar um carro desse modelo que cumpra essa meta?"</i></div>
+    <div class="pe-example">
+      <b>&#128181; Exemplo Prático:</b> Se estabelecer como limite máximo não gastar mais de <b>400€/mês</b> em desvalorização: no <b>Tesla Model 3</b> tem <b>57,3% de probabilidade</b> de o conseguir (quase 6 em cada 10 ofertas do mercado). No <b>Renault Megane E-Tech</b>, essa probabilidade cai para apenas <b>28,7%</b> (menos de 3 em 10 ofertas), exigindo muito mais tempo de procura.
+    </div>
+  </div>
 </div>
 
 <!-- SEÇÃO 5: SENSIBILIDADE MARGINAL & COEFICIENTES DE REGRESSÃO LINEAR -->
@@ -447,6 +511,14 @@ footer {
   </div>
 
   <div class="pareto-grid" id="regressionGrid"></div>
+
+  <div class="practical-explanation-card">
+    <div class="pe-title">&#128161; O que significa na prática?</div>
+    <div>Os coeficientes de regressão linear explicam a "sensibilidade" da desvalorização do modelo: quanto exatamente piora o seu custo mensal por cada +10.000 km no odómetro na altura de compra.</div>
+    <div class="pe-example">
+      <b>&#128181; Exemplo Prático:</b> Se comprar um <b>Tesla Model 3</b> com mais 10.000 km (ex: 60k km em vez de 50k km), o seu custo mensal sobe apenas <b>+22,7€/mês</b>. Mas se fizer o mesmo no <b>Hyundai IONIQ 5</b> ou <b>Megane E-Tech</b>, a mesma diferença de 10.000 km agrava o custo mensal em <b>+34,9€ a +35,6€/mês</b> — uma penalização <b>57% maior</b> por quilometragem percorrida!
+    </div>
+  </div>
 </div>
 
 <!-- SEÇÃO 6: ANÁLISE DE RISCO CAUDAL (Value-at-Risk VaR 95% & Downside CVaR 95%) -->
@@ -459,6 +531,14 @@ footer {
   </div>
 
   <div class="pareto-grid" id="varGrid"></div>
+
+  <div class="practical-explanation-card">
+    <div class="pe-title">&#128161; O que significa na prática?</div>
+    <div>O <b>Value-at-Risk (VaR 95%)</b> mede o "teto de prejuízo no pior cenário": se fizer a compra no pior momento possível (comprando caro um carro com alta quilometragem), qual é o custo máximo mensal que terá de suportar em 95% dos casos?</div>
+    <div class="pe-example">
+      <b>&#128181; Exemplo Prático:</b> No pior 5% de maus negócios do mercado, o custo mensal do <b>Tesla Model 3</b> não ultrapassa os <b>655€/mês</b>. Já no <b>Hyundai IONIQ 5</b> ou <b>Megane E-Tech</b>, o pior cenário atinge custos pesados de <b>839€ a 848€/mês</b> — significando que um mau negócio nestes modelos custa mais <b>+193€/mês (+5.404€ no total do período de posse)</b> do que um mau negócio num Tesla.
+    </div>
+  </div>
 </div>
 
 <!-- SEÇÃO 7: FORMA DA DISTRIBUIÇÃO — ASSIMETRIA (SKEWNESS) & CURTOSE (KURTOSIS) -->
@@ -471,6 +551,14 @@ footer {
   </div>
 
   <div class="pareto-grid" id="skewGrid"></div>
+
+  <div class="practical-explanation-card">
+    <div class="pe-title">&#128161; O que significa na prática?</div>
+    <div>A <b>Assimetria (Skewness)</b> revela se existem "armadilhas escondidas" de desvalorização no modelo (cauda longa de custos desproporcionadamente altos no momento da venda).</div>
+    <div class="pe-example">
+      <b>&#128181; Exemplo Prático:</b> A assimetria do <b>Tesla Model 3</b> (0.07) é praticamente neutra/equilibrada, indicando que os custos seguem um padrão previsível. Não há "pontes de rutura" de desvalorização repentina porque a garantia da bateria da Tesla se estende até aos 192.000 km (vs 160.000 km nos concorrentes) e a química LFP tem uma degradação insignificante no mercado de usados.
+    </div>
+  </div>
 </div>
 
 <footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Modelo Estatístico e Probabilístico Avançado (Monte Carlo 10.000 iterações)</footer>

@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ranking de Melhor Opção — Qual Modelo Desvaloriza Menos?</title>
+
+<style>
+:root {
+  --bg: #06070a;
+  --card-bg: rgba(255, 255, 255, 0.03);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --text: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.45);
+  --gold: #ffd60a;
+  --silver: #c0c0c0;
+  --bronze: #cd7f32;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+h1 {
+  font-size: 22px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffd60a 0%, #ff9f0a 50%, #ff453a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 4px;
+}
+
+.sub { font-size: 11px; color: var(--text-muted); }
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1500px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.nav-links { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.nav-link {
+  color: #30d158;
+  text-decoration: none;
+  font-size: 10px;
+  font-weight: 600;
+  background: rgba(48, 209, 88, 0.1);
+  border: 1px solid rgba(48, 209, 88, 0.2);
+  padding: 5px 10px;
+  border-radius: 16px;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  background: rgba(48, 209, 88, 0.2);
+  box-shadow: 0 0 10px rgba(48, 209, 88, 0.3);
+}
+
+/* SECTIONS */
+.section {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(24px);
+  border-radius: 16px;
+  padding: 18px;
+  width: 100%;
+  max-width: 1500px;
+}
+
+.section-title {
+  font-size: 15px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.section-sub {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+/* BRAND COLORS */
+.c-tesla { color: #ff453a; }
+.c-ioniq { color: #64d2ff; }
+.c-megane { color: #d070ff; }
+
+.bg-tesla { background: rgba(255,69,58,0.2); border: 1px solid rgba(255,69,58,0.3); }
+.bg-ioniq { background: rgba(100,210,255,0.2); border: 1px solid rgba(100,210,255,0.3); }
+.bg-megane { background: rgba(208,112,255,0.2); border: 1px solid rgba(208,112,255,0.3); }
+
+/* PODIUM */
+.podium-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.podium-card {
+  background: rgba(0,0,0,0.5);
+  border-radius: 14px;
+  padding: 14px 18px;
+  min-width: 200px;
+  max-width: 260px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.podium-card:hover { transform: translateY(-3px); }
+
+.podium-card.gold { border: 2px solid var(--gold); box-shadow: 0 0 20px rgba(255,214,10,0.15); }
+.podium-card.silver { border: 2px solid var(--silver); }
+.podium-card.bronze { border: 2px solid var(--bronze); }
+
+.podium-medal {
+  position: absolute;
+  top: -10px;
+  right: 12px;
+  font-size: 22px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.podium-rank {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 800;
+}
+
+.podium-name {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.podium-cost {
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.podium-meta {
+  font-size: 9px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* WINNER MAP */
+.winner-map-container { overflow-x: auto; }
+
+table.wm-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9px;
+  min-width: 900px;
+}
+
+table.wm-table th {
+  color: var(--text-muted);
+  padding: 6px 4px;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  text-align: center;
+  font-weight: 700;
+  font-size: 9px;
+}
+
+table.wm-table th:first-child {
+  text-align: left;
+  min-width: 100px;
+}
+
+table.wm-table td {
+  padding: 3px 2px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+table.wm-table td:first-child {
+  text-align: left;
+  font-weight: 700;
+  font-size: 10px;
+  color: var(--gold);
+  position: sticky;
+  left: 0;
+  background: #06070a;
+  z-index: 2;
+}
+
+.winner-cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 4px 6px;
+  border-radius: 5px;
+  font-weight: 800;
+  font-size: 8px;
+  min-width: 55px;
+  cursor: default;
+  transition: all 0.15s ease;
+}
+
+.winner-cell:hover {
+  transform: scale(1.15);
+  z-index: 5;
+  box-shadow: 0 0 8px rgba(255,255,255,0.3);
+}
+
+/* DEPRECIATION CURVES */
+.curves-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 14px;
+}
+
+.curve-card {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.curve-title {
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 3px;
+  font-size: 9px;
+}
+
+.bar-label {
+  min-width: 130px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bar-track {
+  flex: 1;
+  height: 14px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s ease;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 4px;
+  font-size: 7px;
+  font-weight: 800;
+  color: #000;
+}
+
+.bar-value {
+  min-width: 55px;
+  text-align: right;
+  font-weight: 700;
+  font-size: 9px;
+}
+
+.rank-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  font-size: 8px;
+  font-weight: 900;
+}
+
+.rank-1 { background: var(--gold); color: #000; }
+.rank-2 { background: var(--silver); color: #000; }
+.rank-3 { background: var(--bronze); color: #fff; }
+.rank-other { background: rgba(255,255,255,0.1); color: var(--text-muted); }
+
+/* SUMMARY STATS */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+}
+
+.stat-card {
+  background: rgba(0,0,0,0.5);
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.stat-label {
+  font-size: 9px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* RETENTION TABLE */
+.retention-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9px;
+}
+
+.retention-table th {
+  color: var(--text-muted);
+  padding: 6px 4px;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  text-align: center;
+  font-weight: 700;
+}
+
+.retention-table th:first-child { text-align: left; min-width: 140px; }
+
+.retention-table td {
+  padding: 5px 4px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-weight: 600;
+}
+
+.retention-table td:first-child {
+  text-align: left;
+  position: sticky;
+  left: 0;
+  background: #06070a;
+  z-index: 2;
+}
+
+.ret-pill {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 9px;
+}
+
+footer {
+  font-size: 9px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 16px;
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div>
+    <h1>🏆 Ranking de Melhor Opção — Qual Modelo Desvaloriza Menos?</h1>
+    <div class="sub">Análise comparativa detalhada: qual veículo retém mais valor por km percorrido e por mês de posse (28 meses, +21.000 km)</div>
+  </div>
+  <div class="nav-links">
+    <a href="mega-matriz-todas-ofertas.html" class="nav-link">→ Mega-Matriz</a>
+    <a href="mapa-calor-minimizacao-custo.html" class="nav-link">→ Mapa de Calor</a>
+  </div>
+</div>
+
+<!-- S1: PÓDIO GLOBAL — TOP 3 ABSOLUTE WINNERS -->
+<div class="section" id="podiumSection">
+  <div class="section-title">🥇 Pódio Global — Os 3 Modelos que Menos Desvalorizam (Média Geral)</div>
+  <div class="section-sub">Ranking pelo custo médio mensal mais baixo, considerando a média de TODOS os cenários realistas (preço × km).</div>
+  <div class="podium-row" id="podiumRow"></div>
+  <div class="stats-grid" id="statsGrid"></div>
+</div>
+
+<!-- S2: MAPA DE VENCEDORES — QUEM GANHA EM CADA COMBINAÇÃO (PREÇO × KM) -->
+<div class="section">
+  <div class="section-title">🗺️ Mapa de Vencedores — Quem Tem o Menor Custo Mensal em Cada Combinação</div>
+  <div class="section-sub">Para cada combinação de preço de compra (€21k-€35k) × quilometragem (35k-115k km), o modelo pintado é o que resulta no menor custo mensal. Cores = marca vencedora.</div>
+  <div class="winner-map-container" id="winnerMapContainer"></div>
+</div>
+
+<!-- S3: CURVAS DE DEPRECIAÇÃO POR KM — RANKING VISUAL POR FAIXA -->
+<div class="section">
+  <div class="section-title">📊 Curvas de Retenção de Valor por Quilometragem</div>
+  <div class="section-sub">Para cada faixa de km, quanto cada modelo vale na revenda em 2028 (valor ajustado com penalização de garantia). O modelo com maior barra retém mais valor.</div>
+  <div class="curves-grid" id="curvesGrid"></div>
+</div>
+
+<!-- S4: TABELA DE RETENÇÃO PERCENTUAL -->
+<div class="section" style="overflow-x:auto">
+  <div class="section-title">📈 Tabela de Retenção de Valor (%) — Revenda / Preço Típico de Compra</div>
+  <div class="section-sub">Percentagem do preço típico de compra em 2026 que é retida na revenda em 2028. Quanto mais alto, menor a desvalorização relativa. O preço típico considera a faixa realista por ano de fabrico.</div>
+  <div id="retentionTableContainer"></div>
+</div>
+
+<!-- S5: RANKING POR CUSTO POR KM PERCORRIDO -->
+<div class="section">
+  <div class="section-title">💰 Custo por Quilómetro Percorrido (Depreciação Pura)</div>
+  <div class="section-sub">Quanto custa cada km que percorrer em depreciação pura? Calculado como (Preço Típico - Revenda Ajustada) / 21.000 km. Quanto menor, mais eficiente o modelo.</div>
+  <div class="curves-grid" id="costPerKmGrid"></div>
+</div>
+
+<footer>Consenso: tetoBot + Subagentes · Auditoria Claude Opus 4.6 · Jul/2026 · Ranking Comparativo de Desvalorização</footer>
+
+<script>
+(function(){
+'use strict';
+
+var M = 28;
+var TKM = 21000;
+var LFPR = 0.5;
+
+var WS = [
+    {m: 24, p: 0}, {m: 18, p: 750}, {m: 12, p: 1500},
+    {m: 6, p: 2000}, {m: 0, p: 2500}, {m: -999, p: 3000}
+];
+
+var KM = [35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115];
+var PRICES = [];
+for (var pv = 21000; pv <= 35000; pv += 1000) PRICES.push(pv);
+
+// Preços típicos de compra por ano (para cálculo de retenção %)
+var TYPICAL_PRICES = { 2021: 24000, 2022: 26000, 2023: 29000, 2024: 33000 };
+
+var CARS = [
+    { id: 'tesla_2021', n: 'Tesla M3 SR+ LFP', y: 2021, brand: 'tesla', lfp: true, ry: 2021, rm: 12, wy: 8, wk: 192000, b35: 18300, step: 300, jump: 400 },
+    { id: 'tesla_2022', n: 'Tesla M3 RWD LFP', y: 2022, brand: 'tesla', lfp: true, ry: 2022, rm: 6, wy: 8, wk: 192000, b35: 19800, step: 300, jump: 400 },
+    { id: 'tesla_2023', n: 'Tesla M3 RWD LFP', y: 2023, brand: 'tesla', lfp: true, ry: 2023, rm: 6, wy: 8, wk: 192000, b35: 21500, step: 350, jump: 400 },
+    { id: 'tesla_2024', n: 'Tesla M3 Highland', y: 2024, brand: 'tesla', lfp: true, ry: 2024, rm: 3, wy: 8, wk: 192000, b35: 24500, step: 400, jump: 500 },
+
+    { id: 'ioniq_2021', n: 'IONIQ 5 72.6 kWh', y: 2021, brand: 'ioniq5', lfp: false, ry: 2021, rm: 11, wy: 8, wk: 160000, b35: 16000, step: 500, jump: 500 },
+    { id: 'ioniq_2022', n: 'IONIQ 5 72.6 kWh', y: 2022, brand: 'ioniq5', lfp: false, ry: 2022, rm: 7, wy: 8, wk: 160000, b35: 17500, step: 500, jump: 500 },
+    { id: 'ioniq_2023', n: 'IONIQ 5 77.4 kWh', y: 2023, brand: 'ioniq5', lfp: false, ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 19800, step: 500, jump: 500 },
+    { id: 'ioniq_2024', n: 'IONIQ 5 84kWh FL', y: 2024, brand: 'ioniq5', lfp: false, ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 23200, step: 500, jump: 600 },
+
+    { id: 'megane_2021', n: 'Megane E-Tech', y: 2021, brand: 'megane', lfp: false, ry: 2021, rm: 12, wy: 8, wk: 160000, b35: 15800, step: 500, jump: 500 },
+    { id: 'megane_2022', n: 'Megane E-Tech', y: 2022, brand: 'megane', lfp: false, ry: 2022, rm: 9, wy: 8, wk: 160000, b35: 16500, step: 500, jump: 500 },
+    { id: 'megane_2023', n: 'Megane E-Tech', y: 2023, brand: 'megane', lfp: false, ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 18500, step: 500, jump: 500 },
+    { id: 'megane_2024', n: 'Megane E-Tech', y: 2024, brand: 'megane', lfp: false, ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 21000, step: 500, jump: 600 }
+];
+
+var BRAND_COLORS = {
+    tesla:  { bg: 'rgba(255,69,58,0.25)',  border: 'rgba(255,69,58,0.5)',  text: '#ff453a', fill: '#ff453a' },
+    ioniq5: { bg: 'rgba(100,210,255,0.25)', border: 'rgba(100,210,255,0.5)', text: '#64d2ff', fill: '#64d2ff' },
+    megane: { bg: 'rgba(208,112,255,0.25)', border: 'rgba(208,112,255,0.5)', text: '#d070ff', fill: '#d070ff' }
+};
+
+function wMonths(c) { return (c.ry + c.wy - 2028) * 12 + (c.rm - 12); }
+
+function wPenalty(c) {
+    var m = wMonths(c);
+    var p = 3000;
+    for (var i = 0; i < WS.length; i++) { if (m >= WS[i].m) { p = WS[i].p; break; } }
+    if (c.lfp && p > 0) p = Math.round(p * LFPR);
+    return p;
+}
+
+function getBaseResale(c, k) {
+    var idx = KM.indexOf(k);
+    var res = c.b35;
+    for (var i = 0; i < idx; i++) {
+        var stepKm = KM[i + 1];
+        var isJump = (stepKm > 95);
+        var drop = c.step + (isJump && KM[i] === 90 ? c.jump : 0);
+        res -= drop;
+    }
+    return res;
+}
+
+function aResale(c, k) {
+    var p = wPenalty(c);
+    var fkm = k * 1000 + TKM;
+    if (fkm > c.wk) {
+        var kp = 3000;
+        if (c.lfp) kp = Math.round(kp * LFPR);
+        p = Math.max(p, kp);
+    }
+    return Math.max(0, getBaseResale(c, k) - p);
+}
+
+function moVal(price, resale) {
+    var diff = price - resale;
+    if (diff <= 0) return null;
+    return Math.round(diff / M);
+}
+
+function brandCls(b) { return 'c-' + (b === 'ioniq5' ? 'ioniq' : b); }
+function brandBgCls(b) { return 'bg-' + (b === 'ioniq5' ? 'ioniq' : b); }
+
+// ========== S1: PÓDIO GLOBAL ==========
+function renderPodium() {
+    // Calculate average monthly cost for each car across all realistic scenarios
+    var carStats = CARS.map(function(c) {
+        var costs = [];
+        var wins = 0;
+        PRICES.forEach(function(p) {
+            KM.forEach(function(k) {
+                var r = aResale(c, k);
+                var m = moVal(p, r);
+                if (m !== null) costs.push(m);
+            });
+        });
+        var avg = costs.length > 0 ? Math.round(costs.reduce(function(a,b){return a+b},0) / costs.length) : 9999;
+        var min = costs.length > 0 ? Math.min.apply(null, costs) : 9999;
+        var max = costs.length > 0 ? Math.max.apply(null, costs) : 9999;
+        return { car: c, avg: avg, min: min, max: max, count: costs.length };
+    });
+
+    carStats.sort(function(a,b){ return a.avg - b.avg; });
+
+    // Count wins per car
+    PRICES.forEach(function(p) {
+        KM.forEach(function(k) {
+            var best = null;
+            var bestCost = 99999;
+            CARS.forEach(function(c) {
+                var r = aResale(c, k);
+                var m = moVal(p, r);
+                if (m !== null && m < bestCost) { bestCost = m; best = c; }
+            });
+            if (best) {
+                var stat = carStats.find(function(s){ return s.car.id === best.id; });
+                if (stat) stat.wins = (stat.wins || 0) + 1;
+            }
+        });
+    });
+
+    var medals = ['🥇', '🥈', '🥉'];
+    var classes = ['gold', 'silver', 'bronze'];
+    var rankLabels = ['1º LUGAR', '2º LUGAR', '3º LUGAR'];
+
+    var podiumHtml = '';
+    for (var i = 0; i < 3 && i < carStats.length; i++) {
+        var s = carStats[i];
+        var bc = BRAND_COLORS[s.car.brand];
+        podiumHtml += '<div class="podium-card ' + classes[i] + '">';
+        podiumHtml += '<span class="podium-medal">' + medals[i] + '</span>';
+        podiumHtml += '<div class="podium-rank" style="color:' + bc.text + '">' + rankLabels[i] + '</div>';
+        podiumHtml += '<div class="podium-name ' + brandCls(s.car.brand) + '">' + s.car.n + ' (' + s.car.y + ')</div>';
+        podiumHtml += '<div class="podium-cost" style="color:' + bc.text + '">€' + s.avg + '<span style="font-size:11px;font-weight:400;color:var(--text-muted)">/mês médio</span></div>';
+        podiumHtml += '<div class="podium-meta">';
+        podiumHtml += 'Mín: <b>€' + s.min + '/mês</b> · Máx: <b>€' + s.max + '/mês</b><br>';
+        podiumHtml += 'Cenários realistas: <b>' + s.count + '</b> · Vitórias: <b>' + (s.wins || 0) + '</b>';
+        podiumHtml += '</div>';
+        podiumHtml += '</div>';
+    }
+    document.getElementById('podiumRow').innerHTML = podiumHtml;
+
+    // Stats grid — brand domination
+    var brandWins = {};
+    carStats.forEach(function(s) {
+        var b = s.car.brand;
+        if (!brandWins[b]) brandWins[b] = { wins: 0, name: b === 'tesla' ? 'Tesla' : (b === 'ioniq5' ? 'IONIQ 5' : 'Megane') };
+        brandWins[b].wins += (s.wins || 0);
+    });
+
+    var totalCells = 0;
+    Object.keys(brandWins).forEach(function(b){ totalCells += brandWins[b].wins; });
+
+    var statsHtml = '';
+    ['tesla', 'ioniq5', 'megane'].forEach(function(b) {
+        var bw = brandWins[b] || { wins: 0, name: b };
+        var pct = totalCells > 0 ? Math.round(bw.wins / totalCells * 100) : 0;
+        var bc = BRAND_COLORS[b];
+        statsHtml += '<div class="stat-card" style="border-left:3px solid ' + bc.fill + '">';
+        statsHtml += '<div class="stat-value" style="color:' + bc.text + '">' + pct + '%</div>';
+        statsHtml += '<div class="stat-label">' + bw.name + ' vence em ' + bw.wins + '/' + totalCells + ' cenários</div>';
+        statsHtml += '</div>';
+    });
+
+    // Best overall
+    var best = carStats[0];
+    statsHtml += '<div class="stat-card" style="border-left:3px solid var(--gold)">';
+    statsHtml += '<div class="stat-value" style="color:var(--gold)">€' + best.min + '</div>';
+    statsHtml += '<div class="stat-label">Menor Custo Mensal Possível<br>' + best.car.n + ' (' + best.car.y + ')</div>';
+    statsHtml += '</div>';
+
+    // Best depreciation per km
+    var bestDepKm = null;
+    var bestDepKmVal = 99;
+    carStats.forEach(function(s) {
+        var tp = TYPICAL_PRICES[s.car.y];
+        var resale35 = aResale(s.car, 35);
+        var depPerKm = ((tp - resale35) / TKM).toFixed(2);
+        if (parseFloat(depPerKm) < bestDepKmVal) {
+            bestDepKmVal = parseFloat(depPerKm);
+            bestDepKm = s;
+        }
+    });
+
+    statsHtml += '<div class="stat-card" style="border-left:3px solid #30d158">';
+    statsHtml += '<div class="stat-value" style="color:#30d158">€' + bestDepKmVal.toFixed(2) + '</div>';
+    statsHtml += '<div class="stat-label">Menor Custo / Km Percorrido<br>' + bestDepKm.car.n + ' (' + bestDepKm.car.y + ') a 35k km</div>';
+    statsHtml += '</div>';
+
+    document.getElementById('statsGrid').innerHTML = statsHtml;
+}
+
+// ========== S2: MAPA DE VENCEDORES ==========
+function renderWinnerMap() {
+    var html = '<table class="wm-table"><thead><tr><th>€ Compra \\ Km</th>';
+    KM.forEach(function(k) { html += '<th>' + k + 'k</th>'; });
+    html += '</tr></thead><tbody>';
+
+    PRICES.forEach(function(p) {
+        html += '<tr><td>€' + (p/1000).toFixed(0) + 'k</td>';
+        KM.forEach(function(k) {
+            var best = null;
+            var bestCost = 99999;
+            var results = [];
+
+            CARS.forEach(function(c) {
+                var r = aResale(c, k);
+                var m = moVal(p, r);
+                if (m !== null) {
+                    results.push({ car: c, cost: m });
+                    if (m < bestCost) { bestCost = m; best = c; }
+                }
+            });
+
+            if (best) {
+                var bc = BRAND_COLORS[best.brand];
+                var shortName = best.brand === 'tesla' ? 'T' : (best.brand === 'ioniq5' ? 'I' : 'M');
+                shortName += "'" + (best.y % 100);
+
+                // Find 2nd place
+                results.sort(function(a,b){ return a.cost - b.cost; });
+                var gap = results.length > 1 ? results[1].cost - results[0].cost : 0;
+
+                var title = '1º ' + best.n + ' (' + best.y + '): €' + bestCost + '/mês';
+                if (results.length > 1) title += ' | 2º ' + results[1].car.n + ' (' + results[1].car.y + '): €' + results[1].cost + '/mês (gap +€' + gap + ')';
+
+                html += '<td><span class="winner-cell" style="background:' + bc.bg + ';border:1px solid ' + bc.border + ';color:' + bc.text + '" title="' + title + '">' + shortName + ' €' + bestCost + '</span></td>';
+            } else {
+                html += '<td><span style="color:rgba(255,255,255,0.1);font-size:8px">—</span></td>';
+            }
+        });
+        html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+    document.getElementById('winnerMapContainer').innerHTML = html;
+}
+
+// ========== S3: CURVAS DE RETENÇÃO POR KM ==========
+function renderCurves() {
+    var html = '';
+    var selectedKms = [35, 50, 65, 80, 95, 110];
+
+    selectedKms.forEach(function(k) {
+        var data = CARS.map(function(c) {
+            var r = aResale(c, k);
+            return { car: c, resale: r };
+        });
+        data.sort(function(a,b){ return b.resale - a.resale; });
+
+        var maxResale = data[0].resale;
+
+        html += '<div class="curve-card">';
+        html += '<div class="curve-title"><span>Revenda Ajustada a <b>' + k + '.000 km</b> (venda a ' + (k*1000+TKM)/1000 + 'k km)</span>';
+        html += '<span style="font-size:8px;color:var(--gold)">Pen. incluída</span></div>';
+
+        data.forEach(function(d, idx) {
+            var bc = BRAND_COLORS[d.car.brand];
+            var pct = maxResale > 0 ? Math.round(d.resale / maxResale * 100) : 0;
+            var rankCls = idx < 3 ? 'rank-' + (idx + 1) : 'rank-other';
+
+            html += '<div class="bar-row">';
+            html += '<span class="rank-badge ' + rankCls + '">' + (idx + 1) + '</span>';
+            html += '<span class="bar-label" style="color:' + bc.text + '">' + d.car.n + ' ' + d.car.y + '</span>';
+            html += '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + bc.fill + '">' + (pct >= 30 ? '€' + (d.resale/1000).toFixed(1) + 'k' : '') + '</div></div>';
+            html += '<span class="bar-value" style="color:' + bc.text + '">€' + d.resale.toLocaleString('pt-PT') + '</span>';
+            html += '</div>';
+        });
+
+        html += '</div>';
+    });
+
+    document.getElementById('curvesGrid').innerHTML = html;
+}
+
+// ========== S4: TABELA DE RETENÇÃO PERCENTUAL ==========
+function renderRetentionTable() {
+    var selectedKms = [35, 50, 65, 80, 95, 110];
+    var html = '<table class="retention-table"><thead><tr><th>Modelo (Ano)</th><th>Preço Típico Ago/2026</th>';
+    selectedKms.forEach(function(k) { html += '<th>' + k + 'k km → ' + (k*1000+TKM)/1000 + 'k</th>'; });
+    html += '<th>Méd. Retenção</th></tr></thead><tbody>';
+
+    var allRows = CARS.map(function(c) {
+        var tp = TYPICAL_PRICES[c.y];
+        var retentions = [];
+        selectedKms.forEach(function(k) {
+            var r = aResale(c, k);
+            var pct = Math.round(r / tp * 100);
+            retentions.push(pct);
+        });
+        var avgRet = Math.round(retentions.reduce(function(a,b){return a+b},0) / retentions.length);
+        return { car: c, tp: tp, retentions: retentions, avgRet: avgRet };
+    });
+
+    allRows.sort(function(a,b){ return b.avgRet - a.avgRet; });
+
+    allRows.forEach(function(row, idx) {
+        var bc = BRAND_COLORS[row.car.brand];
+        var rankCls = idx < 3 ? 'rank-' + (idx + 1) : 'rank-other';
+
+        html += '<tr>';
+        html += '<td><span class="rank-badge ' + rankCls + '" style="margin-right:4px">' + (idx + 1) + '</span>';
+        html += '<span style="color:' + bc.text + ';font-weight:700">' + row.car.n + ' (' + row.car.y + ')</span></td>';
+        html += '<td style="color:var(--text-muted)">€' + row.tp.toLocaleString('pt-PT') + '</td>';
+
+        row.retentions.forEach(function(pct) {
+            var color = pct >= 70 ? '#30d158' : (pct >= 55 ? '#a3e635' : (pct >= 40 ? '#ffd60a' : (pct >= 25 ? '#ff9f0a' : '#ff453a')));
+            html += '<td><span class="ret-pill" style="background:' + color + '22;color:' + color + ';border:1px solid ' + color + '44">' + pct + '%</span></td>';
+        });
+
+        var avgColor = row.avgRet >= 65 ? '#30d158' : (row.avgRet >= 50 ? '#a3e635' : (row.avgRet >= 35 ? '#ffd60a' : '#ff453a'));
+        html += '<td><span class="ret-pill" style="background:' + avgColor + '33;color:' + avgColor + ';border:1px solid ' + avgColor + '55;font-weight:900">' + row.avgRet + '%</span></td>';
+        html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+    document.getElementById('retentionTableContainer').innerHTML = html;
+}
+
+// ========== S5: CUSTO POR KM PERCORRIDO ==========
+function renderCostPerKm() {
+    var html = '';
+    var selectedKms = [35, 50, 65, 80, 95, 110];
+
+    selectedKms.forEach(function(k) {
+        var data = CARS.map(function(c) {
+            var tp = TYPICAL_PRICES[c.y];
+            var r = aResale(c, k);
+            var depreciation = tp - r;
+            var costPerKm = depreciation / TKM;
+            return { car: c, costPerKm: costPerKm, depreciation: depreciation, resale: r, tp: tp };
+        });
+        data.sort(function(a,b){ return a.costPerKm - b.costPerKm; });
+
+        var maxCPK = data[data.length - 1].costPerKm;
+
+        html += '<div class="curve-card">';
+        html += '<div class="curve-title"><span>Custo/km a <b>' + k + '.000 km</b> de Odómetro</span>';
+        html += '<span style="font-size:8px;color:#30d158">Menor = Melhor</span></div>';
+
+        data.forEach(function(d, idx) {
+            var bc = BRAND_COLORS[d.car.brand];
+            var pct = maxCPK > 0 ? Math.round(d.costPerKm / maxCPK * 100) : 0;
+            var rankCls = idx < 3 ? 'rank-' + (idx + 1) : 'rank-other';
+
+            html += '<div class="bar-row">';
+            html += '<span class="rank-badge ' + rankCls + '">' + (idx + 1) + '</span>';
+            html += '<span class="bar-label" style="color:' + bc.text + '">' + d.car.n + ' ' + d.car.y + '</span>';
+            html += '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + bc.fill + ';opacity:0.7">' + (pct >= 25 ? '€' + d.costPerKm.toFixed(2) + '/km' : '') + '</div></div>';
+            html += '<span class="bar-value" style="color:' + bc.text + '">€' + d.costPerKm.toFixed(2) + '/km</span>';
+            html += '</div>';
+        });
+
+        html += '</div>';
+    });
+
+    document.getElementById('costPerKmGrid').innerHTML = html;
+}
+
+// RENDER ALL
+renderPodium();
+renderWinnerMap();
+renderCurves();
+renderRetentionTable();
+renderCostPerKm();
+
+})();
+</script>
+
+</body>
+</html>

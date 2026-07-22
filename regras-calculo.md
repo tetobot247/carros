@@ -56,7 +56,7 @@ Onde:
 | Modelo | 2021 | 2022 | 2023 | 2024 |
 |--------|------|------|------|------|
 | **Tesla Model 3 LFP** | €18.300 (55kWh) | €19.800 (60kWh) | €21.500 (60kWh) | €24.500 (Highland) |
-| **IONIQ 5** | €17.000 (72.6kWh) | €17.500 (72.6kWh) | €19.800 (77.4kWh) | €23.200 (84kWh Facelift) |
+| **IONIQ 5** | €16.000 (72.6kWh) | €17.500 (72.6kWh) | €19.800 (77.4kWh) | €23.200 (84kWh Facelift) |
 | **Megane E-Tech EV60** | €15.800 | €16.500 | €18.500 (OpenR Link) | €21.000 (Gama 2024) |
 
 ---
@@ -69,3 +69,4 @@ Onde:
 | v2.0 | 22/Jul/2026 | Adicionada penalização de garantia de bateria e redutor LFP (50%) |
 | v3.0 | 22/Jul/2026 | Expansão para cobrir **todos os anos de fabrico de 2021 a 2024** (12 variantes), novo HTML v3 com filtros |
 | v3.1 | 22/Jul/2026 | **Correção de Valores Negativos:** Implementada proteção contra depreciação negativa (`Preço_Compra ≤ Revenda_Ajustada` assinalado como `—`), preços realistas de compra por ano de fabrico, e criação do dashboard unificado `comparativo-custo-mensal.html`. |
+| v3.2 | 22/Jul/2026 | **Ajuste IONIQ 5 2021:** Revenda base corrigida de €17.000 para €16.000 (auditoria independente Claude Opus 4.6: diferencial de apenas €500 face ao 2022 era insuficiente, agora €1.500). |

@@ -606,121 +606,121 @@
         {
           "km_compra": 35000,
           "km_venda": 56000,
-          "revenda_base_eur": 17000,
-          "penalizacao_garantia_eur": 2000,
-          "revenda_ajustada_eur": 15000
-        },
-        {
-          "km_compra": 40000,
-          "km_venda": 61000,
-          "revenda_base_eur": 16500,
-          "penalizacao_garantia_eur": 2000,
-          "revenda_ajustada_eur": 14500
-        },
-        {
-          "km_compra": 45000,
-          "km_venda": 66000,
           "revenda_base_eur": 16000,
           "penalizacao_garantia_eur": 2000,
           "revenda_ajustada_eur": 14000
         },
         {
-          "km_compra": 50000,
-          "km_venda": 71000,
+          "km_compra": 40000,
+          "km_venda": 61000,
           "revenda_base_eur": 15500,
           "penalizacao_garantia_eur": 2000,
           "revenda_ajustada_eur": 13500
         },
         {
-          "km_compra": 55000,
-          "km_venda": 76000,
+          "km_compra": 45000,
+          "km_venda": 66000,
           "revenda_base_eur": 15000,
           "penalizacao_garantia_eur": 2000,
           "revenda_ajustada_eur": 13000
         },
         {
-          "km_compra": 60000,
-          "km_venda": 81000,
+          "km_compra": 50000,
+          "km_venda": 71000,
           "revenda_base_eur": 14500,
           "penalizacao_garantia_eur": 2000,
           "revenda_ajustada_eur": 12500
         },
         {
-          "km_compra": 65000,
-          "km_venda": 86000,
+          "km_compra": 55000,
+          "km_venda": 76000,
           "revenda_base_eur": 14000,
           "penalizacao_garantia_eur": 2000,
           "revenda_ajustada_eur": 12000
         },
         {
-          "km_compra": 70000,
-          "km_venda": 91000,
+          "km_compra": 60000,
+          "km_venda": 81000,
           "revenda_base_eur": 13500,
           "penalizacao_garantia_eur": 2000,
           "revenda_ajustada_eur": 11500
         },
         {
-          "km_compra": 75000,
-          "km_venda": 96000,
+          "km_compra": 65000,
+          "km_venda": 86000,
           "revenda_base_eur": 13000,
           "penalizacao_garantia_eur": 2000,
           "revenda_ajustada_eur": 11000
         },
         {
-          "km_compra": 80000,
-          "km_venda": 101000,
+          "km_compra": 70000,
+          "km_venda": 91000,
           "revenda_base_eur": 12500,
           "penalizacao_garantia_eur": 2000,
           "revenda_ajustada_eur": 10500
         },
         {
-          "km_compra": 85000,
-          "km_venda": 106000,
+          "km_compra": 75000,
+          "km_venda": 96000,
           "revenda_base_eur": 12000,
           "penalizacao_garantia_eur": 2000,
           "revenda_ajustada_eur": 10000
         },
         {
-          "km_compra": 90000,
-          "km_venda": 111000,
+          "km_compra": 80000,
+          "km_venda": 101000,
           "revenda_base_eur": 11500,
           "penalizacao_garantia_eur": 2000,
           "revenda_ajustada_eur": 9500
         },
         {
-          "km_compra": 95000,
-          "km_venda": 116000,
+          "km_compra": 85000,
+          "km_venda": 106000,
           "revenda_base_eur": 11000,
           "penalizacao_garantia_eur": 2000,
           "revenda_ajustada_eur": 9000
         },
         {
-          "km_compra": 100000,
-          "km_venda": 121000,
+          "km_compra": 90000,
+          "km_venda": 111000,
           "revenda_base_eur": 10500,
           "penalizacao_garantia_eur": 2000,
           "revenda_ajustada_eur": 8500
         },
         {
-          "km_compra": 105000,
-          "km_venda": 126000,
+          "km_compra": 95000,
+          "km_venda": 116000,
           "revenda_base_eur": 10000,
           "penalizacao_garantia_eur": 2000,
           "revenda_ajustada_eur": 8000
         },
         {
-          "km_compra": 110000,
-          "km_venda": 131000,
+          "km_compra": 100000,
+          "km_venda": 121000,
           "revenda_base_eur": 9500,
           "penalizacao_garantia_eur": 2000,
           "revenda_ajustada_eur": 7500
         },
         {
-          "km_compra": 115000,
-          "km_venda": 136000,
+          "km_compra": 105000,
+          "km_venda": 126000,
           "revenda_base_eur": 9000,
           "penalizacao_garantia_eur": 2000,
           "revenda_ajustada_eur": 7000
+        },
+        {
+          "km_compra": 110000,
+          "km_venda": 131000,
+          "revenda_base_eur": 8500,
+          "penalizacao_garantia_eur": 2000,
+          "revenda_ajustada_eur": 6500
+        },
+        {
+          "km_compra": 115000,
+          "km_venda": 136000,
+          "revenda_base_eur": 8000,
+          "penalizacao_garantia_eur": 2000,
+          "revenda_ajustada_eur": 6000
         }
       ]
     },

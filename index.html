@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Portal — Análise de Desvalorização de Veículos Elétricos</title>
+<meta name="description" content="Dashboard de análise de desvalorização de veículos elétricos usados em Portugal. 18 variantes, 5 plataformas, 8 ferramentas de análise.">
+<link rel="stylesheet" href="styles.css">
+
+<style>
+body { gap: 24px; }
+
+h1 {
+  font-size: 28px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #ffffff 0%, #30d158 50%, #ffd60a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero {
+  text-align: center;
+  max-width: 800px;
+  padding: 20px 0;
+}
+
+.hero-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+/* Stats Row */
+.stats-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.stat-chip {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+}
+
+.stat-chip b {
+  color: #fff;
+  font-weight: 800;
+}
+
+.stat-chip .accent {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+/* Brand Legend */
+.brand-legend {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.brand-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.brand-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* Tools Grid */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.tool-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(24px);
+  border-radius: 18px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.tool-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.tool-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.tool-card:hover::before {
+  opacity: 1;
+}
+
+.tool-emoji {
+  font-size: 28px;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));
+}
+
+.tool-name {
+  font-size: 14px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.3;
+}
+
+.tool-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.tool-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.tool-tag {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(48, 209, 88, 0.1);
+  color: var(--accent);
+  border: 1px solid rgba(48, 209, 88, 0.2);
+}
+
+.tool-tag.stat {
+  background: rgba(255, 159, 10, 0.1);
+  color: #ff9f0a;
+  border-color: rgba(255, 159, 10, 0.2);
+}
+
+.tool-tag.visual {
+  background: rgba(100, 210, 255, 0.1);
+  color: #64d2ff;
+  border-color: rgba(100, 210, 255, 0.2);
+}
+
+.tool-tag.sim {
+  background: rgba(208, 112, 255, 0.1);
+  color: #d070ff;
+  border-color: rgba(208, 112, 255, 0.2);
+}
+
+/* Version Badge */
+.version-badge {
+  font-size: 10px;
+  font-weight: 800;
+  color: #ffd60a;
+  background: rgba(255, 214, 10, 0.08);
+  border: 1px solid rgba(255, 214, 10, 0.2);
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+/* Docs section */
+.docs-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.doc-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 10px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 6px 14px;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+}
+
+.doc-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>&#9889; Análise de Desvalorização de Elétricos</h1>
+  <div class="hero-sub">
+    Comprar em <b>Agosto/2026</b> &middot; Vender em <b>Dezembro/2028</b> &middot; 28 meses de posse &middot; +21.000 km &middot; Porto, Portugal
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-chip"><span class="accent">18</span> Variantes de Veículos</div>
+    <div class="stat-chip"><span class="accent">5</span> Plataformas</div>
+    <div class="stat-chip"><span class="accent">8</span> Ferramentas de Análise</div>
+    <div class="stat-chip"><span class="accent">3.060+</span> Pontos de Dados</div>
+    <div class="stat-chip"><span class="version-badge">v4.0</span></div>
+  </div>
+
+  <div class="brand-legend">
+    <div class="brand-item"><div class="brand-dot" style="background:#ff3b30;box-shadow:0 0 6px #ff3b30"></div> Tesla M3 LFP</div>
+    <div class="brand-item"><div class="brand-dot" style="background:#ff9f0a;box-shadow:0 0 6px #ff9f0a"></div> Tesla M3 LR</div>
+    <div class="brand-item"><div class="brand-dot" style="background:#5ac8fa;box-shadow:0 0 6px #5ac8fa"></div> IONIQ 5 58k</div>
+    <div class="brand-item"><div class="brand-dot" style="background:#32ade6;box-shadow:0 0 6px #32ade6"></div> IONIQ 5 LR</div>
+    <div class="brand-item"><div class="brand-dot" style="background:#af52de;box-shadow:0 0 6px #af52de"></div> Megane E-Tech</div>
+  </div>
+</div>
+
+<!-- GARAGE SECTION -->
+<div class="garage-section" id="garageSection">
+  <div style="font-size:16px;font-weight:800;display:flex;align-items:center;gap:8px">
+    <span>&#128663; A Minha Garagem (Ofertas Guardadas)</span>
+  </div>
+  
+  <div class="garage-form-card">
+    <div style="display:flex;flex-direction:column;gap:5px;flex:1;min-width:200px">
+      <label style="font-size:10px;text-transform:uppercase;color:#32ade6;font-weight:800">Veículo & Ano:</label>
+      <select id="gCarSelect" style="background:rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.15);color:#fff;padding:6px 10px;border-radius:8px;font-size:11px"></select>
+    </div>
+    
+    <div style="display:flex;flex-direction:column;gap:5px">
+      <label style="font-size:10px;text-transform:uppercase;color:#32ade6;font-weight:800">Km de Compra:</label>
+      <select id="gKmSelect" style="background:rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.15);color:#fff;padding:6px 10px;border-radius:8px;font-size:11px"></select>
+    </div>
+    
+    <div style="display:flex;flex-direction:column;gap:5px">
+      <label style="font-size:10px;text-transform:uppercase;color:#32ade6;font-weight:800">Preço Anunciado:</label>
+      <select id="gPriceSelect" style="background:rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.15);color:#fff;padding:6px 10px;border-radius:8px;font-size:11px"></select>
+    </div>
+    
+    <div style="display:flex;flex-direction:column;gap:5px;flex:1;min-width:200px">
+      <label style="font-size:10px;text-transform:uppercase;color:#32ade6;font-weight:800">Link do Anúncio (Opcional):</label>
+      <input type="url" id="gUrlInput" placeholder="https://..." style="background:rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.15);color:#fff;padding:6px 10px;border-radius:8px;font-size:11px">
+    </div>
+    
+    <div style="width:100%;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn-blue" onclick="addGarageOffer()">+ Adicionar Oferta</button>
+      <a href="comparativo-garagem.html" class="btn-blue" style="background:linear-gradient(135deg, #30d158 0%, #000 100%);color:#fff;text-decoration:none">&#128200; Comparativo da Garagem</a>
+      <a href="mega-matriz-todas-ofertas.html" class="btn-blue" style="background:linear-gradient(135deg, #ffd60a 0%, #ff9f0a 100%);color:#000;text-decoration:none">&#9889; Destacar na Mega Matriz</a>
+    </div>
+  </div>
+
+  <div class="garage-grid" id="garageCardsContainer"></div>
+</div>
+
+<!-- TOOLS GRID -->
+<div class="tools-grid" style="margin-top:20px">
+
+  <a href="mega-matriz-todas-ofertas.html" class="tool-card">
+    <div class="tool-emoji">&#128202;</div>
+    <div class="tool-name">Mega-Matriz de Todas as Ofertas</div>
+    <div class="tool-desc">Dashboard principal com abas: matriz cruzada completa com filtros de faixa €/mês e simulador de oferta concreta com highlight dourado animado.</div>
+    <div class="tool-tags">
+      <span class="tool-tag">Matriz Cruzada</span>
+      <span class="tool-tag sim">Simulador</span>
+      <span class="tool-tag visual">Garantia Dupla</span>
+    </div>
+  </a>
+
+  <a href="modelo-estatistico-decisao-modelo.html" class="tool-card">
+    <div class="tool-emoji">&#128200;</div>
+    <div class="tool-name">Modelo Estatístico &amp; Probabilístico</div>
+    <div class="tool-desc">Monte Carlo 10.000 iterações, estatística descritiva robusta (média, mediana, σ, IQR, P10-P90), Sharpe Ratio, CDF, regressão linear, VaR 95%.</div>
+    <div class="tool-tags">
+      <span class="tool-tag stat">Monte Carlo</span>
+      <span class="tool-tag stat">Sharpe Ratio</span>
+      <span class="tool-tag stat">VaR 95%</span>
+    </div>
+  </a>
+
+  <a href="ranking-melhor-opcao.html" class="tool-card">
+    <div class="tool-emoji">&#127942;</div>
+    <div class="tool-name">Ranking de Melhor Opção</div>
+    <div class="tool-desc">Pódio Global, Mapa de Vencedores por faixa km/preço, Curvas de Retenção de Valor e Custo por Km percorrido.</div>
+    <div class="tool-tags">
+      <span class="tool-tag">Ranking</span>
+      <span class="tool-tag visual">Retenção de Valor</span>
+      <span class="tool-tag">Custo/Km</span>
+    </div>
+  </a>
+
+  <a href="mapa-calor-minimizacao-custo.html" class="tool-card">
+    <div class="tool-emoji">&#128506;</div>
+    <div class="tool-name">Mapa de Calor Mestre</div>
+    <div class="tool-desc">Matriz visual de densidade sem filtros. Todas as 18 variantes × 17 faixas km com tooltip interativo e leaderboard de oportunidades de ouro.</div>
+    <div class="tool-tags">
+      <span class="tool-tag visual">Heatmap</span>
+      <span class="tool-tag">Leaderboard</span>
+      <span class="tool-tag visual">Tooltip Interativo</span>
+    </div>
+  </a>
+
+  <a href="comparativo-custo-mensal.html" class="tool-card">
+    <div class="tool-emoji">&#9889;</div>
+    <div class="tool-name">Comparativo de Custo Mensal</div>
+    <div class="tool-desc">Visão unificada de ranges de custo mensal com cards visuais, barras de progresso e tabela comparativa. Filtros por preço, ano e ordenação.</div>
+    <div class="tool-tags">
+      <span class="tool-tag">Comparativo</span>
+      <span class="tool-tag visual">Cards Visuais</span>
+      <span class="tool-tag">Filtros</span>
+    </div>
+  </a>
+
+  <a href="diagrama-referencia-ofertas.html" class="tool-card">
+    <div class="tool-emoji">&#127919;</div>
+    <div class="tool-name">Diagrama de Referência &amp; Avaliador</div>
+    <div class="tool-desc">Selecione qualquer modelo e veja o diagrama mestre de referência. Inclui avaliador rápido de oferta com veredito (Excelente → Mau Negócio).</div>
+    <div class="tool-tags">
+      <span class="tool-tag sim">Avaliador</span>
+      <span class="tool-tag">Diagrama Mestre</span>
+      <span class="tool-tag visual">Veredito Visual</span>
+    </div>
+  </a>
+
+  <a href="matrizes-unificadas-granulares.html" class="tool-card">
+    <div class="tool-emoji">&#128203;</div>
+    <div class="tool-name">Matrizes Unificadas Granulares</div>
+    <div class="tool-desc">Dois modos: Tabela cruzada unificada e Matrizes lado a lado. Filtros por ano e preço de compra (realista ou fixo).</div>
+    <div class="tool-tags">
+      <span class="tool-tag">Tabela Cruzada</span>
+      <span class="tool-tag visual">Lado a Lado</span>
+      <span class="tool-tag">Filtros</span>
+    </div>
+  </a>
+
+  <a href="matrizes-km-granular-v3.html" class="tool-card">
+    <div class="tool-emoji">&#128200;</div>
+    <div class="tool-name">Matrizes Granulares Detalhadas</div>
+    <div class="tool-desc">Cards individuais por modelo com tabela preço×km completa, ranking automático de sweet spots e informação detalhada de garantia de bateria.</div>
+    <div class="tool-tags">
+      <span class="tool-tag">Cards Individuais</span>
+      <span class="tool-tag">Sweet Spots</span>
+      <span class="tool-tag visual">Garantia Bateria</span>
+    </div>
+  </a>
+
+</div>
+
+<!-- DOCS -->
+<div class="docs-row">
+  <a href="https://github.com/tetobot247/carros" class="doc-link" target="_blank">&#128279; GitHub Repository</a>
+  <a href="regras-calculo.md" class="doc-link">&#128196; Regras de Cálculo</a>
+  <a href="HANDOFF.md" class="doc-link">&#128214; Handoff / Documentação</a>
+</div>
+
+<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; v4.0 (18 Variantes) &middot; Motor Partilhado engine.js</footer>
+
+<script src="engine.js"></script>
+<script>
+(function(){
+  'use strict';
+  var E = CarEngine;
+  
+  function initGarage() {
+    // Populate dropdowns
+    var carSel = document.getElementById('gCarSelect');
+    var kmSel = document.getElementById('gKmSelect');
+    var priceSel = document.getElementById('gPriceSelect');
+
+    var carHtml = '';
+    E.CARS.forEach(function(c) {
+      carHtml += '<option value="' + c.id + '">' + c.n + ' (' + c.y + ')</option>';
+    });
+    carSel.innerHTML = carHtml;
+
+    var kmHtml = '';
+    E.KM.forEach(function(k) {
+      kmHtml += '<option value="' + k + '">' + k + '.000 km</option>';
+    });
+    kmSel.innerHTML = kmHtml;
+
+    var priceHtml = '';
+    for (var p = 21000; p <= 42000; p += 1000) {
+      priceHtml += '<option value="' + p + '">€' + p.toLocaleString('pt-PT') + '</option>';
+    }
+    priceSel.innerHTML = priceHtml;
+
+    renderGarage();
+  }
+
+  function getSavedOffers() {
+    var saved = localStorage.getItem('garageOffers');
+    if (saved) return JSON.parse(saved);
+    return [];
+  }
+
+  window.addGarageOffer = function() {
+    var carId = document.getElementById('gCarSelect').value;
+    var km = Number(document.getElementById('gKmSelect').value);
+    var price = Number(document.getElementById('gPriceSelect').value);
+    var url = document.getElementById('gUrlInput').value.trim();
+    
+    var offers = getSavedOffers();
+    
+    // Removida a limitação de duplicados exatos para permitir que o utilizador
+    // guarde múltiplos anúncios reais que possam ter o mesmo modelo, km e preço.
+    var newId = Date.now().toString() + '_' + Math.random().toString(36).substr(2, 5);
+    offers.push({ id: newId, carId: carId, km: km, price: price, url: url });
+    
+    localStorage.setItem('garageOffers', JSON.stringify(offers));
+    document.getElementById('gUrlInput').value = '';
+    renderGarage();
+  };
+
+  window.removeGarageOffer = function(id) {
+    var offers = getSavedOffers();
+    offers = offers.filter(function(o) { return o.id !== id; });
+    localStorage.setItem('garageOffers', JSON.stringify(offers));
+    renderGarage();
+  };
+
+  function renderGarage() {
+    var offers = getSavedOffers();
+    var container = document.getElementById('garageCardsContainer');
+    
+    if (offers.length === 0) {
+      container.innerHTML = '<div style="font-size:11px;color:rgba(255,255,255,0.4);font-style:italic">Nenhum veículo guardado na garagem.</div>';
+      return;
+    }
+
+    var html = '';
+    offers.forEach(function(o) {
+      var car = E.getCar(o.carId);
+      var r = E.aResale(car, o.km);
+      var m = E.moVal(o.price, r);
+      var wObj = E.getEffectiveWarranty(car, o.km);
+      
+      var brandCls = 'border-' + car.brand;
+      
+      html += '<div class="garage-card ' + brandCls + '">';
+      html += '<div class="garage-card-title">';
+      html += '<span>' + car.n + ' <span class="version-badge">' + car.y + '</span></span>';
+      html += '<button class="btn-remove" onclick="removeGarageOffer(\'' + o.id + '\')">X</button>';
+      html += '</div>';
+      
+      html += '<div class="garage-card-details">';
+      html += '<div>Compra: <b>€' + o.price.toLocaleString('pt-PT') + '</b> | Km: <b>' + o.km + 'k km</b></div>';
+      
+      if (m !== null) {
+        html += '<div class="garage-card-cost">€' + m + '<span style="font-size:10px;color:rgba(255,255,255,0.4)"> / mês</span></div>';
+        html += '<div>Revenda Estimada (2028): €' + r.toLocaleString('pt-PT') + '</div>';
+        html += '<div style="color:#ffd60a;margin-top:4px">' + E.getWarrantyBadge(car, o.km) + ' ' + wObj.effMonths + 'm ou ' + (wObj.kmLeft/1000).toFixed(0) + 'k km extra</div>';
+      } else {
+        html += '<div style="color:#ff453a;font-weight:800;margin-top:4px">⚠️ Preço irrealista (inferior à revenda)</div>';
+      }
+      
+      if (o.url) {
+        html += '<a href="' + o.url + '" target="_blank" style="margin-top:8px;display:inline-block;color:#32ade6;font-size:11px;text-decoration:none;font-weight:800">&#128279; Ver Anúncio Original</a>';
+      }
+      
+      html += '</div></div>';
+    });
+    
+    container.innerHTML = html;
+  }
+
+  // Initialize
+  initGarage();
+
+})();
+</script>
+
+</body>
+</html>

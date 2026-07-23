@@ -4,129 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Comparativo Geral — Custo Mensal de Elétricos</title>
+<link rel="stylesheet" href="styles.css">
 
 <style>
-:root {
-  --bg: #090a0f;
-  --card-bg: rgba(255, 255, 255, 0.04);
-  --card-border: rgba(255, 255, 255, 0.08);
-  --accent: #30d158;
-  --text: #ffffff;
-  --text-muted: rgba(255, 255, 255, 0.5);
-}
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-  background: var(--bg);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  color: var(--text);
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 18px;
-}
-
-header {
-  text-align: center;
-  max-width: 900px;
-}
-
-h1 {
-  font-size: 22px;
-  font-weight: 800;
-  background: linear-gradient(135deg, #fff 0%, #a1a1a1 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 4px;
-}
-
-.sub {
-  font-size: 11px;
-  color: var(--text-muted);
-}
-
-.top-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  max-width: 1100px;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.nav-link {
-  color: var(--accent);
-  text-decoration: none;
-  font-size: 11px;
-  font-weight: 600;
-  background: rgba(48, 209, 88, 0.1);
-  border: 1px solid rgba(48, 209, 88, 0.2);
-  padding: 6px 12px;
-  border-radius: 20px;
-  transition: all 0.2s ease;
-}
-
-.nav-link:hover {
-  background: rgba(48, 209, 88, 0.2);
-  box-shadow: 0 0 12px rgba(48, 209, 88, 0.3);
-}
-
-.controls-card {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  backdrop-filter: blur(20px);
-  border-radius: 16px;
-  padding: 14px 18px;
-  width: 100%;
-  max-width: 1100px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.control-group {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.control-label {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: var(--text-muted);
-  font-weight: 700;
-  min-width: 140px;
-}
-
-.btn-pill {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.7);
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 11px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-
-.btn-pill:hover {
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
-}
-
-.btn-pill.active {
-  background: var(--accent);
-  color: #000;
-  border-color: var(--accent);
-  font-weight: 700;
-  box-shadow: 0 0 12px rgba(48, 209, 88, 0.3);
-}
+/* Page-specific */
+:root { --bg: #090a0f; }
+header { max-width: 900px; }
+.top-bar { max-width: 1100px; }
+.controls-card { max-width: 1100px; }
 
 .grid-summary {
   display: grid;
@@ -148,7 +33,6 @@ h1 {
   overflow: hidden;
   transition: transform 0.2s ease, border-color 0.2s ease;
 }
-
 .model-card:hover {
   transform: translateY(-2px);
   border-color: rgba(255, 255, 255, 0.2);
@@ -159,151 +43,57 @@ h1 {
   justify-content: space-between;
   align-items: flex-start;
 }
-
-.model-title {
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.year-badge {
-  font-size: 9px;
-  font-weight: 800;
-  background: #ffd60a;
-  color: #000;
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-
+.model-title { font-size: 13px; font-weight: 700; }
 .price-tag {
-  font-size: 10px;
-  color: rgba(255,255,255,0.6);
-  background: rgba(255,255,255,0.08);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-weight: 600;
+  font-size: 10px; color: rgba(255,255,255,0.6);
+  background: rgba(255,255,255,0.08); padding: 2px 6px;
+  border-radius: 4px; font-weight: 600;
 }
 
 .range-box {
   background: rgba(0, 0, 0, 0.4);
-  border-radius: 10px;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  border-radius: 10px; padding: 10px;
+  display: flex; flex-direction: column; gap: 6px;
 }
-
 .range-values {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
+  display: flex; justify-content: space-between; align-items: baseline;
 }
-
 .val-min { color: #30d158; font-weight: 800; font-size: 18px; }
 .val-mid { color: #ffd60a; font-size: 11px; font-weight: 600; }
 .val-max { color: #ff453a; font-weight: 700; font-size: 13px; }
 
 .bar-track {
-  height: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  position: relative;
-  overflow: hidden;
+  height: 8px; background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px; position: relative; overflow: hidden;
 }
-
 .bar-fill {
-  height: 100%;
-  border-radius: 4px;
+  height: 100%; border-radius: 4px;
   background: linear-gradient(90deg, #30d158 0%, #ffd60a 50%, #ff453a 100%);
 }
 
 .card-meta {
-  display: flex;
-  justify-content: space-between;
-  font-size: 9px;
-  color: var(--text-muted);
+  display: flex; justify-content: space-between;
+  font-size: 9px; color: var(--text-muted);
   border-top: 1px solid rgba(255, 255, 255, 0.05);
   padding-top: 6px;
 }
 
 .master-table-card {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 16px;
-  padding: 16px;
-  width: 100%;
-  max-width: 1100px;
-  overflow-x: auto;
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: 16px; padding: 16px; width: 100%;
+  max-width: 1100px; overflow-x: auto;
 }
-
 .master-table-card h2 {
-  font-size: 14px;
-  font-weight: 700;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  font-size: 14px; font-weight: 700; margin-bottom: 10px;
+  display: flex; justify-content: space-between; align-items: center;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 10px;
-  min-width: 750px;
-}
+table { font-size: 10px; min-width: 750px; }
+th { padding: 8px; font-size: 9px; }
+td { padding: 8px; font-weight: 600; }
+td:first-child { text-align: left; font-weight: 700; color: #fff; }
 
-th {
-  color: var(--text-muted);
-  padding: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  text-align: center;
-  font-weight: 600;
-  font-size: 9px;
-}
-
-th:first-child { text-align: left; }
-
-td {
-  padding: 8px;
-  text-align: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-  font-weight: 600;
-}
-
-td:first-child {
-  text-align: left;
-  font-weight: 700;
-  color: #fff;
-}
-
-.badge-lfp {
-  font-size: 8px;
-  background: rgba(48, 209, 88, 0.15);
-  color: #30d158;
-  padding: 1px 4px;
-  border-radius: 3px;
-  margin-left: 4px;
-}
-
-.cell-pill {
-  display: inline-block;
-  padding: 3px 8px;
-  border-radius: 6px;
-  font-weight: 700;
-  min-width: 48px;
-}
-
-.cell-na {
-  color: rgba(255, 255, 255, 0.25);
-  font-style: italic;
-  font-size: 9px;
-}
-
-footer {
-  font-size: 9px;
-  color: var(--text-muted);
-  text-align: center;
-  padding: 12px;
-}
+body { gap: 18px; }
 </style>
 </head>
 <body>
@@ -318,23 +108,23 @@ footer {
 
 <!-- Controlos de Filtro e Modo de Preço -->
 <div class="controls-card">
-  <div class="control-group">
-    <span class="control-label">Preço de Compra:</span>
+  <div class="control-row">
+    <span class="control-label" style="min-width:140px">Preço de Compra:</span>
     <button class="btn-pill active" onclick="setPriceMode('realistic', this)">Realista por Ano (Recomendado)</button>
     <button class="btn-pill" onclick="setPriceMode(25000, this)">€25.000 Fixo</button>
     <button class="btn-pill" onclick="setPriceMode(30000, this)">€30.000 Fixo</button>
     <button class="btn-pill" onclick="setPriceMode(35000, this)">€35.000 Fixo</button>
   </div>
-  <div class="control-group">
-    <span class="control-label">Filtrar Ano:</span>
+  <div class="control-row">
+    <span class="control-label" style="min-width:140px">Filtrar Ano:</span>
     <button class="btn-pill active" onclick="setFilterYear('all', this)">Todos (2021-2024)</button>
     <button class="btn-pill" onclick="setFilterYear('2021', this)">2021</button>
     <button class="btn-pill" onclick="setFilterYear('2022', this)">2022</button>
     <button class="btn-pill" onclick="setFilterYear('2023', this)">2023</button>
     <button class="btn-pill" onclick="setFilterYear('2024', this)">2024</button>
   </div>
-  <div class="control-group">
-    <span class="control-label">Ordenar por:</span>
+  <div class="control-row">
+    <span class="control-label" style="min-width:140px">Ordenar por:</span>
     <button class="btn-pill active" onclick="setSortMode('min_cost', this)">Menor Custo Mínimo</button>
     <button class="btn-pill" onclick="setSortMode('avg_cost', this)">Menor Custo Médio</button>
     <button class="btn-pill" onclick="setSortMode('year_desc', this)">Ano Mais Recente</button>
@@ -366,174 +156,29 @@ footer {
   </table>
 </div>
 
-<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Dashboard Comparativo de Elétricos sem valores negativos</footer>
+<footer>
+  <a href="index.html" class="nav-link" style="margin-right:10px">&larr; Portal</a>
+  Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Dashboard Comparativo de Elétricos sem valores negativos
+</footer>
 
+<script src="engine.js"></script>
 <script>
 (function(){
 'use strict';
-
-var M = 28;
-var TKM = 21000;
-var LFPR = 0.5;
-
-var WS = [
-    {m: 24, p: 0},
-    {m: 18, p: 750},
-    {m: 12, p: 1500},
-    {m: 6,  p: 2000},
-    {m: 0,  p: 2500},
-    {m: -999, p: 3000}
-];
-
-// Preços de Compra Típicos/Realistas de Mercado em Agosto de 2026 por Ano de Fabrico
-var REALISTIC_PRICES = {
-    2021: 24000,
-    2022: 26000,
-    2023: 29000,
-    2024: 33000
-};
-
-var CARS = [
-    // TESLA MODEL 3 SR / RWD (LFP)
-    {
-        id: 'tesla_m3_2021', name: 'Tesla Model 3 SR+ LFP', year: 2021, brand: 'tesla', lfp: true,
-        ry: 2021, rm: 12, wy: 8, wk: 192000, b35: 18300, step: 300, jump: 400
-    },
-    {
-        id: 'tesla_m3_2022', name: 'Tesla Model 3 RWD LFP', year: 2022, brand: 'tesla', lfp: true,
-        ry: 2022, rm: 6, wy: 8, wk: 192000, b35: 19800, step: 300, jump: 400
-    },
-    {
-        id: 'tesla_m3_2023', name: 'Tesla Model 3 RWD LFP', year: 2023, brand: 'tesla', lfp: true,
-        ry: 2023, rm: 6, wy: 8, wk: 192000, b35: 21500, step: 350, jump: 400
-    },
-    {
-        id: 'tesla_m3_2024', name: 'Tesla Model 3 Highland RWD LFP', year: 2024, brand: 'tesla', lfp: true,
-        ry: 2024, rm: 3, wy: 8, wk: 192000, b35: 24500, step: 400, jump: 500
-    },
-
-    // TESLA MODEL 3 LONG RANGE AWD (NMC)
-    {
-        id: 'tesla_lr_2021', name: 'Tesla Model 3 LR AWD', year: 2021, brand: 'tesla_lr', lfp: false,
-        ry: 2021, rm: 9, wy: 8, wk: 192000, b35: 20000, step: 350, jump: 450
-    },
-    {
-        id: 'tesla_lr_2022', name: 'Tesla Model 3 LR AWD', year: 2022, brand: 'tesla_lr', lfp: false,
-        ry: 2022, rm: 6, wy: 8, wk: 192000, b35: 21800, step: 350, jump: 450
-    },
-    {
-        id: 'tesla_lr_2023', name: 'Tesla Model 3 LR AWD', year: 2023, brand: 'tesla_lr', lfp: false,
-        ry: 2023, rm: 6, wy: 8, wk: 192000, b35: 24000, step: 400, jump: 450
-    },
-    {
-        id: 'tesla_lr_2024', name: 'Tesla Model 3 Highland LR', year: 2024, brand: 'tesla_lr', lfp: false,
-        ry: 2024, rm: 3, wy: 8, wk: 192000, b35: 27500, step: 450, jump: 550
-    },
-
-    // IONIQ 5 58 kWh (STANDARD RANGE)
-    {
-        id: 'ioniq5_58_2021', name: 'IONIQ 5 58 kWh Standard', year: 2021, brand: 'ioniq5_58', lfp: false,
-        ry: 2021, rm: 11, wy: 8, wk: 160000, b35: 13500, step: 450, jump: 500
-    },
-    {
-        id: 'ioniq5_58_2022', name: 'IONIQ 5 58 kWh Standard', year: 2022, brand: 'ioniq5_58', lfp: false,
-        ry: 2022, rm: 7, wy: 8, wk: 160000, b35: 15000, step: 450, jump: 500
-    },
-
-    // IONIQ 5 LONG RANGE
-    {
-        id: 'ioniq5_2021', name: 'IONIQ 5 72.6 kWh', year: 2021, brand: 'ioniq5', lfp: false,
-        ry: 2021, rm: 11, wy: 8, wk: 160000, b35: 16000, step: 500, jump: 500
-    },
-    {
-        id: 'ioniq5_2022', name: 'IONIQ 5 72.6 kWh', year: 2022, brand: 'ioniq5', lfp: false,
-        ry: 2022, rm: 7, wy: 8, wk: 160000, b35: 17500, step: 500, jump: 500
-    },
-    {
-        id: 'ioniq5_2023', name: 'IONIQ 5 77.4 kWh', year: 2023, brand: 'ioniq5', lfp: false,
-        ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 19800, step: 500, jump: 500
-    },
-    {
-        id: 'ioniq5_2024', name: 'IONIQ 5 84 kWh (Facelift)', year: 2024, brand: 'ioniq5', lfp: false,
-        ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 23200, step: 500, jump: 600
-    },
-
-    // MEGANE E-TECH EV60
-    {
-        id: 'megane_2021', name: 'Megane E-Tech EV60', year: 2021, brand: 'megane', lfp: false,
-        ry: 2021, rm: 12, wy: 8, wk: 160000, b35: 15800, step: 500, jump: 500
-    },
-    {
-        id: 'megane_2022', name: 'Megane E-Tech EV60', year: 2022, brand: 'megane', lfp: false,
-        ry: 2022, rm: 9, wy: 8, wk: 160000, b35: 16500, step: 500, jump: 500
-    },
-    {
-        id: 'megane_2023', name: 'Megane E-Tech EV60', year: 2023, brand: 'megane', lfp: false,
-        ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 18500, step: 500, jump: 500
-    },
-    {
-        id: 'megane_2024', name: 'Megane E-Tech EV60', year: 2024, brand: 'megane', lfp: false,
-        ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 21000, step: 500, jump: 600
-    }
-];
+var E = CarEngine;
+var M = E.M, TKM = E.TKM;
+var CARS = E.CARS, REALISTIC_PRICES = E.REALISTIC_PRICES;
+var wMonths = E.wMonths, wPenalty = E.wPenalty;
+var aResale = E.aResale, moVal = E.moVal, col = E.col;
 
 var priceMode = 'realistic';
 var filterYear = 'all';
 var sortMode = 'min_cost';
 
-function wMonths(c) {
-    return (c.ry + c.wy - 2028) * 12 + (c.rm - 12);
-}
-
-function wPenalty(c) {
-    var m = wMonths(c);
-    var p = 3000;
-    for (var i = 0; i < WS.length; i++) {
-        if (m >= WS[i].m) { p = WS[i].p; break; }
-    }
-    if (c.lfp && p > 0) p = Math.round(p * LFPR);
-    return p;
-}
-
-function getBaseResale(c, k) {
-    var stepsCount = (k - 35) / 5;
-    var res = c.b35;
-    for (var i = 0; i < stepsCount; i++) {
-        var currentKm = 35 + i * 5;
-        var drop = c.step + (currentKm === 90 ? c.jump : 0);
-        res -= drop;
-    }
-    return res;
-}
-
-function aResale(c, k) {
-    var p = wPenalty(c);
-    var fkm = k * 1000 + TKM;
-    if (fkm > c.wk) {
-        var kp = 3000;
-        if (c.lfp) kp = Math.round(kp * LFPR);
-        p = Math.max(p, kp);
-    }
-    return Math.max(0, getBaseResale(c, k) - p);
-}
-
-// CUSTO MENSAL COM PROTEÇÃO CONTRA VALORES NEGATIVOS
-function moVal(price, resale) {
-    var diff = price - resale;
-    if (diff <= 0) return null; // Combinação irrealista
-    return Math.round(diff / M);
-}
-
-function col(v) {
-    if (v === null) return 'rgba(255,255,255,0.2)';
-    var t = Math.max(0, Math.min(1, (v - 100) / 600));
-    return 'rgb(' + Math.round(255 * t) + ',' + Math.round(255 * (1 - t)) + ',50)';
-}
-
 function computeMetrics(c) {
-    var p = (priceMode === 'realistic') ? REALISTIC_PRICES[c.year] : Number(priceMode);
+    var p = (priceMode === 'realistic') ? REALISTIC_PRICES[c.y] : Number(priceMode);
     var kms = [35, 50, 70, 90, 110];
-    
+
     var costs = kms.map(function(k){ return moVal(p, aResale(c, k)); });
     var validCosts = costs.filter(function(v){ return v !== null; });
 
@@ -541,13 +186,7 @@ function computeMetrics(c) {
     var max = validCosts.length ? Math.max.apply(null, validCosts) : null;
     var avg = validCosts.length ? Math.round(validCosts.reduce(function(a,b){return a+b;},0) / validCosts.length) : null;
 
-    return {
-        price: p,
-        costs: costs,
-        min: min,
-        max: max,
-        avg: avg
-    };
+    return { price: p, costs: costs, min: min, max: max, avg: avg };
 }
 
 window.setPriceMode = function(mode, btn) {
@@ -576,13 +215,13 @@ function updateButtons(clickedBtn) {
 }
 
 function renderDashboard() {
-    var label = (priceMode === 'realistic') 
+    var label = (priceMode === 'realistic')
         ? 'Modo: Preço Realista de Mercado por Ano (2021=€24k, 2022=€26k, 2023=€29k, 2024=€33k)'
         : 'Modo: Preço Fixo de Compra: €' + Number(priceMode).toLocaleString('pt-PT');
     document.getElementById('benchmarkLabel').textContent = label;
 
     var list = CARS.filter(function(c) {
-        return filterYear === 'all' || c.year.toString() === filterYear;
+        return filterYear === 'all' || c.y.toString() === filterYear;
     });
 
     var items = list.map(function(c) {
@@ -593,7 +232,7 @@ function renderDashboard() {
     items.sort(function(a, b) {
         if (sortMode === 'min_cost') return (a.metrics.min || 9999) - (b.metrics.min || 9999);
         if (sortMode === 'avg_cost') return (a.metrics.avg || 9999) - (b.metrics.avg || 9999);
-        if (sortMode === 'year_desc') return b.car.year - a.car.year;
+        if (sortMode === 'year_desc') return b.car.y - a.car.y;
         return 0;
     });
 
@@ -604,20 +243,18 @@ function renderDashboard() {
         var m = item.metrics;
         var pen = wPenalty(c);
         var wm = wMonths(c);
-
         var normFill = m.avg ? Math.max(5, Math.min(100, (m.avg / 600) * 100)) : 0;
 
         gridHtml += '<div class="model-card">';
         gridHtml += '<div class="card-header">';
         gridHtml += '<div>';
-        gridHtml += '<div class="model-title">' + c.name + (c.lfp ? ' <span class="badge-lfp">LFP</span>' : '') + '</div>';
+        gridHtml += '<div class="model-title">' + c.n + (c.lfp ? ' <span class="badge-lfp">LFP</span>' : '') + '</div>';
         gridHtml += '<div style="font-size:9px;color:var(--text-muted);margin-top:2px">Preço Compra: <b style="color:#fff">€' + m.price.toLocaleString('pt-PT') + '</b></div>';
         gridHtml += '</div>';
-        gridHtml += '<span class="year-badge">' + c.year + '</span>';
+        gridHtml += '<span class="year-badge">' + c.y + '</span>';
         gridHtml += '</div>';
 
-        gridHtml += '<div class="range-box">';
-        gridHtml += '<div class="range-values">';
+        gridHtml += '<div class="range-box"><div class="range-values">';
         if (m.min !== null) {
             gridHtml += '<div><span style="font-size:9px;color:var(--text-muted)">Min (35k km):</span> <span class="val-min">€' + m.min + '</span><span style="font-size:9px">/mês</span></div>';
             gridHtml += '<div><span style="font-size:9px;color:var(--text-muted)">Média:</span> <span class="val-mid">€' + m.avg + '</span></div>';
@@ -626,15 +263,13 @@ function renderDashboard() {
             gridHtml += '<div style="color:var(--text-muted);font-size:11px;font-style:italic">Preço de compra abaixo da revenda (Irrealista)</div>';
         }
         gridHtml += '</div>';
-
         gridHtml += '<div class="bar-track"><div class="bar-fill" style="width:' + normFill + '%"></div></div>';
         gridHtml += '</div>';
 
         gridHtml += '<div class="card-meta">';
         gridHtml += '<span>Garantia bateria em 2028: <b>' + (wm > 0 ? wm + 'm restantes' : 'Expirada') + '</b></span>';
         gridHtml += '<span>Penalização: <b style="color:' + (pen > 0 ? '#ff453a' : '#30d158') + '">-' + pen + '€</b></span>';
-        gridHtml += '</div>';
-        gridHtml += '</div>';
+        gridHtml += '</div></div>';
     });
     document.getElementById('gridApp').innerHTML = gridHtml;
 
@@ -647,7 +282,7 @@ function renderDashboard() {
         var pen = wPenalty(c);
 
         tableHtml += '<tr>';
-        tableHtml += '<td>' + c.name + ' <span class="year-badge">' + c.year + '</span>' + (c.lfp ? '<span class="badge-lfp">LFP</span>' : '') + '</td>';
+        tableHtml += '<td>' + c.n + ' <span class="year-badge">' + c.y + '</span>' + (c.lfp ? '<span class="badge-lfp">LFP</span>' : '') + '</td>';
         tableHtml += '<td style="color:#ffd60a">€' + m.price.toLocaleString('pt-PT') + '</td>';
         tableHtml += '<td style="font-size:9px;color:var(--text-muted)">' + (wm > 0 ? wm + 'm rest. (-' + pen + '€)' : 'Expirada (-' + pen + '€)') + '</td>';
 

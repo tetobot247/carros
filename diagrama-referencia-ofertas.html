@@ -4,303 +4,101 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Diagrama Mestre de Referência — Avaliador de Ofertas</title>
+<link rel="stylesheet" href="styles.css">
 
 <style>
+/* Page-specific */
 :root {
-  --bg: #08090c;
-  --card-bg: rgba(255, 255, 255, 0.04);
-  --card-border: rgba(255, 255, 255, 0.08);
-  --text: #ffffff;
-  --text-muted: rgba(255, 255, 255, 0.45);
-  
-  --c-great: #30d158;
-  --c-good: #a3e635;
-  --c-fair: #ffd60a;
-  --c-high: #ff9f0a;
-  --c-bad: #ff453a;
+  --c-great: #30d158; --c-good: #a3e635; --c-fair: #ffd60a;
+  --c-high: #ff9f0a; --c-bad: #ff453a;
 }
+header { max-width: 1000px; }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-  background: var(--bg);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  color: var(--text);
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-}
-
-header {
-  text-align: center;
-  max-width: 1000px;
-}
-
-h1 {
-  font-size: 22px;
-  font-weight: 800;
-  background: linear-gradient(135deg, #ffffff 0%, #a1a1a1 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 4px;
-}
-
-.sub {
-  font-size: 11px;
-  color: var(--text-muted);
-}
-
-/* Painel Avaliador Rápido de Ofertas (Simulator Widget) */
+/* Avaliador Widget */
 .eval-card {
   background: linear-gradient(135deg, rgba(48,209,88,0.08) 0%, rgba(0,0,0,0.4) 100%);
   border: 1px solid rgba(48, 209, 88, 0.2);
-  border-radius: 16px;
-  padding: 16px 20px;
-  width: 100%;
-  max-width: 1200px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+  border-radius: 16px; padding: 16px 20px;
+  width: 100%; max-width: 1200px;
+  display: flex; flex-direction: column; gap: 14px;
 }
-
-.eval-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: #30d158;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.eval-inputs {
-  display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
-  align-items: flex-end;
-}
-
-.input-group {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.input-label {
-  font-size: 10px;
-  color: var(--text-muted);
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-select, input {
-  background: rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #fff;
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 600;
-  outline: none;
-}
-
-select:focus, input:focus {
-  border-color: #30d158;
-}
+.eval-title { font-size: 13px; font-weight: 700; color: #30d158; display: flex; align-items: center; gap: 6px; }
+.eval-inputs { display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end; }
+.input-group { display: flex; flex-direction: column; gap: 4px; }
+.input-label { font-size: 10px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+select, input { padding: 8px 12px; font-size: 12px; }
 
 .verdict-box {
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 12px;
-  padding: 12px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
+  background: rgba(0, 0, 0, 0.5); border-radius: 12px;
+  padding: 12px 16px; display: flex; align-items: center;
+  justify-content: space-between; flex-wrap: wrap; gap: 12px;
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
-
 .verdict-badge {
-  font-size: 14px;
-  font-weight: 800;
-  padding: 6px 14px;
-  border-radius: 20px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  font-size: 14px; font-weight: 800; padding: 6px 14px;
+  border-radius: 20px; display: inline-flex; align-items: center; gap: 6px;
 }
 
-/* Controlos de Seleção de Modelo no Diagrama */
+/* Diagram Controls */
 .diagram-controls {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 16px;
-  padding: 14px 18px;
-  width: 100%;
-  max-width: 1200px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: 16px; padding: 14px 18px;
+  width: 100%; max-width: 1200px;
+  display: flex; flex-direction: column; gap: 10px;
 }
-
-.btn-row {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
 .btn-model {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.7);
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
+  padding: 6px 14px; border-radius: 20px;
+  font-size: 11px; font-weight: 600; cursor: pointer;
   transition: all 0.2s ease;
 }
-
-.btn-model:hover {
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
-}
-
+.btn-model:hover { background: rgba(255, 255, 255, 0.15); color: #fff; }
 .btn-model.active {
-  background: #30d158;
-  color: #000;
-  border-color: #30d158;
-  font-weight: 800;
-  box-shadow: 0 0 12px rgba(48, 209, 88, 0.3);
+  background: #30d158; color: #000; border-color: #30d158;
+  font-weight: 800; box-shadow: 0 0 12px rgba(48, 209, 88, 0.3);
 }
 
-/* Legenda de Qualidade de Negócio */
+/* Legend */
 .legend-bar {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  justify-content: center;
-  font-size: 10px;
-  padding: 8px 0;
+  display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+  font-size: 10px; padding: 8px 0;
 }
+.leg-item { display: flex; align-items: center; gap: 5px; font-weight: 600; }
+.leg-dot { width: 10px; height: 10px; border-radius: 3px; }
 
-.leg-item {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-weight: 600;
-}
-
-.leg-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 3px;
-}
-
-/* Diagrama Mestre de Referência (Tabela 15x17) */
+/* Diagram */
 .diagram-card {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  backdrop-filter: blur(24px);
-  border-radius: 16px;
-  padding: 16px;
-  width: 100%;
-  max-width: 1200px;
-  overflow-x: auto;
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  backdrop-filter: blur(24px); border-radius: 16px; padding: 16px;
+  width: 100%; max-width: 1200px; overflow-x: auto;
 }
+.diagram-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.diagram-title { font-size: 15px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
 
-.diagram-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.diagram-title {
-  font-size: 15px;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-table.diagram-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 9px;
-  min-width: 900px;
-}
-
-table.diagram-table th {
-  color: var(--text-muted);
-  padding: 6px 4px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  text-align: center;
-  font-size: 9px;
-  font-weight: 700;
-}
-
-table.diagram-table th:first-child {
-  text-align: left;
-  min-width: 90px;
-}
-
-table.diagram-table td {
-  padding: 4px 2px;
-  text-align: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-}
-
-table.diagram-table td:first-child {
-  text-align: left;
-  font-weight: 700;
-  color: #ffd60a;
-  position: sticky;
-  left: 0;
-  background: #08090c;
-  z-index: 2;
-}
+table.diagram-table { width: 100%; border-collapse: collapse; font-size: 9px; min-width: 900px; }
+table.diagram-table th { color: var(--text-muted); padding: 6px 4px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); text-align: center; font-size: 9px; font-weight: 700; }
+table.diagram-table th:first-child { text-align: left; min-width: 90px; }
+table.diagram-table td { padding: 4px 2px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.04); }
+table.diagram-table td:first-child { text-align: left; font-weight: 700; color: #ffd60a; position: sticky; left: 0; background: var(--bg); z-index: 2; }
 
 .d-cell {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 3px 4px;
-  border-radius: 6px;
-  font-weight: 800;
-  font-size: 9px;
-  min-width: 44px;
+  display: inline-flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 3px 4px; border-radius: 6px;
+  font-weight: 800; font-size: 9px; min-width: 44px;
   transition: transform 0.15s ease;
 }
-
-.d-cell:hover {
-  transform: scale(1.15);
-  z-index: 3;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-}
-
-.d-cell.highlighted {
-  border: 2px solid #ffffff !important;
-  box-shadow: 0 0 16px #ffffff !important;
-  transform: scale(1.2);
-  z-index: 4;
-}
+.d-cell:hover { transform: scale(1.15); z-index: 3; box-shadow: 0 0 10px rgba(255, 255, 255, 0.3); }
+.d-cell.highlighted { border: 2px solid #ffffff !important; box-shadow: 0 0 16px #ffffff !important; transform: scale(1.2); z-index: 4; }
 
 .cell-great { background: rgba(48, 209, 88, 0.25); color: #30d158; border: 1px solid rgba(48, 209, 88, 0.4); }
 .cell-good  { background: rgba(163, 230, 53, 0.2);  color: #a3e635; border: 1px solid rgba(163, 230, 53, 0.3); }
 .cell-fair  { background: rgba(255, 214, 10, 0.2);  color: #ffd60a; border: 1px solid rgba(255, 214, 10, 0.3); }
 .cell-high  { background: rgba(255, 159, 10, 0.2);  color: #ff9f0a; border: 1px solid rgba(255, 159, 10, 0.3); }
 .cell-bad   { background: rgba(255, 69, 58, 0.2);   color: #ff453a; border: 1px solid rgba(255, 69, 58, 0.3); }
-.cell-na    { background: rgba(255, 255, 255, 0.03); color: rgba(255, 255, 255, 0.2); font-style: italic; }
-
-footer {
-  font-size: 9px;
-  color: var(--text-muted);
-  text-align: center;
-  padding: 12px;
-}
+.cell-na-d  { background: rgba(255, 255, 255, 0.03); color: rgba(255, 255, 255, 0.2); font-style: italic; }
 </style>
 </head>
 <body>
@@ -310,55 +108,33 @@ footer {
   <div class="sub">Matriz de Decisão Rápida para Avaliar se Qualquer Oferta de Elétrico Usado em Portugal é Excelente, Boa ou Má</div>
 </header>
 
-<!-- Avaliador Rápido de Oferta de Mercado -->
+<!-- Avaliador Rápido -->
 <div class="eval-card">
   <div class="eval-title">&#127919; Avaliador Rápido de Oferta (Simule Qualquer Carro Anunciado)</div>
   <div class="eval-inputs">
     <div class="input-group">
       <label class="input-label">Selecione o Modelo &amp; Ano:</label>
-      <select id="evalModel" onchange="runEvaluation()">
-        <option value="tesla_2021">Tesla Model 3 SR+ LFP (2021)</option>
-        <option value="tesla_2022">Tesla Model 3 RWD LFP (2022)</option>
-        <option value="tesla_2023">Tesla Model 3 RWD LFP (2023)</option>
-        <option value="tesla_2024">Tesla Model 3 Highland (2024)</option>
-        <option value="tesla_lr_2021">Tesla Model 3 LR AWD (2021)</option>
-        <option value="tesla_lr_2022">Tesla Model 3 LR AWD (2022)</option>
-        <option value="tesla_lr_2023">Tesla Model 3 LR AWD (2023)</option>
-        <option value="tesla_lr_2024">Tesla Model 3 Highland LR (2024)</option>
-        <option value="ioniq5_58_2021">IONIQ 5 58 kWh Standard (2021)</option>
-        <option value="ioniq5_58_2022">IONIQ 5 58 kWh Standard (2022)</option>
-        <option value="ioniq_2021">IONIQ 5 72.6 kWh (2021)</option>
-        <option value="ioniq_2022" selected>IONIQ 5 72.6 kWh (2022)</option>
-        <option value="ioniq_2023">IONIQ 5 77.4 kWh (2023)</option>
-        <option value="ioniq_2024">IONIQ 5 84 kWh Facelift (2024)</option>
-        <option value="megane_2021">Megane E-Tech EV60 (2021)</option>
-        <option value="megane_2022">Megane E-Tech EV60 (2022)</option>
-        <option value="megane_2023">Megane E-Tech EV60 (2023)</option>
-        <option value="megane_2024">Megane E-Tech EV60 (2024)</option>
-      </select>
+      <select id="evalModel" onchange="runEvaluation()"></select>
     </div>
-
     <div class="input-group">
       <label class="input-label">Preço de Compra Anunciado (€):</label>
       <input type="number" id="evalPrice" value="24500" step="500" min="15000" max="45000" oninput="runEvaluation()">
     </div>
-
     <div class="input-group">
       <label class="input-label">Quilometragem (Km):</label>
       <input type="number" id="evalKm" value="50000" step="5000" min="20000" max="150000" oninput="runEvaluation()">
     </div>
   </div>
-
   <div class="verdict-box" id="verdictBox"></div>
 </div>
 
-<!-- Barra de Controlo de Seleção do Diagrama -->
+<!-- Seleção de Modelo para Diagrama -->
 <div class="diagram-controls">
   <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase">Selecione o Modelo para Exibir o Diagrama Mestre de Referência:</div>
   <div class="btn-row" id="modelBtnRow"></div>
 </div>
 
-<!-- Legenda do Diagrama -->
+<!-- Legenda -->
 <div class="legend-bar">
   <div class="leg-item"><div class="leg-dot" style="background:#30d158"></div> Negócio Excelente (&lt; €200/mês)</div>
   <div class="leg-item"><div class="leg-dot" style="background:#a3e635"></div> Bom Negócio (€200-€275/mês)</div>
@@ -368,130 +144,46 @@ footer {
   <div class="leg-item"><div class="leg-dot" style="background:rgba(255,255,255,0.2)"></div> Irrealista (Preço &le; Revenda)</div>
 </div>
 
-<!-- Diagrama Mestre (Matriz 15 Preços x 17 Km) -->
+<!-- Diagrama Mestre -->
 <div class="diagram-card">
   <div class="diagram-header">
     <div class="diagram-title" id="activeDiagramTitle">&#128515; Tesla Model 3 RWD LFP (2022)</div>
     <div style="font-size:10px;color:var(--text-muted)" id="activeDiagramSub">Revenda Base 35k: €19.800 &middot; Penalização Garantia: -€375</div>
   </div>
-
   <table class="diagram-table">
-    <thead>
-      <tr id="diagramThRow"></tr>
-    </thead>
+    <thead><tr id="diagramThRow"></tr></thead>
     <tbody id="diagramTbody"></tbody>
   </table>
 </div>
 
-<footer>Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Diagrama Mestre de Referência para Avaliação de Ofertas</footer>
+<footer>
+  <a href="index.html" class="nav-link" style="margin-right:10px">&larr; Portal</a>
+  Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Diagrama Mestre de Referência para Avaliação de Ofertas
+</footer>
 
+<script src="engine.js"></script>
 <script>
 (function(){
 'use strict';
-
-var M = 28;
-var TKM = 21000;
-var LFPR = 0.5;
-
-var WS = [
-    {m: 24, p: 0},
-    {m: 18, p: 750},
-    {m: 12, p: 1500},
-    {m: 6,  p: 2000},
-    {m: 0,  p: 2500},
-    {m: -999, p: 3000}
-];
-
-var KM = [35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115];
-var PR = [];
-for (var i = 21000; i <= 42000; i += 1000) PR.push(i);
-
-var CARS = [
-    // TESLA MODEL 3 SR / RWD (LFP)
-    { id: 'tesla_2021', n: 'Tesla Model 3 SR+ LFP', y: 2021, brand: 'tesla', lfp: true, ry: 2021, rm: 12, wy: 8, wk: 192000, b35: 18300, step: 300, jump: 400 },
-    { id: 'tesla_2022', n: 'Tesla Model 3 RWD LFP', y: 2022, brand: 'tesla', lfp: true, ry: 2022, rm: 6, wy: 8, wk: 192000, b35: 19800, step: 300, jump: 400 },
-    { id: 'tesla_2023', n: 'Tesla Model 3 RWD LFP', y: 2023, brand: 'tesla', lfp: true, ry: 2023, rm: 6, wy: 8, wk: 192000, b35: 21500, step: 350, jump: 400 },
-    { id: 'tesla_2024', n: 'Tesla Model 3 Highland', y: 2024, brand: 'tesla', lfp: true, ry: 2024, rm: 3, wy: 8, wk: 192000, b35: 24500, step: 400, jump: 500 },
-
-    // TESLA MODEL 3 LONG RANGE AWD (NMC)
-    { id: 'tesla_lr_2021', n: 'Tesla Model 3 LR AWD', y: 2021, brand: 'tesla_lr', lfp: false, ry: 2021, rm: 9, wy: 8, wk: 192000, b35: 20000, step: 350, jump: 450 },
-    { id: 'tesla_lr_2022', n: 'Tesla Model 3 LR AWD', y: 2022, brand: 'tesla_lr', lfp: false, ry: 2022, rm: 6, wy: 8, wk: 192000, b35: 21800, step: 350, jump: 450 },
-    { id: 'tesla_lr_2023', n: 'Tesla Model 3 LR AWD', y: 2023, brand: 'tesla_lr', lfp: false, ry: 2023, rm: 6, wy: 8, wk: 192000, b35: 24000, step: 400, jump: 450 },
-    { id: 'tesla_lr_2024', n: 'Tesla Model 3 Highland LR', y: 2024, brand: 'tesla_lr', lfp: false, ry: 2024, rm: 3, wy: 8, wk: 192000, b35: 27500, step: 450, jump: 550 },
-
-    // IONIQ 5 58 kWh (STANDARD RANGE)
-    { id: 'ioniq5_58_2021', n: 'IONIQ 5 58 kWh Standard', y: 2021, brand: 'ioniq5_58', lfp: false, ry: 2021, rm: 11, wy: 8, wk: 160000, b35: 13500, step: 450, jump: 500 },
-    { id: 'ioniq5_58_2022', n: 'IONIQ 5 58 kWh Standard', y: 2022, brand: 'ioniq5_58', lfp: false, ry: 2022, rm: 7, wy: 8, wk: 160000, b35: 15000, step: 450, jump: 500 },
-
-    // IONIQ 5 LONG RANGE
-    { id: 'ioniq_2021', n: 'IONIQ 5 72.6 kWh', y: 2021, brand: 'ioniq5', lfp: false, ry: 2021, rm: 11, wy: 8, wk: 160000, b35: 16000, step: 500, jump: 500 },
-    { id: 'ioniq_2022', n: 'IONIQ 5 72.6 kWh', y: 2022, brand: 'ioniq5', lfp: false, ry: 2022, rm: 7, wy: 8, wk: 160000, b35: 17500, step: 500, jump: 500 },
-    { id: 'ioniq_2023', n: 'IONIQ 5 77.4 kWh', y: 2023, brand: 'ioniq5', lfp: false, ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 19800, step: 500, jump: 500 },
-    { id: 'ioniq_2024', n: 'IONIQ 5 84 kWh Facelift', y: 2024, brand: 'ioniq5', lfp: false, ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 23200, step: 500, jump: 600 },
-
-    // MEGANE E-TECH
-    { id: 'megane_2021', n: 'Megane E-Tech EV60', y: 2021, brand: 'megane', lfp: false, ry: 2021, rm: 12, wy: 8, wk: 160000, b35: 15800, step: 500, jump: 500 },
-    { id: 'megane_2022', n: 'Megane E-Tech EV60', y: 2022, brand: 'megane', lfp: false, ry: 2022, rm: 9, wy: 8, wk: 160000, b35: 16500, step: 500, jump: 500 },
-    { id: 'megane_2023', n: 'Megane E-Tech EV60', y: 2023, brand: 'megane', lfp: false, ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 18500, step: 500, jump: 500 },
-    { id: 'megane_2024', n: 'Megane E-Tech EV60', y: 2024, brand: 'megane', lfp: false, ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 21000, step: 500, jump: 600 }
-];
+var E = CarEngine;
+var M = E.M, TKM = E.TKM;
+var KM = E.KM, PR = E.PR, CARS = E.CARS;
+var wMonths = E.wMonths, wPenalty = E.wPenalty;
+var aResale = E.aResale, moVal = E.moVal, getCar = E.getCar;
 
 var selectedModelId = 'tesla_2022';
 
-function getCar(id) {
-    for (var i = 0; i < CARS.length; i++) {
-        if (CARS[i].id === id) return CARS[i];
-    }
-    return CARS[0];
-}
-
-function wMonths(c) {
-    return (c.ry + c.wy - 2028) * 12 + (c.rm - 12);
-}
-
-function wPenalty(c) {
-    var m = wMonths(c);
-    var p = 3000;
-    for (var i = 0; i < WS.length; i++) {
-        if (m >= WS[i].m) { p = WS[i].p; break; }
-    }
-    if (c.lfp && p > 0) p = Math.round(p * LFPR);
-    return p;
-}
-
-function getBaseResale(c, k) {
-    var idx = KM.indexOf(k);
-    if (idx === -1) {
-        idx = Math.max(0, Math.min(KM.length - 1, Math.round((k - 35) / 5)));
-    }
-    var res = c.b35;
-    for (var i = 0; i < idx; i++) {
-        var currentKm = 35 + i * 5;
-        var drop = c.step + (currentKm === 90 ? c.jump : 0);
-        res -= drop;
-    }
-    return res;
-}
-
-function aResale(c, k) {
-    var p = wPenalty(c);
-    var fkm = k * 1000 + TKM;
-    if (fkm > c.wk) {
-        var kp = 3000;
-        if (c.lfp) kp = Math.round(kp * LFPR);
-        p = Math.max(p, kp);
-    }
-    return Math.max(0, getBaseResale(c, k) - p);
-}
-
-function moVal(price, resale) {
-    var diff = price - resale;
-    if (diff <= 0) return null;
-    return Math.round(diff / M);
-}
+// Populate evaluator select
+var evalSel = document.getElementById('evalModel');
+var selHtml = '';
+CARS.forEach(function(c) {
+    var sel = (c.id === 'ioniq_2022') ? ' selected' : '';
+    selHtml += '<option value="' + c.id + '"' + sel + '>' + c.n + ' (' + c.y + ')</option>';
+});
+evalSel.innerHTML = selHtml;
 
 function getQualityClass(cost) {
-    if (cost === null) return 'cell-na';
+    if (cost === null) return 'cell-na-d';
     if (cost < 200) return 'cell-great';
     if (cost <= 275) return 'cell-good';
     if (cost <= 350) return 'cell-fair';
@@ -525,14 +217,10 @@ function renderDiagram() {
     document.getElementById('activeDiagramTitle').innerHTML = '&#128515; ' + c.n + ' <span style="color:#ffd60a">(' + c.y + ')</span>';
     document.getElementById('activeDiagramSub').innerHTML = 'Revenda Base 35k: €' + c.b35.toLocaleString('pt-PT') + ' &middot; Garantia Bateria em 2028: ' + (wm > 0 ? wm + 'm rest. (-' + pen + '€)' : 'Expirada (-' + pen + '€)');
 
-    // Header TH
     var thHtml = '<th>Preço Compra \\ Km</th>';
-    for (var ki = 0; ki < KM.length; ki++) {
-        thHtml += '<th>' + KM[ki] + 'k km</th>';
-    }
+    for (var ki = 0; ki < KM.length; ki++) { thHtml += '<th>' + KM[ki] + 'k km</th>'; }
     document.getElementById('diagramThRow').innerHTML = thHtml;
 
-    // Body TR
     var evalP = Number(document.getElementById('evalPrice').value);
     var evalK = Number(document.getElementById('evalKm').value);
 
@@ -545,14 +233,12 @@ function renderDiagram() {
             var r = aResale(c, k);
             var m = moVal(p, r);
             var qCls = getQualityClass(m);
-
             var isHigh = (p === evalP && k === evalK && c.id === selectedModelId);
             var highCls = isHigh ? 'highlighted' : '';
-
             if (m !== null) {
                 tbHtml += '<td><span class="d-cell ' + qCls + ' ' + highCls + '">' + m + '€</span></td>';
             } else {
-                tbHtml += '<td><span class="d-cell cell-na ' + highCls + '">&mdash;</span></td>';
+                tbHtml += '<td><span class="d-cell cell-na-d ' + highCls + '">&mdash;</span></td>';
             }
         }
         tbHtml += '</tr>';
@@ -571,43 +257,27 @@ window.runEvaluation = function() {
     var c = getCar(modelId);
     var price = Number(document.getElementById('evalPrice').value);
     var km = Number(document.getElementById('evalKm').value);
-
     var resale = aResale(c, km);
     var cost = moVal(price, resale);
 
     var vBox = document.getElementById('verdictBox');
-
     if (cost === null) {
         vBox.innerHTML = '<div><div style="font-size:12px;font-weight:700;color:#ff453a">⚠️ Oferta Irrealista / Incoerente</div><div style="font-size:10px;color:var(--text-muted)">O preço de compra (€' + price.toLocaleString('pt-PT') + ') é inferior ao valor de revenda futuro em 2028 (€' + resale.toLocaleString('pt-PT') + ').</div></div><div class="verdict-badge" style="background:rgba(255,69,58,0.2);color:#ff453a;border:1px solid #ff453a">N/A</div>';
     } else {
         var badgeBg, badgeColor, labelText, descText;
-
-        if (cost < 200) {
-            badgeBg = '#30d158'; badgeColor = '#000'; labelText = '🟢 EXCELENTE NEGÓCIO';
-            descText = 'Custo extremamente baixo de apenas €' + cost + '/mês! Oportunidade imperdível no mercado.';
-        } else if (cost <= 275) {
-            badgeBg = '#a3e635'; badgeColor = '#000'; labelText = '🟢 BOM NEGÓCIO';
-            descText = 'Custo mensal atrativo de €' + cost + '/mês. Compra muito sólida e recomendada.';
-        } else if (cost <= 350) {
-            badgeBg = '#ffd60a'; badgeColor = '#000'; labelText = '🟡 PREÇO RAZOÁVEL';
-            descText = 'Custo mensal justo dentro da média de mercado (€' + cost + '/mês).';
-        } else if (cost <= 450) {
-            badgeBg = '#ff9f0a'; badgeColor = '#000'; labelText = '🟠 PREÇO ELEVADO';
-            descText = 'Custo mensal de €' + cost + '/mês. Tente negociar o preço de compra para baixo.';
-        } else {
-            badgeBg = '#ff453a'; badgeColor = '#fff'; labelText = '🔴 MAU NEGÓCIO / EVITAR';
-            descText = 'Custo mensal muito alto de €' + cost + '/mês. Sobrepreço significativo.';
-        }
+        if (cost < 200) { badgeBg = '#30d158'; badgeColor = '#000'; labelText = '🟢 EXCELENTE NEGÓCIO'; descText = 'Custo extremamente baixo de apenas €' + cost + '/mês! Oportunidade imperdível no mercado.'; }
+        else if (cost <= 275) { badgeBg = '#a3e635'; badgeColor = '#000'; labelText = '🟢 BOM NEGÓCIO'; descText = 'Custo mensal atrativo de €' + cost + '/mês. Compra muito sólida e recomendada.'; }
+        else if (cost <= 350) { badgeBg = '#ffd60a'; badgeColor = '#000'; labelText = '🟡 PREÇO RAZOÁVEL'; descText = 'Custo mensal justo dentro da média de mercado (€' + cost + '/mês).'; }
+        else if (cost <= 450) { badgeBg = '#ff9f0a'; badgeColor = '#000'; labelText = '🟠 PREÇO ELEVADO'; descText = 'Custo mensal de €' + cost + '/mês. Tente negociar o preço de compra para baixo.'; }
+        else { badgeBg = '#ff453a'; badgeColor = '#fff'; labelText = '🔴 MAU NEGÓCIO / EVITAR'; descText = 'Custo mensal muito alto de €' + cost + '/mês. Sobrepreço significativo.'; }
 
         var h = '<div>';
         h += '<div style="font-size:12px;font-weight:700;color:#fff">' + c.n + ' (' + c.y + ') @ €' + price.toLocaleString('pt-PT') + ' &middot; ' + km.toLocaleString('pt-PT') + ' km</div>';
         h += '<div style="font-size:10px;color:var(--text-muted);margin-top:2px">' + descText + ' &middot; Revenda 2028: <b>€' + resale.toLocaleString('pt-PT') + '</b></div>';
         h += '</div>';
         h += '<div class="verdict-badge" style="background:' + badgeBg + ';color:' + badgeColor + '">' + labelText + ' &middot; €' + cost + '/mês</div>';
-
         vBox.innerHTML = h;
     }
-
     renderDiagram();
 };
 
@@ -617,6 +287,5 @@ runEvaluation();
 
 })();
 </script>
-
 </body>
 </html>

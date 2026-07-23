@@ -248,6 +248,47 @@ function col(v) {
 
 ---
 
+## 🔴 DÍVIDA TÉCNICA & PRÓXIMOS PASSOS
+
+### Prioridade Alta
+
+#### 1. Motor de Cálculo Partilhado (`engine.js`) - ✅ CONCLUÍDO
+> A lógica core foi centralizada em `engine.js`. Todos os 8 HTMLs foram refatorados para importar as variáveis e funções partilhadas.
+
+#### 2. CSS Partilhado (`styles.css`) - ✅ CONCLUÍDO
+> As classes globais e definições CSS foram movidas para `styles.css`. Todos os 8 HTMLs foram atualizados com `<link rel="stylesheet" href="styles.css">`.
+
+### Prioridade Média
+
+#### 3. Portal de Navegação (`index.html`) - ✅ CONCLUÍDO
+> Foi desenvolvido um `index.html` servindo como ponto de entrada que agrega todas as ferramentas e unifica a experiência do utilizador.
+
+#### 4. Completar `regras-calculo.md`
+O `regras-calculo.md` (fonte da verdade) **não documenta**:
+- A escada de penalização de garantia de bateria (`WS[]`)
+- Os parâmetros `ry`, `rm`, `wk` por modelo
+- Os parâmetros `step` e `jump` por modelo
+
+Esses dados só existem no HANDOFF e nos HTMLs. A fonte da verdade deveria ser autocontida.
+
+#### 5. Limpeza de Ficheiros Legacy
+- `matrizes-km-granular.html` e `matrizes-km-granular-v2.html` estão obsoletos (apenas 3 modelos). Remover ou mover para pasta `legacy/`.
+- `matrizes-consenso-final.md` já não é atualizado — considerar arquivar.
+
+### Prioridade Baixa
+
+#### 6. Expansão de Modelos
+Outros EVs populares em Portugal usados que poderiam ser adicionados:
+- **BYD Atto 3** (LFP, competitivo em preço)
+- **MG4** (muito popular, preço baixo)
+- **Volkswagen ID.3 / ID.4**
+- **Peugeot e-208 / e-2008**
+
+#### 7. Responsividade Mobile
+Verificar e melhorar a responsividade dos 8 HTMLs para consulta em telemóvel (útil ao ver carros pessoalmente).
+
+---
+
 ## 📋 CHECKLIST DE INTEGRIDADE (para o próximo agente)
 
 Se precisares de verificar que todos os HTMLs estão consistentes, corre este comando:

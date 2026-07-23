@@ -1,0 +1,435 @@
+/**
+ * styles.css — CSS Base Partilhado v4.0
+ * Estilos comuns a todos os dashboards de desvalorização.
+ * Cada HTML mantém um <style> local com estilos específicos da sua visualização.
+ */
+
+/* ============ CSS VARIABLES ============ */
+:root {
+  --bg: #06070a;
+  --card-bg: rgba(255, 255, 255, 0.03);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --text: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.45);
+  --accent: #30d158;
+}
+
+/* ============ RESET & BASE ============ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* ============ TYPOGRAPHY ============ */
+header { text-align: center; }
+
+h1 {
+  font-size: 22px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffffff 0%, #a1a1a1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 4px;
+}
+
+.sub {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+footer {
+  font-size: 9px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 12px;
+}
+
+/* ============ TOP BAR & NAVIGATION ============ */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1400px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.nav-links-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(48, 209, 88, 0.1);
+  border: 1px solid rgba(48, 209, 88, 0.2);
+  padding: 6px 12px;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  background: rgba(48, 209, 88, 0.2);
+  box-shadow: 0 0 12px rgba(48, 209, 88, 0.3);
+}
+
+/* ============ BUTTONS ============ */
+.btn-pill,
+.filter-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-pill:hover,
+.filter-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.btn-pill.active,
+.filter-btn.active {
+  background: var(--accent);
+  color: #000;
+  border-color: var(--accent);
+  font-weight: 700;
+  box-shadow: 0 0 12px rgba(48, 209, 88, 0.3);
+}
+
+/* ============ CONTROLS PANEL ============ */
+.controls-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  padding: 14px 18px;
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.control-row,
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.control-label,
+.filter-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  font-weight: 700;
+  min-width: 130px;
+}
+
+/* ============ FORM ELEMENTS ============ */
+select, input[type="number"] {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  outline: none;
+}
+
+select:focus, input[type="number"]:focus {
+  border-color: var(--accent);
+}
+
+/* ============ CARDS ============ */
+.glass-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(24px);
+  border-radius: 16px;
+  padding: 16px;
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* ============ TABLE BASE ============ */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9px;
+}
+
+th {
+  color: var(--text-muted);
+  padding: 6px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+th:first-child { text-align: left; }
+
+td {
+  padding: 5px 3px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-weight: 600;
+}
+
+/* ============ CELL STYLES ============ */
+.cell-pill {
+  display: inline-block;
+  padding: 3px 6px;
+  border-radius: 5px;
+  font-weight: 700;
+  font-size: 9px;
+  min-width: 38px;
+}
+
+.cell-na {
+  color: rgba(255, 255, 255, 0.2);
+  font-style: italic;
+  font-size: 9px;
+}
+
+/* ============ BRAND INDICATOR BADGES ============ */
+.model-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.ind-tesla {
+  background: rgba(255, 59, 48, 0.15);
+  border: 1px solid rgba(255, 59, 48, 0.3);
+  color: #ff453a;
+}
+.ind-tesla_lr {
+  background: rgba(255, 159, 10, 0.15);
+  border: 1px solid rgba(255, 159, 10, 0.3);
+  color: #ff9f0a;
+}
+.ind-ioniq {
+  background: rgba(50, 173, 230, 0.15);
+  border: 1px solid rgba(50, 173, 230, 0.3);
+  color: #64d2ff;
+}
+.ind-ioniq5_58 {
+  background: rgba(90, 200, 250, 0.15);
+  border: 1px solid rgba(90, 200, 250, 0.3);
+  color: #5ac8fa;
+}
+.ind-megane {
+  background: rgba(175, 82, 222, 0.15);
+  border: 1px solid rgba(175, 82, 222, 0.3);
+  color: #d070ff;
+}
+
+/* ============ BRAND DOTS (luminosos) ============ */
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.dot-tesla     { background: #ff3b30; box-shadow: 0 0 6px #ff3b30; }
+.dot-tesla_lr  { background: #ff9f0a; box-shadow: 0 0 6px #ff9f0a; }
+.dot-ioniq     { background: #32ade6; box-shadow: 0 0 6px #32ade6; }
+.dot-ioniq5_58 { background: #5ac8fa; box-shadow: 0 0 6px #5ac8fa; }
+.dot-megane    { background: #af52de; box-shadow: 0 0 6px #af52de; }
+
+/* ============ BRAND BADGE PILLS ============ */
+.badge-car,
+.brand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.b-tesla     { background: rgba(255, 69, 58, 0.15); color: #ff453a; border: 1px solid rgba(255, 69, 58, 0.3); }
+.b-tesla_lr  { background: rgba(255, 159, 10, 0.15); color: #ff9f0a; border: 1px solid rgba(255, 159, 10, 0.3); }
+.b-ioniq     { background: rgba(100, 210, 255, 0.15); color: #64d2ff; border: 1px solid rgba(100, 210, 255, 0.3); }
+.b-ioniq5_58 { background: rgba(90, 200, 250, 0.15); color: #5ac8fa; border: 1px solid rgba(90, 200, 250, 0.3); }
+.b-megane    { background: rgba(208, 112, 255, 0.15); color: #d070ff; border: 1px solid rgba(208, 112, 255, 0.3); }
+
+/* ============ BRAND BORDER TOP (for cards) ============ */
+.border-tesla     { border-top: 3px solid #ff3b30; }
+.border-tesla_lr  { border-top: 3px solid #ff9f0a; }
+.border-ioniq     { border-top: 3px solid #32ade6; }
+.border-ioniq5_58 { border-top: 3px solid #5ac8fa; }
+.border-megane    { border-top: 3px solid #af52de; }
+
+/* ============ BRAND TEXT COLORS ============ */
+.c-tesla     { color: #ff453a; }
+.c-tesla_lr  { color: #ff9f0a; }
+.c-ioniq     { color: #64d2ff; }
+.c-ioniq5_58 { color: #5ac8fa; }
+.c-megane    { color: #d070ff; }
+
+/* ============ WARRANTY BADGES ============ */
+.w-badge-pill {
+  font-size: 8px;
+  font-weight: 800;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+.w-exp { color: #ff453a; background: rgba(255,69,58,0.2);   border: 1px solid rgba(255,69,58,0.4); }
+.w-6m  { color: #ff3b30; background: rgba(255,59,48,0.18);  border: 1px solid rgba(255,59,48,0.35); }
+.w-12m { color: #ff9f0a; background: rgba(255,159,10,0.18); border: 1px solid rgba(255,159,10,0.35); }
+.w-18m { color: #ffd60a; background: rgba(255,214,10,0.18); border: 1px solid rgba(255,214,10,0.35); }
+.w-ok  { color: #30d158; background: rgba(48,209,88,0.15);  border: 1px solid rgba(48,209,88,0.3); }
+
+/* ============ YEAR BADGE ============ */
+.year-badge,
+.tag {
+  font-size: 9px;
+  font-weight: 800;
+  background: #ffd60a;
+  color: #000;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* ============ LFP BADGE ============ */
+.badge-lfp,
+.lfp {
+  font-size: 8px;
+  background: rgba(48, 209, 88, 0.15);
+  color: #30d158;
+  padding: 1px 4px;
+  border-radius: 3px;
+  margin-left: 4px;
+}
+
+/* ============ GARAGE UI & HIGHLIGHT ============ */
+.garage-section {
+  width: 100%;
+  max-width: 1200px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.garage-form-card {
+  background: linear-gradient(135deg, rgba(50, 173, 230, 0.08) 0%, rgba(0, 0, 0, 0.5) 100%);
+  border: 1px solid rgba(50, 173, 230, 0.3);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  padding: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 14px;
+}
+.garage-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+.garage-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(24px);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+}
+.garage-card-title {
+  font-size: 14px;
+  font-weight: 800;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.garage-card-details {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.garage-card-cost {
+  font-size: 24px;
+  font-weight: 900;
+  color: #30d158;
+  margin-top: 4px;
+}
+.btn-remove {
+  background: rgba(255, 69, 58, 0.15);
+  color: #ff453a;
+  border: 1px solid rgba(255, 69, 58, 0.3);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 9px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-remove:hover {
+  background: rgba(255, 69, 58, 0.3);
+}
+.btn-blue {
+  background: linear-gradient(135deg, #32ade6 0%, #007aff 100%);
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  height: 32px;
+  display: flex;
+  align-items: center;
+}
+
+/* CLASSE DE HIGHLIGHT MÚLTIPLO NA MEGA MATRIZ */
+.cell-garage-highlight {
+  position: relative;
+  z-index: 90;
+  border: 2px solid #32ade6 !important;
+  box-shadow: 0 0 20px rgba(50, 173, 230, 0.8), inset 0 0 10px rgba(50, 173, 230, 0.5) !important;
+  transform: scale(1.25) !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  animation: pulseBlue 2s infinite ease-in-out;
+}
+@keyframes pulseBlue {
+  0% { transform: scale(1.2); box-shadow: 0 0 15px rgba(50,173,230,0.6); }
+  50% { transform: scale(1.35); box-shadow: 0 0 25px rgba(50,173,230,0.9), 0 0 40px rgba(50,173,230,0.4); }
+  100% { transform: scale(1.2); box-shadow: 0 0 15px rgba(50,173,230,0.6); }
+}

@@ -1,8 +1,8 @@
 # Agent Handoff — Análise de Desvalorização de Veículos Elétricos
 
 > **Documento de Transição / Handoff do Projeto**  
-> **Última Atualização:** 22/Jul/2026 23:05 (Lisboa)  
-> **Versão do Modelo:** v4.0 (18 variantes)  
+> **Última Atualização:** 24/Jul/2026 12:40 (Lisboa)  
+> **Versão do Modelo:** v5.0 (47 variantes)  
 > **Repositório GitHub:** https://github.com/tetobot247/carros  
 > **Branch principal:** `main`
 

@@ -1,10 +1,7 @@
 /**
- * CarEngine v4.0 — Motor de Cálculo Partilhado
+ * CarEngine v5.0 — Motor de Cálculo Partilhado
  * Fonte da verdade para todos os dashboards de desvalorização.
- * 18 variantes · 5 plataformas · Agosto/2026 → Dezembro/2028
- *
- * NOTA: Anteriormente, este código estava duplicado inline em cada HTML.
- * Agora é carregado uma vez via <script src="engine.js"></script>.
+ * 43 variantes · 16 plataformas · Agosto/2026 → Dezembro/2028
  */
 (function() {
 'use strict';
@@ -24,7 +21,6 @@ var WS = [
     {m: 0,  p: 2500},     // 0-5 meses
     {m: -999, p: 3000}    // Expirada
 ];
-// Se carro é LFP e penalização > 0: penalização *= LFPR (50%)
 
 // ============ FAIXAS DE QUILOMETRAGEM (×1000 km) ============
 var KM = [35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115];
@@ -38,13 +34,15 @@ var MN = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez
 
 // ============ PREÇOS DE COMPRA REALISTAS POR ANO (Agosto/2026) ============
 var REALISTIC_PRICES = {
+    2020: 21000,
     2021: 24000,
     2022: 26000,
     2023: 29000,
-    2024: 33000
+    2024: 33000,
+    2025: 37000
 };
 
-// ============ 18 VARIANTES DE VEÍCULOS ============
+// ============ 43 VARIANTES DE VEÍCULOS ============
 var CARS = [
     // --- TESLA MODEL 3 SR / RWD (LFP) ---
     {
@@ -90,7 +88,7 @@ var CARS = [
         s: 'Highland Long Range com autonomia m\u00E1xima de ~678 km WLTP e tra\u00E7\u00E3o integral. 39m de garantia restantes.'
     },
 
-    // --- IONIQ 5 58 kWh (STANDARD RANGE) ---
+    // --- IONIQ 5 58 kWh & 63 kWh (STANDARD RANGE / FACELIFT) ---
     {
         id: 'ioniq5_58_2021', n: 'IONIQ 5 58 kWh Standard', y: 2021, brand: 'ioniq5_58', lfp: false,
         ry: 2021, rm: 11, wy: 8, wk: 160000, b35: 13500, step: 450, jump: 500,
@@ -100,6 +98,21 @@ var CARS = [
         id: 'ioniq5_58_2022', n: 'IONIQ 5 58 kWh Standard', y: 2022, brand: 'ioniq5_58', lfp: false,
         ry: 2022, rm: 7, wy: 8, wk: 160000, b35: 15000, step: 450, jump: 500,
         s: 'Bateria 58 kWh de entrada. 19m de garantia de bateria restantes em 2028 (-\u20AC750).'
+    },
+    {
+        id: 'ioniq5_58_2023', n: 'IONIQ 5 58 kWh Standard', y: 2023, brand: 'ioniq5_58', lfp: false,
+        ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 17000, step: 450, jump: 500,
+        s: 'Vers\u00E3o 58 kWh ano 2023. 30m de garantia de bateria restante em 2028.'
+    },
+    {
+        id: 'ioniq5_63_2024', n: 'IONIQ 5 63 kWh Facelift', y: 2024, brand: 'ioniq5_63', lfp: false,
+        ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 20000, step: 450, jump: 500,
+        s: 'Bateria atualizada de 63 kWh em 2024. 39m de garantia de bateria restante.'
+    },
+    {
+        id: 'ioniq5_63_2025', n: 'IONIQ 5 63 kWh Facelift', y: 2025, brand: 'ioniq5_63', lfp: false,
+        ry: 2025, rm: 3, wy: 8, wk: 160000, b35: 23500, step: 450, jump: 500,
+        s: 'Ano de fabrico 2025 com baixa deprecia\u00E7\u00E3o e 51m de garantia restante.'
     },
 
     // --- IONIQ 5 LONG RANGE ---
@@ -122,6 +135,144 @@ var CARS = [
         id: 'ioniq_2024', n: 'IONIQ 5 84 kWh Facelift', y: 2024, brand: 'ioniq5', lfp: false,
         ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 23200, step: 500, jump: 600,
         s: 'Facelift 2024 com bateria de 84 kWh e limpa-para-brisas traseiro. 39m de garantia de bateria restante em 2028.'
+    },
+
+    // --- KIA EV6 ---
+    {
+        id: 'ev6_58_2021', n: 'Kia EV6 58 kWh Air', y: 2021, brand: 'ev6_58', lfp: false,
+        ry: 2021, rm: 10, wy: 8, wk: 160000, b35: 14000, step: 450, jump: 500,
+        s: 'Plataforma E-GMP 800V com bateria de 58 kWh. 10m de garantia restantes em 2028 (-\u20AC2.000).'
+    },
+    {
+        id: 'ev6_58_2022', n: 'Kia EV6 58 kWh Air', y: 2022, brand: 'ev6_58', lfp: false,
+        ry: 2022, rm: 7, wy: 8, wk: 160000, b35: 15500, step: 450, jump: 500,
+        s: 'Carregamento ultrarr\u00E1pido 800V. 19m de garantia restantes em 2028 (-\u20AC750).'
+    },
+    {
+        id: 'ev6_58_2023', n: 'Kia EV6 58 kWh Air', y: 2023, brand: 'ev6_58', lfp: false,
+        ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 17500, step: 450, jump: 500,
+        s: 'Bateria 58 kWh com 30m de garantia de bateria restante em 2028.'
+    },
+    {
+        id: 'ev6_63_2024', n: 'Kia EV6 63 kWh Facelift', y: 2024, brand: 'ev6_63', lfp: false,
+        ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 20500, step: 450, jump: 500,
+        s: 'Facelift 2024 com bateria 63 kWh. 39m de garantia de bateria restante.'
+    },
+    {
+        id: 'ev6_lr_2021', n: 'Kia EV6 LR 77.4 kWh', y: 2021, brand: 'ev6_lr', lfp: false,
+        ry: 2021, rm: 10, wy: 8, wk: 160000, b35: 17000, step: 500, jump: 500,
+        s: 'Autonomia at\u00E9 528 km WLTP com bateria 77.4 kWh. 10m de garantia em 2028 (-\u20AC2.000).'
+    },
+    {
+        id: 'ev6_lr_2022', n: 'Kia EV6 LR 77.4 kWh', y: 2022, brand: 'ev6_lr', lfp: false,
+        ry: 2022, rm: 7, wy: 8, wk: 160000, b35: 18800, step: 500, jump: 500,
+        s: 'Vers\u00E3o Long Range 77.4 kWh. 19m de garantia restantes (-\u20AC750).'
+    },
+    {
+        id: 'ev6_lr_2023', n: 'Kia EV6 LR 77.4 kWh', y: 2023, brand: 'ev6_lr', lfp: false,
+        ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 21200, step: 500, jump: 500,
+        s: 'Excelente autonomia e 30m de garantia de bateria restante em 2028.'
+    },
+
+    // --- BMW I3 & I3S ---
+    {
+        id: 'bmw_i3_2020', n: 'BMW i3 120Ah', y: 2020, brand: 'bmw_i3', lfp: false,
+        ry: 2020, rm: 12, wy: 8, wk: 160000, b35: 14000, step: 400, jump: 400,
+        s: 'Bateria 120Ah (42.2 kWh). Chassis de fibra de carbono. 0m de garantia em 2028 (-\u20AC2.500).'
+    },
+    {
+        id: 'bmw_i3_2021', n: 'BMW i3 120Ah', y: 2021, brand: 'bmw_i3', lfp: false,
+        ry: 2021, rm: 12, wy: 8, wk: 160000, b35: 15200, step: 400, jump: 400,
+        s: 'Bateria 120Ah com 12m de garantia de bateria restantes em Dez/2028 (-\u20AC1.500).'
+    },
+    {
+        id: 'bmw_i3_2022', n: 'BMW i3 120Ah', y: 2022, brand: 'bmw_i3', lfp: false,
+        ry: 2022, rm: 7, wy: 8, wk: 160000, b35: 16800, step: 400, jump: 400,
+        s: '\u00DAltimo ano de produ\u00E7\u00E3o da s\u00E9rie i3. 19m de garantia restantes (-\u20AC750).'
+    },
+    {
+        id: 'bmw_i3s_2020', n: 'BMW i3s 120Ah', y: 2020, brand: 'bmw_i3s', lfp: false,
+        ry: 2020, rm: 12, wy: 8, wk: 160000, b35: 15200, step: 400, jump: 400,
+        s: 'Vers\u00E3o Sport 184cv com vias alargadas. 0m de garantia em 2028 (-\u20AC2.500).'
+    },
+    {
+        id: 'bmw_i3s_2021', n: 'BMW i3s 120Ah', y: 2021, brand: 'bmw_i3s', lfp: false,
+        ry: 2021, rm: 12, wy: 8, wk: 160000, b35: 16500, step: 400, jump: 400,
+        s: 'Vers\u00E3o i3s desportiva com 12m de garantia restantes em Dez/2028 (-\u20AC1.500).'
+    },
+    {
+        id: 'bmw_i3s_2022', n: 'BMW i3s 120Ah', y: 2022, brand: 'bmw_i3s', lfp: false,
+        ry: 2022, rm: 7, wy: 8, wk: 160000, b35: 18200, step: 400, jump: 400,
+        s: 'Edi\u00E7\u00E3o final do i3s com 19m de garantia de bateria restante (-\u20AC750).'
+    },
+
+    // --- POLESTAR 2 ---
+    {
+        id: 'polestar2_sr_2021', n: 'Polestar 2 Standard 69 kWh', y: 2021, brand: 'polestar2_sr', lfp: false,
+        ry: 2021, rm: 9, wy: 8, wk: 160000, b35: 17500, step: 450, jump: 500,
+        s: 'Design escandinavo premium com ecr\u00E3 Android Automotive. 9m de garantia em 2028 (-\u20AC2.000).'
+    },
+    {
+        id: 'polestar2_sr_2022', n: 'Polestar 2 Standard 69 kWh', y: 2022, brand: 'polestar2_sr', lfp: false,
+        ry: 2022, rm: 6, wy: 8, wk: 160000, b35: 19200, step: 450, jump: 500,
+        s: 'Single Motor FWD 69 kWh. 18m de garantia de bateria restante (-\u20AC750).'
+    },
+    {
+        id: 'polestar2_sr_2023', n: 'Polestar 2 Standard 69 kWh', y: 2023, brand: 'polestar2_sr', lfp: false,
+        ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 21500, step: 450, jump: 500,
+        s: 'Modelo 2023 com 30m de garantia de bateria restante em 2028.'
+    },
+    {
+        id: 'polestar2_lr_2021', n: 'Polestar 2 LR Single 78 kWh', y: 2021, brand: 'polestar2_lr', lfp: false,
+        ry: 2021, rm: 9, wy: 8, wk: 160000, b35: 19500, step: 500, jump: 500,
+        s: 'Bateria 78 kWh com excelente autonomia rodovi\u00E1ria. 9m de garantia em 2028 (-\u20AC2.000).'
+    },
+    {
+        id: 'polestar2_lr_2022', n: 'Polestar 2 LR Single 78 kWh', y: 2022, brand: 'polestar2_lr', lfp: false,
+        ry: 2022, rm: 6, wy: 8, wk: 160000, b35: 21500, step: 500, jump: 500,
+        s: 'Long Range Single Motor com 18m de garantia de bateria restante (-\u20AC750).'
+    },
+    {
+        id: 'polestar2_lr_2023', n: 'Polestar 2 LR Single 78 kWh', y: 2023, brand: 'polestar2_lr', lfp: false,
+        ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 24000, step: 500, jump: 500,
+        s: 'Autonomia elevada ~540 km WLTP. 30m de garantia restantes.'
+    },
+
+    // --- CUPRA BORN ---
+    {
+        id: 'cupra_born_58_2021', n: 'Cupra Born 58 kWh', y: 2021, brand: 'cupra_born_58', lfp: false,
+        ry: 2021, rm: 11, wy: 8, wk: 160000, b35: 14800, step: 450, jump: 500,
+        s: 'Plataforma MEB desportiva de 204cv. 11m de garantia de bateria restantes em 2028 (-\u20AC2.000).'
+    },
+    {
+        id: 'cupra_born_58_2022', n: 'Cupra Born 58 kWh', y: 2022, brand: 'cupra_born_58', lfp: false,
+        ry: 2022, rm: 8, wy: 8, wk: 160000, b35: 16200, step: 450, jump: 500,
+        s: 'Hatchback el\u00E9trico din\u00E2mico de 58 kWh. 20m de garantia restantes.'
+    },
+    {
+        id: 'cupra_born_eboost_2021', n: 'Cupra Born 58 kWh e-Boost', y: 2021, brand: 'cupra_born_eboost', lfp: false,
+        ry: 2021, rm: 11, wy: 8, wk: 160000, b35: 15800, step: 450, jump: 500,
+        s: 'Pacote e-Boost com 231cv (170kW). 11m de garantia de bateria restantes em 2028 (-\u20AC2.000).'
+    },
+    {
+        id: 'cupra_born_eboost_2022', n: 'Cupra Born 58 kWh e-Boost', y: 2022, brand: 'cupra_born_eboost', lfp: false,
+        ry: 2022, rm: 8, wy: 8, wk: 160000, b35: 17200, step: 450, jump: 500,
+        s: 'Performance de 231cv com 20m de garantia de bateria restante.'
+    },
+    {
+        id: 'cupra_born_77_2022', n: 'Cupra Born LR 77 kWh', y: 2022, brand: 'cupra_born_77', lfp: false,
+        ry: 2022, rm: 8, wy: 8, wk: 160000, b35: 18500, step: 450, jump: 500,
+        s: 'Bateria Long Range 77 kWh (configura\u00E7\u00E3o 4 lugares). 20m de garantia restantes.'
+    },
+    {
+        id: 'cupra_born_77_2023', n: 'Cupra Born LR 77 kWh', y: 2023, brand: 'cupra_born_77', lfp: false,
+        ry: 2023, rm: 6, wy: 8, wk: 160000, b35: 20800, step: 450, jump: 500,
+        s: 'Autonomia at\u00E9 548 km WLTP com 30m de garantia de bateria restante em 2028.'
+    },
+    {
+        id: 'cupra_born_77_2024', n: 'Cupra Born LR 77 kWh', y: 2024, brand: 'cupra_born_77', lfp: false,
+        ry: 2024, rm: 3, wy: 8, wk: 160000, b35: 23500, step: 450, jump: 500,
+        s: 'Vers\u00E3o recente de 77 kWh com 39m de garantia de bateria restante.'
     },
 
     // --- MEGANE E-TECH ---
@@ -153,6 +304,17 @@ var BRANDS = [
     { id: 'tesla_lr', name: 'Tesla Model 3 Long Range (NMC)', color: '#ff9f0a', cars: [] },
     { id: 'ioniq5', name: 'Hyundai IONIQ 5 (Long Range)', color: '#64d2ff', cars: [] },
     { id: 'ioniq5_58', name: 'Hyundai IONIQ 5 58 kWh (Standard)', color: '#5ac8fa', cars: [] },
+    { id: 'ioniq5_63', name: 'Hyundai IONIQ 5 63 kWh (Facelift)', color: '#38bdf8', cars: [] },
+    { id: 'ev6_58', name: 'Kia EV6 58 kWh Air', color: '#30d158', cars: [] },
+    { id: 'ev6_63', name: 'Kia EV6 63 kWh Facelift', color: '#34d399', cars: [] },
+    { id: 'ev6_lr', name: 'Kia EV6 Long Range 77.4 kWh', color: '#00c7be', cars: [] },
+    { id: 'bmw_i3', name: 'BMW i3 120Ah', color: '#007aff', cars: [] },
+    { id: 'bmw_i3s', name: 'BMW i3s 120Ah (Sport)', color: '#58a6ff', cars: [] },
+    { id: 'polestar2_sr', name: 'Polestar 2 Standard Range 69 kWh', color: '#ffd60a', cars: [] },
+    { id: 'polestar2_lr', name: 'Polestar 2 Long Range SM 78 kWh', color: '#ffcc00', cars: [] },
+    { id: 'cupra_born_58', name: 'Cupra Born 58 kWh', color: '#ff9500', cars: [] },
+    { id: 'cupra_born_eboost', name: 'Cupra Born 58 kWh e-Boost 170kW', color: '#ff7a00', cars: [] },
+    { id: 'cupra_born_77', name: 'Cupra Born Long Range 77 kWh', color: '#e58e26', cars: [] },
     { id: 'megane', name: 'Renault Megane E-Tech EV60', color: '#d070ff', cars: [] }
 ];
 
@@ -163,12 +325,46 @@ BRANDS.forEach(function(b) {
 
 // ============ CORES POR BRAND (para rendering) ============
 var BRAND_COLORS = {
-    tesla:     { bg: 'rgba(255,69,58,0.25)',  border: 'rgba(255,69,58,0.5)',  text: '#ff453a', fill: '#ff453a' },
-    tesla_lr:  { bg: 'rgba(255,159,10,0.25)', border: 'rgba(255,159,10,0.5)', text: '#ff9f0a', fill: '#ff9f0a' },
-    ioniq5:    { bg: 'rgba(100,210,255,0.25)', border: 'rgba(100,210,255,0.5)', text: '#64d2ff', fill: '#64d2ff' },
-    ioniq5_58: { bg: 'rgba(90,200,250,0.25)',  border: 'rgba(90,200,250,0.5)',  text: '#5ac8fa', fill: '#5ac8fa' },
-    megane:    { bg: 'rgba(208,112,255,0.25)', border: 'rgba(208,112,255,0.5)', text: '#d070ff', fill: '#d070ff' }
+    tesla:              { bg: 'rgba(255,69,58,0.25)',  border: 'rgba(255,69,58,0.5)',  text: '#ff453a', fill: '#ff453a' },
+    tesla_lr:           { bg: 'rgba(255,159,10,0.25)', border: 'rgba(255,159,10,0.5)', text: '#ff9f0a', fill: '#ff9f0a' },
+    ioniq5:             { bg: 'rgba(100,210,255,0.25)', border: 'rgba(100,210,255,0.5)', text: '#64d2ff', fill: '#64d2ff' },
+    ioniq5_58:          { bg: 'rgba(90,200,250,0.25)',  border: 'rgba(90,200,250,0.5)',  text: '#5ac8fa', fill: '#5ac8fa' },
+    ioniq5_63:          { bg: 'rgba(56,189,248,0.25)',  border: 'rgba(56,189,248,0.5)',  text: '#38bdf8', fill: '#38bdf8' },
+    ev6_58:             { bg: 'rgba(48,209,88,0.25)',   border: 'rgba(48,209,88,0.5)',   text: '#30d158', fill: '#30d158' },
+    ev6_63:             { bg: 'rgba(52,211,153,0.25)',  border: 'rgba(52,211,153,0.5)',  text: '#34d399', fill: '#34d399' },
+    ev6_lr:             { bg: 'rgba(0,199,190,0.25)',   border: 'rgba(0,199,190,0.5)',   text: '#00c7be', fill: '#00c7be' },
+    bmw_i3:             { bg: 'rgba(0,122,255,0.25)',   border: 'rgba(0,122,255,0.5)',   text: '#007aff', fill: '#007aff' },
+    bmw_i3s:            { bg: 'rgba(88,166,255,0.25)',  border: 'rgba(88,166,255,0.5)',  text: '#58a6ff', fill: '#58a6ff' },
+    polestar2_sr:       { bg: 'rgba(255,214,10,0.25)',  border: 'rgba(255,214,10,0.5)',  text: '#ffd60a', fill: '#ffd60a' },
+    polestar2_lr:       { bg: 'rgba(255,204,0,0.25)',   border: 'rgba(255,204,0,0.5)',   text: '#ffcc00', fill: '#ffcc00' },
+    cupra_born_58:      { bg: 'rgba(255,149,0,0.25)',   border: 'rgba(255,149,0,0.5)',   text: '#ff9500', fill: '#ff9500' },
+    cupra_born_eboost:  { bg: 'rgba(255,122,0,0.25)',   border: 'rgba(255,122,0,0.5)',   text: '#ff7a00', fill: '#ff7a00' },
+    cupra_born_77:      { bg: 'rgba(229,142,38,0.25)',  border: 'rgba(229,142,38,0.5)',  text: '#e58e26', fill: '#e58e26' },
+    megane:             { bg: 'rgba(208,112,255,0.25)', border: 'rgba(208,112,255,0.5)', text: '#d070ff', fill: '#d070ff' }
 };
+
+// ============ FUNÇÕES AUXILIARES DE IMAGEM E MARCA ============
+function getCarImg(brand) {
+    if (brand === 'tesla' || brand === 'tesla_lr') return 'img/cars/tesla_model_3.png';
+    if (brand === 'ioniq5' || brand === 'ioniq5_58' || brand === 'ioniq5_63') return 'img/cars/hyundai_ioniq_5.png';
+    if (brand === 'megane') return 'img/cars/renault_megane_etech.png';
+    if (brand === 'ev6_58' || brand === 'ev6_63' || brand === 'ev6_lr') return 'img/cars/kia_ev6.png';
+    if (brand === 'bmw_i3' || brand === 'bmw_i3s') return 'img/cars/bmw_i3.png';
+    if (brand === 'polestar2_sr' || brand === 'polestar2_lr') return 'img/cars/polestar_2.png';
+    if (brand === 'cupra_born_58' || brand === 'cupra_born_eboost' || brand === 'cupra_born_77') return 'img/cars/cupra_born.png';
+    return 'img/cars/tesla_model_3.png';
+}
+
+function getBrandName(brand) {
+    if (brand === 'tesla' || brand === 'tesla_lr') return 'Tesla';
+    if (brand === 'ioniq5' || brand === 'ioniq5_58' || brand === 'ioniq5_63') return 'Hyundai';
+    if (brand === 'megane') return 'Renault';
+    if (brand === 'ev6_58' || brand === 'ev6_63' || brand === 'ev6_lr') return 'Kia';
+    if (brand === 'bmw_i3' || brand === 'bmw_i3s') return 'BMW';
+    if (brand === 'polestar2_sr' || brand === 'polestar2_lr') return 'Polestar';
+    if (brand === 'cupra_born_58' || brand === 'cupra_born_eboost' || brand === 'cupra_born_77') return 'Cupra';
+    return 'EV';
+}
 
 // ============ FUNÇÕES DE CÁLCULO ============
 
@@ -311,7 +507,7 @@ window.CarEngine = {
     CARS: CARS, BRANDS: BRANDS,
     REALISTIC_PRICES: REALISTIC_PRICES,
     BRAND_COLORS: BRAND_COLORS,
-    // Funções de cálculo
+    // Funções de cálculo e auxiliares
     wMonths: wMonths,
     wPenalty: wPenalty,
     getBaseResale: getBaseResale,
@@ -323,7 +519,9 @@ window.CarEngine = {
     wLabel: wLabel,
     getEffectiveWarranty: getEffectiveWarranty,
     getWarrantyBadge: getWarrantyBadge,
-    getCar: getCar
+    getCar: getCar,
+    getCarImg: getCarImg,
+    getBrandName: getBrandName
 };
 
 })();

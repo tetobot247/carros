@@ -226,31 +226,23 @@ td {
   border-radius: 6px;
 }
 
-.ind-tesla {
-  background: rgba(255, 59, 48, 0.15);
-  border: 1px solid rgba(255, 59, 48, 0.3);
-  color: #ff453a;
-}
-.ind-tesla_lr {
-  background: rgba(255, 159, 10, 0.15);
-  border: 1px solid rgba(255, 159, 10, 0.3);
-  color: #ff9f0a;
-}
-.ind-ioniq {
-  background: rgba(50, 173, 230, 0.15);
-  border: 1px solid rgba(50, 173, 230, 0.3);
-  color: #64d2ff;
-}
-.ind-ioniq5_58 {
-  background: rgba(90, 200, 250, 0.15);
-  border: 1px solid rgba(90, 200, 250, 0.3);
-  color: #5ac8fa;
-}
-.ind-megane {
-  background: rgba(175, 82, 222, 0.15);
-  border: 1px solid rgba(175, 82, 222, 0.3);
-  color: #d070ff;
-}
+.ind-tesla { background: rgba(255, 59, 48, 0.15); border: 1px solid rgba(255, 59, 48, 0.3); color: #ff453a; }
+.ind-tesla_lr { background: rgba(255, 159, 10, 0.15); border: 1px solid rgba(255, 159, 10, 0.3); color: #ff9f0a; }
+.ind-ioniq { background: rgba(50, 173, 230, 0.15); border: 1px solid rgba(50, 173, 230, 0.3); color: #64d2ff; }
+.ind-ioniq5 { background: rgba(50, 173, 230, 0.15); border: 1px solid rgba(50, 173, 230, 0.3); color: #64d2ff; }
+.ind-ioniq5_58 { background: rgba(90, 200, 250, 0.15); border: 1px solid rgba(90, 200, 250, 0.3); color: #5ac8fa; }
+.ind-ioniq5_63 { background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); color: #38bdf8; }
+.ind-ev6_58 { background: rgba(48, 209, 88, 0.15); border: 1px solid rgba(48, 209, 88, 0.3); color: #30d158; }
+.ind-ev6_63 { background: rgba(52, 211, 153, 0.15); border: 1px solid rgba(52, 211, 153, 0.3); color: #34d399; }
+.ind-ev6_lr { background: rgba(0, 199, 190, 0.15); border: 1px solid rgba(0, 199, 190, 0.3); color: #00c7be; }
+.ind-bmw_i3 { background: rgba(0, 122, 255, 0.15); border: 1px solid rgba(0, 122, 255, 0.3); color: #007aff; }
+.ind-bmw_i3s { background: rgba(88, 166, 255, 0.15); border: 1px solid rgba(88, 166, 255, 0.3); color: #58a6ff; }
+.ind-polestar2_sr { background: rgba(255, 214, 10, 0.15); border: 1px solid rgba(255, 214, 10, 0.3); color: #ffd60a; }
+.ind-polestar2_lr { background: rgba(255, 204, 0, 0.15); border: 1px solid rgba(255, 204, 0, 0.3); color: #ffcc00; }
+.ind-cupra_born_58 { background: rgba(255, 149, 0, 0.15); border: 1px solid rgba(255, 149, 0, 0.3); color: #ff9500; }
+.ind-cupra_born_eboost { background: rgba(255, 122, 0, 0.15); border: 1px solid rgba(255, 122, 0, 0.3); color: #ff7a00; }
+.ind-cupra_born_77 { background: rgba(229, 142, 38, 0.15); border: 1px solid rgba(229, 142, 38, 0.3); color: #e58e26; }
+.ind-megane { background: rgba(175, 82, 222, 0.15); border: 1px solid rgba(175, 82, 222, 0.3); color: #d070ff; }
 
 /* ============ BRAND DOTS (luminosos) ============ */
 .dot {
@@ -259,11 +251,23 @@ td {
   border-radius: 50%;
   display: inline-block;
 }
-.dot-tesla     { background: #ff3b30; box-shadow: 0 0 6px #ff3b30; }
-.dot-tesla_lr  { background: #ff9f0a; box-shadow: 0 0 6px #ff9f0a; }
-.dot-ioniq     { background: #32ade6; box-shadow: 0 0 6px #32ade6; }
-.dot-ioniq5_58 { background: #5ac8fa; box-shadow: 0 0 6px #5ac8fa; }
-.dot-megane    { background: #af52de; box-shadow: 0 0 6px #af52de; }
+.dot-tesla             { background: #ff3b30; box-shadow: 0 0 6px #ff3b30; }
+.dot-tesla_lr          { background: #ff9f0a; box-shadow: 0 0 6px #ff9f0a; }
+.dot-ioniq             { background: #32ade6; box-shadow: 0 0 6px #32ade6; }
+.dot-ioniq5            { background: #32ade6; box-shadow: 0 0 6px #32ade6; }
+.dot-ioniq5_58         { background: #5ac8fa; box-shadow: 0 0 6px #5ac8fa; }
+.dot-ioniq5_63         { background: #38bdf8; box-shadow: 0 0 6px #38bdf8; }
+.dot-ev6_58            { background: #30d158; box-shadow: 0 0 6px #30d158; }
+.dot-ev6_63            { background: #34d399; box-shadow: 0 0 6px #34d399; }
+.dot-ev6_lr            { background: #00c7be; box-shadow: 0 0 6px #00c7be; }
+.dot-bmw_i3            { background: #007aff; box-shadow: 0 0 6px #007aff; }
+.dot-bmw_i3s           { background: #58a6ff; box-shadow: 0 0 6px #58a6ff; }
+.dot-polestar2_sr      { background: #ffd60a; box-shadow: 0 0 6px #ffd60a; }
+.dot-polestar2_lr      { background: #ffcc00; box-shadow: 0 0 6px #ffcc00; }
+.dot-cupra_born_58     { background: #ff9500; box-shadow: 0 0 6px #ff9500; }
+.dot-cupra_born_eboost { background: #ff7a00; box-shadow: 0 0 6px #ff7a00; }
+.dot-cupra_born_77     { background: #e58e26; box-shadow: 0 0 6px #e58e26; }
+.dot-megane            { background: #af52de; box-shadow: 0 0 6px #af52de; }
 
 /* ============ BRAND BADGE PILLS ============ */
 .badge-car,
@@ -277,25 +281,61 @@ td {
   border-radius: 4px;
   white-space: nowrap;
 }
-.b-tesla     { background: rgba(255, 69, 58, 0.15); color: #ff453a; border: 1px solid rgba(255, 69, 58, 0.3); }
-.b-tesla_lr  { background: rgba(255, 159, 10, 0.15); color: #ff9f0a; border: 1px solid rgba(255, 159, 10, 0.3); }
-.b-ioniq     { background: rgba(100, 210, 255, 0.15); color: #64d2ff; border: 1px solid rgba(100, 210, 255, 0.3); }
-.b-ioniq5_58 { background: rgba(90, 200, 250, 0.15); color: #5ac8fa; border: 1px solid rgba(90, 200, 250, 0.3); }
-.b-megane    { background: rgba(208, 112, 255, 0.15); color: #d070ff; border: 1px solid rgba(208, 112, 255, 0.3); }
+.b-tesla             { background: rgba(255, 69, 58, 0.15); color: #ff453a; border: 1px solid rgba(255, 69, 58, 0.3); }
+.b-tesla_lr          { background: rgba(255, 159, 10, 0.15); color: #ff9f0a; border: 1px solid rgba(255, 159, 10, 0.3); }
+.b-ioniq             { background: rgba(100, 210, 255, 0.15); color: #64d2ff; border: 1px solid rgba(100, 210, 255, 0.3); }
+.b-ioniq5            { background: rgba(100, 210, 255, 0.15); color: #64d2ff; border: 1px solid rgba(100, 210, 255, 0.3); }
+.b-ioniq5_58         { background: rgba(90, 200, 250, 0.15); color: #5ac8fa; border: 1px solid rgba(90, 200, 250, 0.3); }
+.b-ioniq5_63         { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+.b-ev6_58            { background: rgba(48, 209, 88, 0.15); color: #30d158; border: 1px solid rgba(48, 209, 88, 0.3); }
+.b-ev6_63            { background: rgba(52, 211, 153, 0.15); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.3); }
+.b-ev6_lr            { background: rgba(0, 199, 190, 0.15); color: #00c7be; border: 1px solid rgba(0, 199, 190, 0.3); }
+.b-bmw_i3            { background: rgba(0, 122, 255, 0.15); color: #007aff; border: 1px solid rgba(0, 122, 255, 0.3); }
+.b-bmw_i3s           { background: rgba(88, 166, 255, 0.15); color: #58a6ff; border: 1px solid rgba(88, 166, 255, 0.3); }
+.b-polestar2_sr      { background: rgba(255, 214, 10, 0.15); color: #ffd60a; border: 1px solid rgba(255, 214, 10, 0.3); }
+.b-polestar2_lr      { background: rgba(255, 204, 0, 0.15); color: #ffcc00; border: 1px solid rgba(255, 204, 0, 0.3); }
+.b-cupra_born_58     { background: rgba(255, 149, 0, 0.15); color: #ff9500; border: 1px solid rgba(255, 149, 0, 0.3); }
+.b-cupra_born_eboost { background: rgba(255, 122, 0, 0.15); color: #ff7a00; border: 1px solid rgba(255, 122, 0, 0.3); }
+.b-cupra_born_77     { background: rgba(229, 142, 38, 0.15); color: #e58e26; border: 1px solid rgba(229, 142, 38, 0.3); }
+.b-megane            { background: rgba(208, 112, 255, 0.15); color: #d070ff; border: 1px solid rgba(208, 112, 255, 0.3); }
 
 /* ============ BRAND BORDER TOP (for cards) ============ */
-.border-tesla     { border-top: 3px solid #ff3b30; }
-.border-tesla_lr  { border-top: 3px solid #ff9f0a; }
-.border-ioniq     { border-top: 3px solid #32ade6; }
-.border-ioniq5_58 { border-top: 3px solid #5ac8fa; }
-.border-megane    { border-top: 3px solid #af52de; }
+.border-tesla             { border-top: 3px solid #ff3b30; }
+.border-tesla_lr          { border-top: 3px solid #ff9f0a; }
+.border-ioniq             { border-top: 3px solid #32ade6; }
+.border-ioniq5            { border-top: 3px solid #32ade6; }
+.border-ioniq5_58         { border-top: 3px solid #5ac8fa; }
+.border-ioniq5_63         { border-top: 3px solid #38bdf8; }
+.border-ev6_58            { border-top: 3px solid #30d158; }
+.border-ev6_63            { border-top: 3px solid #34d399; }
+.border-ev6_lr            { border-top: 3px solid #00c7be; }
+.border-bmw_i3            { border-top: 3px solid #007aff; }
+.border-bmw_i3s           { border-top: 3px solid #58a6ff; }
+.border-polestar2_sr      { border-top: 3px solid #ffd60a; }
+.border-polestar2_lr      { border-top: 3px solid #ffcc00; }
+.border-cupra_born_58     { border-top: 3px solid #ff9500; }
+.border-cupra_born_eboost { border-top: 3px solid #ff7a00; }
+.border-cupra_born_77     { border-top: 3px solid #e58e26; }
+.border-megane            { border-top: 3px solid #af52de; }
 
 /* ============ BRAND TEXT COLORS ============ */
-.c-tesla     { color: #ff453a; }
-.c-tesla_lr  { color: #ff9f0a; }
-.c-ioniq     { color: #64d2ff; }
-.c-ioniq5_58 { color: #5ac8fa; }
-.c-megane    { color: #d070ff; }
+.c-tesla             { color: #ff453a; }
+.c-tesla_lr          { color: #ff9f0a; }
+.c-ioniq             { color: #64d2ff; }
+.c-ioniq5            { color: #64d2ff; }
+.c-ioniq5_58         { color: #5ac8fa; }
+.c-ioniq5_63         { color: #38bdf8; }
+.c-ev6_58            { color: #30d158; }
+.c-ev6_63            { color: #34d399; }
+.c-ev6_lr            { color: #00c7be; }
+.c-bmw_i3            { color: #007aff; }
+.c-bmw_i3s           { color: #58a6ff; }
+.c-polestar2_sr      { color: #ffd60a; }
+.c-polestar2_lr      { color: #ffcc00; }
+.c-cupra_born_58     { color: #ff9500; }
+.c-cupra_born_eboost { color: #ff7a00; }
+.c-cupra_born_77     { color: #e58e26; }
+.c-megane            { color: #d070ff; }
 
 /* ============ WARRANTY BADGES ============ */
 .w-badge-pill {

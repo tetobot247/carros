@@ -104,11 +104,13 @@ td:first-child {
 
   <div class="control-row">
     <span class="control-label">Filtrar por Ano:</span>
-    <button class="btn-pill active" onclick="setYearFilter('all', this)">Todos os Anos (2021-2024)</button>
+    <button class="btn-pill active" onclick="setYearFilter('all', this)">Todos os Anos (2020-2025)</button>
+    <button class="btn-pill" onclick="setYearFilter(2020, this)">2020</button>
     <button class="btn-pill" onclick="setYearFilter(2021, this)">2021</button>
     <button class="btn-pill" onclick="setYearFilter(2022, this)">2022</button>
     <button class="btn-pill" onclick="setYearFilter(2023, this)">2023</button>
     <button class="btn-pill" onclick="setYearFilter(2024, this)">2024</button>
+    <button class="btn-pill" onclick="setYearFilter(2025, this)">2025</button>
   </div>
 </div>
 
@@ -179,6 +181,10 @@ function renderUnifiedTable() {
     h += '<div class="legend-inline">';
     h += '<span style="color:#ff453a">&#9679; Tesla</span>';
     h += '<span style="color:#64d2ff">&#9679; IONIQ 5</span>';
+    h += '<span style="color:#30d158">&#9679; Kia EV6</span>';
+    h += '<span style="color:#007aff">&#9679; BMW i3</span>';
+    h += '<span style="color:#ffd60a">&#9679; Polestar</span>';
+    h += '<span style="color:#ff9500">&#9679; Cupra</span>';
     h += '<span style="color:#d070ff">&#9679; Megane</span>';
     h += '</div></div>';
 

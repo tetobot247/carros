@@ -1,7 +1,7 @@
 /**
- * CarEngine v5.0 — Motor de Cálculo Partilhado
+ * CarEngine v5.0 — Motor de Cálculo Partilhado & Gestão de Garagem
  * Fonte da verdade para todos os dashboards de desvalorização.
- * 43 variantes · 16 plataformas · Agosto/2026 → Dezembro/2028
+ * 47 variantes · 16 plataformas · Agosto/2026 → Dezembro/2028
  */
 (function() {
 'use strict';
@@ -42,7 +42,7 @@ var REALISTIC_PRICES = {
     2025: 37000
 };
 
-// ============ 43 VARIANTES DE VEÍCULOS ============
+// ============ 47 VARIANTES DE VEÍCULOS ============
 var CARS = [
     // --- TESLA MODEL 3 SR / RWD (LFP) ---
     {
@@ -366,6 +366,269 @@ function getBrandName(brand) {
     return 'EV';
 }
 
+// ============ LISTA DE PÁGINAS DO HUB ============
+var HUB_PAGES = [
+    { id: 'home', title: 'Portal / Hub Principal', file: 'index.html', icon: '🏠' },
+    { id: 'garagem', title: 'A Minha Garagem', file: 'comparativo-garagem.html', icon: '🏎️' },
+    { id: 'mega', title: 'Mega-Matriz Ofertas', file: 'mega-matriz-todas-ofertas.html', icon: '📊' },
+    { id: 'modelo', title: 'Modelo Estatístico', file: 'modelo-estatistico-decisao-modelo.html', icon: '📈' },
+    { id: 'ranking', title: 'Ranking Melhor Opção', file: 'ranking-melhor-opcao.html', icon: '🏆' },
+    { id: 'heatmap', title: 'Mapa de Calor Mestre', file: 'mapa-calor-minimizacao-custo.html', icon: '🗺️' },
+    { id: 'comparativo', title: 'Comparativo Custo', file: 'comparativo-custo-mensal.html', icon: '⚡' },
+    { id: 'diagrama', title: 'Diagrama & Avaliador', file: 'diagrama-referencia-ofertas.html', icon: '🎯' },
+    { id: 'unificadas', title: 'Matrizes Unificadas', file: 'matrizes-unificadas-granulares.html', icon: '📋' },
+    { id: 'detalhadas', title: 'Matrizes Detalhadas', file: 'matrizes-km-granular-v3.html', icon: '📈' }
+];
+
+// ============ INICIALIZAÇÃO DA BARRA DE NAVEGAÇÃO GLOBAL ============
+function initHubNavigation() {
+    var existingHeader = document.getElementById('appHubNav');
+    if (!existingHeader) return;
+
+    var currentPath = window.location.pathname.split('/').pop() || 'index.html';
+    var isSubpage = window.location.pathname.includes('/pages/');
+    var relPrefix = isSubpage ? '../' : './';
+    var pagesPrefix = isSubpage ? '' : 'pages/';
+
+    var menuItemsHtml = '';
+    HUB_PAGES.forEach(function(p) {
+        var isCurrent = (currentPath === p.file) || (currentPath === '' && p.file === 'index.html');
+        var targetUrl = (p.file === 'index.html') ? relPrefix + 'index.html' : (isSubpage ? p.file : pagesPrefix + p.file);
+        if (!isSubpage && p.file !== 'index.html' && !window.location.pathname.includes('carros_vercel')) {
+            // Suporte para caminhos na raiz do repositório
+            targetUrl = p.file;
+        }
+
+        var activeClass = isCurrent ? ' active nav-current-badge' : '';
+        menuItemsHtml += '<a href="' + targetUrl + '" class="app-header-item' + activeClass + '">' +
+            '<span>' + p.icon + ' ' + p.title + '</span>' +
+            '</a>';
+    });
+
+    var hamburgerSvg = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+        '<line x1="3" y1="12" x2="21" y2="12"></line>' +
+        '<line x1="3" y1="6" x2="21" y2="6"></line>' +
+        '<line x1="3" y1="18" x2="21" y2="18"></line>' +
+    '</svg>';
+
+    var headerHtml = '<div class="app-header-container">' +
+        '<div class="app-header-brand">' +
+            '<a href="' + relPrefix + 'index.html" class="app-header-logo">⚡ AutoGarage EV <span style="font-size:10px;color:#ffd60a">v5.0</span></a>' +
+        '</div>' +
+        '<button class="app-header-toggle" aria-label="Abrir Menu de Navegação">' + hamburgerSvg + '</button>' +
+        '<div class="app-header-backdrop"></div>' +
+        '<nav class="app-header-menu">' + menuItemsHtml + '</nav>' +
+        '<div class="app-header-status" title="Motor de cálculo síncrono e sincronização nuvem ativos">' +
+            '<span class="status-dot-green"></span>' +
+            '<span style="font-size:11px">Sync Active</span>' +
+        '</div>' +
+    '</div>';
+
+    existingHeader.innerHTML = headerHtml;
+
+    // Lógica do Menu Mobile (Hambúrguer)
+    var toggleBtn = existingHeader.querySelector('.app-header-toggle');
+    var menuNav = existingHeader.querySelector('.app-header-menu');
+    var backdrop = existingHeader.querySelector('.app-header-backdrop');
+
+    function toggleMobileMenu() {
+        if (!menuNav) return;
+        var isOpen = menuNav.classList.toggle('is-open');
+        if (toggleBtn) toggleBtn.classList.toggle('is-active', isOpen);
+        if (backdrop) backdrop.classList.toggle('is-open', isOpen);
+        document.body.classList.toggle('menu-open-lock', isOpen);
+    }
+
+    if (toggleBtn) {
+        toggleBtn.onclick = function(e) {
+            e.stopPropagation();
+            toggleMobileMenu();
+        };
+    }
+
+    if (backdrop) {
+        backdrop.onclick = function() {
+            if (menuNav && menuNav.classList.contains('is-open')) {
+                toggleMobileMenu();
+            }
+        };
+    }
+
+    if (menuNav) {
+        var menuLinks = menuNav.querySelectorAll('.app-header-item');
+        for (var i = 0; i < menuLinks.length; i++) {
+            menuLinks[i].onclick = function() {
+                if (menuNav.classList.contains('is-open')) {
+                    toggleMobileMenu();
+                }
+            };
+        }
+    }
+}
+
+// ============ GESTÃO DA GARAGEM (SUPABASE REST + LOCALSTORAGE FALLBACK) ============
+var SUPABASE_CONFIG = {
+    url: (window.SUPABASE_URL || localStorage.getItem('SUPABASE_URL') || 'https://qcqjosifmgxdgygqalak.supabase.co').trim(),
+    key: (window.SUPABASE_KEY || localStorage.getItem('SUPABASE_KEY') || 'sb_publishable_gYyeaW4x-6Pme_98ZchVHQ_DjE7tQSd').trim()
+};
+
+function getSupabaseBaseUrl() {
+    var rawUrl = (SUPABASE_CONFIG.url || '').trim();
+    if (!rawUrl) return '';
+    var clean = rawUrl.replace(/\/rest\/v1\/?$/i, '').replace(/\/$/, '');
+    return clean + '/rest/v1';
+}
+
+async function getGarageOffers() {
+    var offers = null;
+    
+    // 1. Tentar carregar do Supabase se configurado
+    if (SUPABASE_CONFIG.url && SUPABASE_CONFIG.key) {
+        try {
+            var endpoint = getSupabaseBaseUrl() + '/garagem?id=eq.main_garagem&select=data';
+            var res = await fetch(endpoint, {
+                headers: {
+                    'apikey': SUPABASE_CONFIG.key,
+                    'Authorization': 'Bearer ' + SUPABASE_CONFIG.key
+                }
+            });
+            if (res.ok) {
+                var json = await res.json();
+                if (json && json.length > 0 && json[0].data) {
+                    offers = json[0].data;
+                    localStorage.setItem('garagem_offers', JSON.stringify(offers));
+                }
+            }
+        } catch(e) {
+            console.warn('Supabase fetch warning, fallback storage used:', e);
+        }
+    }
+    
+    // 2. Tentar carregar do backend local (server.py)
+    if (!offers) {
+        try {
+            var localRes = await fetch('/api/garagem');
+            if (localRes.ok) {
+                offers = await localRes.json();
+            }
+        } catch(e) {}
+    }
+
+    // 3. Fallback para localStorage
+    if (!offers) {
+        try {
+            var stored = localStorage.getItem('garagem_offers') || localStorage.getItem('garageOffers');
+            if (stored) offers = JSON.parse(stored);
+        } catch(e) {}
+    }
+    
+    return offers || [];
+}
+
+async function saveGarageOffers(offers) {
+    // 1. Guardar sempre em localStorage para resposta instantânea
+    try {
+        localStorage.setItem('garagem_offers', JSON.stringify(offers));
+        localStorage.setItem('garageOffers', JSON.stringify(offers));
+    } catch(e) {}
+    
+    // 2. Guardar em server.py se estiver a correr localmente
+    try {
+        await fetch('/api/garagem', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(offers)
+        });
+    } catch(e) {}
+
+    // 3. Sincronizar com Supabase REST API (UPSERT)
+    if (SUPABASE_CONFIG.url && SUPABASE_CONFIG.key) {
+        try {
+            var endpoint = getSupabaseBaseUrl() + '/garagem';
+            await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'apikey': SUPABASE_CONFIG.key,
+                    'Authorization': 'Bearer ' + SUPABASE_CONFIG.key,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'resolution=merge-duplicates'
+                },
+                body: JSON.stringify({
+                    id: 'main_garagem',
+                    data: offers
+                })
+            });
+        } catch(e) {
+            console.error('Supabase save error:', e);
+        }
+    }
+    return true;
+}
+
+function setSupabaseCredentials(url, key) {
+    if (url !== undefined) localStorage.setItem('SUPABASE_URL', url.trim());
+    if (key !== undefined) localStorage.setItem('SUPABASE_KEY', key.trim());
+    SUPABASE_CONFIG.url = (url || localStorage.getItem('SUPABASE_URL') || '').trim();
+    SUPABASE_CONFIG.key = (key || localStorage.getItem('SUPABASE_KEY') || '').trim();
+}
+
+/**
+ * Deteção do país de origem e plataforma do anúncio a partir do URL.
+ * AutoScout24 / .de -> Alemanha 🇩🇪
+ * Standvirtual / .pt -> Portugal 🇵🇹
+ */
+function getOfferOrigin(url) {
+    if (!url || typeof url !== 'string') return null;
+    var u = url.toLowerCase().trim();
+    if (!u) return null;
+    if (u.includes('autoscout') || u.includes('.de')) {
+        return { country: 'DE', flag: '🇩🇪', label: 'Alemanha (AutoScout24)', site: 'AutoScout24' };
+    }
+    if (u.includes('standvirtual') || u.includes('.pt')) {
+        return { country: 'PT', flag: '🇵🇹', label: 'Portugal (Standvirtual)', site: 'Standvirtual' };
+    }
+    return null;
+}
+
+function initPwaAndFavicon() {
+    var isSubpage = window.location.pathname.includes('/pages/');
+    var relPrefix = isSubpage ? '../' : './';
+    
+    if (!document.querySelector('link[rel*="icon"]')) {
+        var favLink = document.createElement('link');
+        favLink.rel = 'icon';
+        favLink.type = 'image/svg+xml';
+        favLink.href = relPrefix + 'favicon.svg';
+        document.head.appendChild(favLink);
+    }
+    
+    if (!document.querySelector('link[rel="manifest"]')) {
+        var manLink = document.createElement('link');
+        manLink.rel = 'manifest';
+        manLink.href = relPrefix + 'manifest.json';
+        document.head.appendChild(manLink);
+    }
+
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register(relPrefix + 'sw.js').catch(function() {});
+        });
+    }
+}
+
+// Auto-inicializar ao carregar a página
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+        initHubNavigation();
+        initPwaAndFavicon();
+    });
+} else {
+    setTimeout(function() {
+        initHubNavigation();
+        initPwaAndFavicon();
+    }, 10);
+}
+
 // ============ FUNÇÕES DE CÁLCULO ============
 
 /** Meses de garantia de bateria restantes na data de venda (Dez/2028) */
@@ -384,33 +647,20 @@ function wPenalty(c) {
     return p;
 }
 
-/**
- * Revenda base (€) para um dado modelo e km de compra.
- * Parte de b35 (revenda @35k km) e subtrai c.step por cada faixa de 5k km.
- * Na transição 90k→95k (barreira psicológica dos 100k), acrescenta c.jump.
- *
- * @param {Object} c - Veículo
- * @param {number} k - Quilometragem de compra em milhares (ex: 35, 40, ...)
- */
 function getBaseResale(c, k) {
     var idx = KM.indexOf(k);
     if (idx === -1) {
-        // Fallback para km não-standard (usado pelo avaliador de ofertas)
         idx = Math.max(0, Math.min(KM.length - 1, Math.round((k - 35) / 5)));
     }
     var res = c.b35;
     for (var i = 0; i < idx; i++) {
-        var currentKm = KM[i]; // km de partida deste step
+        var currentKm = KM[i];
         var drop = c.step + (currentKm === 90 ? c.jump : 0);
         res -= drop;
     }
     return res;
 }
 
-/**
- * Revenda ajustada (€) = revenda base - penalização de garantia.
- * Também aplica penalização por exceder o limite de km da garantia.
- */
 function aResale(c, k) {
     var p = wPenalty(c);
     var fkm = k * 1000 + TKM;
@@ -422,34 +672,26 @@ function aResale(c, k) {
     return Math.max(0, getBaseResale(c, k) - p);
 }
 
-/**
- * Custo mensal de depreciação (€/mês).
- * Retorna null se o preço de compra ≤ revenda (combinação irrealista).
- */
 function moVal(price, resale) {
     var diff = price - resale;
     if (diff <= 0) return null;
     return Math.round(diff / M);
 }
 
-/** Cor do heatmap verde→vermelho para um custo mensal */
 function col(v) {
     if (v === null) return 'rgba(255,255,255,0.2)';
     var t = Math.max(0, Math.min(1, (v - 100) / 600));
     return 'rgb(' + Math.round(255 * t) + ',' + Math.round(255 * (1 - t)) + ',50)';
 }
 
-/** Formatar valor em euros (ex: fmt(18300) → "€18.300") */
 function fmt(n) {
     return '\u20AC' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
-/** Data de expiração da garantia (ex: "Dez/2029") */
 function wExpiry(c) {
     return MN[c.rm - 1] + '/' + (c.ry + c.wy);
 }
 
-/** Label descritivo da faixa de garantia */
 function wLabel(c) {
     var m = wMonths(c);
     if (m >= 24) return '\u226524m (Sem Pen.)';
@@ -460,10 +702,6 @@ function wLabel(c) {
     return 'Expirada';
 }
 
-/**
- * Garantia efetiva considerando AMBOS os limites (tempo E quilometragem).
- * Retorna o mínimo entre os meses restantes por tempo e por km.
- */
 function getEffectiveWarranty(c, buyKm) {
     var mTime = wMonths(c);
     var saleKm = buyKm * 1000 + TKM;
@@ -479,7 +717,6 @@ function getEffectiveWarranty(c, buyKm) {
     };
 }
 
-/** Badge HTML de garantia de bateria com cor e tooltip */
 function getWarrantyBadge(c, buyKm) {
     var wObj = getEffectiveWarranty(c, buyKm || 35);
     var m = wObj.effMonths;
@@ -490,7 +727,6 @@ function getWarrantyBadge(c, buyKm) {
     return '<span class="w-badge-pill w-ok" title="Garantia Bateria Confort\u00E1vel (' + m + 'm equivalentes restantes)">&check; &ge;18m</span>';
 }
 
-/** Encontrar um carro pelo ID */
 function getCar(id) {
     for (var i = 0; i < CARS.length; i++) {
         if (CARS[i].id === id) return CARS[i];
@@ -507,7 +743,9 @@ window.CarEngine = {
     CARS: CARS, BRANDS: BRANDS,
     REALISTIC_PRICES: REALISTIC_PRICES,
     BRAND_COLORS: BRAND_COLORS,
-    // Funções de cálculo e auxiliares
+    HUB_PAGES: HUB_PAGES,
+    SUPABASE_CONFIG: SUPABASE_CONFIG,
+    // Funções de cálculo e sincronização
     wMonths: wMonths,
     wPenalty: wPenalty,
     getBaseResale: getBaseResale,
@@ -521,7 +759,12 @@ window.CarEngine = {
     getWarrantyBadge: getWarrantyBadge,
     getCar: getCar,
     getCarImg: getCarImg,
-    getBrandName: getBrandName
+    getBrandName: getBrandName,
+    initHubNavigation: initHubNavigation,
+    getGarageOffers: getGarageOffers,
+    saveGarageOffers: saveGarageOffers,
+    setSupabaseCredentials: setSupabaseCredentials,
+    getOfferOrigin: getOfferOrigin
 };
 
 })();

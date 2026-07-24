@@ -1,255 +1,764 @@
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Comparativo da Garagem — Análise de Desvalorização de Veículos Elétricos</title>
-<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AutoGarage EV — A Minha Garagem &amp; Matriz</title>
+  <link rel="stylesheet" href="styles.css">
 
-<style>
-/* Page-specific styles */
-.garage-empty {
-  text-align: center;
-  padding: 40px;
-  background: var(--card-bg);
-  border: 1px dashed rgba(255,255,255,0.2);
-  border-radius: 16px;
-  color: var(--text-muted);
-}
+  <style>
+    /* Page-specific styles */
+    .garage-empty {
+      text-align: center;
+      padding: 40px;
+      background: var(--card-bg);
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+      border-radius: 16px;
+      color: var(--text-muted);
+    }
 
-.ranked-bar-container {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-top: 20px;
-  width: 100%;
-  max-width: 1000px;
-}
+    .ranked-bar-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 20px;
+      width: 100%;
+      max-width: 1000px;
+    }
 
-.ranked-item {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.05);
-  border-radius: 12px;
-  padding: 12px 16px;
-  position: relative;
-  overflow: hidden;
-}
+    .ranked-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 12px 16px;
+      position: relative;
+      overflow: hidden;
+    }
 
-.ranked-item-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 13px;
-  font-weight: 800;
-  z-index: 2;
-}
+    .ranked-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 800;
+      z-index: 2;
+    }
 
-.ranked-item-details {
-  display: flex;
-  gap: 16px;
-  font-size: 11px;
-  color: var(--text-muted);
-  z-index: 2;
-  flex-wrap: wrap;
-}
+    .ranked-item-details {
+      display: flex;
+      gap: 16px;
+      font-size: 11px;
+      color: var(--text-muted);
+      z-index: 2;
+      flex-wrap: wrap;
+    }
 
-.bar-track {
-  width: 100%;
-  height: 12px;
-  background: rgba(0,0,0,0.5);
-  border-radius: 6px;
-  margin-top: 6px;
-  overflow: hidden;
-  z-index: 2;
-  position: relative;
-}
+    .bar-track {
+      width: 100%;
+      height: 12px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 6px;
+      margin-top: 6px;
+      overflow: hidden;
+      z-index: 2;
+      position: relative;
+    }
 
-.bar-fill {
-  height: 100%;
-  border-radius: 6px;
-  transition: width 1s ease-out;
-}
+    .bar-fill {
+      height: 100%;
+      border-radius: 6px;
+      transition: width 1s ease-out;
+    }
 
-.cost-value {
-  font-size: 18px;
-  font-weight: 900;
-}
+    .cost-value {
+      font-size: 18px;
+      font-weight: 900;
+    }
 
-.rank-badge {
-  background: rgba(255,255,255,0.1);
-  color: #fff;
-  padding: 2px 8px;
-  border-radius: 10px;
-  font-size: 10px;
-}
+    .rank-badge {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+    }
 
-.rank-1 { background: linear-gradient(135deg, #ffd60a 0%, #ff9f0a 100%); color: #000; }
-.rank-2 { background: linear-gradient(135deg, #e5e5ea 0%, #aeaeb2 100%); color: #000; }
-.rank-3 { background: linear-gradient(135deg, #d2a679 0%, #a67c52 100%); color: #000; }
+    .rank-1 {
+      background: linear-gradient(135deg, #ffd60a 0%, #ff9f0a 100%);
+      color: #000;
+    }
 
-.btn-link {
-  color: #32ade6;
-  text-decoration: none;
-  font-size: 10px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.btn-link:hover { text-decoration: underline; }
-</style>
+    .rank-2 {
+      background: linear-gradient(135deg, #e5e5ea 0%, #aeaeb2 100%);
+      color: #000;
+    }
+
+    .rank-3 {
+      background: linear-gradient(135deg, #d2a679 0%, #a67c52 100%);
+      color: #000;
+    }
+
+    .btn-link {
+      color: #32ade6;
+      text-decoration: none;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-link:hover {
+      text-decoration: underline;
+    }
+
+    .table-scroll-wrapper {
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      max-height: 680px !important;
+      clear: both !important;
+      display: block !important;
+      margin-bottom: 32px !important;
+      border-radius: 12px !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      background: var(--card-bg, rgba(15, 20, 28, 0.8)) !important;
+      padding: 0 !important;
+    }
+
+    .mega-table-compact {
+      width: 100% !important;
+      table-layout: fixed !important;
+      border-collapse: collapse !important;
+      font-size: 9px !important;
+    }
+
+    .mega-table-compact tr {
+      height: 42px !important;
+    }
+
+    .mega-table-compact th,
+    .mega-table-compact td {
+      height: 42px !important;
+      max-height: 42px !important;
+      padding: 2px 1px !important;
+      text-align: center !important;
+      vertical-align: middle !important;
+      border: 1px solid rgba(255, 255, 255, 0.05) !important;
+      word-wrap: break-word !important;
+      overflow: hidden !important;
+      box-sizing: border-box !important;
+    }
+
+    .mega-table-compact th {
+      height: 32px !important;
+      max-height: 32px !important;
+      background: #0a0e14 !important;
+      color: var(--text-muted, #8e8e93) !important;
+      font-size: 8px !important;
+      font-weight: 800 !important;
+      padding: 4px 0.5px !important;
+      line-height: 1.1 !important;
+    }
+
+    .garage-cell-badge {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: space-around !important;
+      text-align: center !important;
+      padding: 2px 2px !important;
+      height: 38px !important;
+      max-height: 38px !important;
+      border-radius: 5px !important;
+      font-size: 8px !important;
+      line-height: 1.1 !important;
+      white-space: normal !important;
+      word-break: break-word !important;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) !important;
+      cursor: pointer;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
+    .garage-cell-badge:focus-visible {
+      outline: 2px solid #32ade6 !important;
+      outline-offset: 1px !important;
+      box-shadow: 0 0 10px rgba(50, 173, 230, 0.8) !important;
+    }
+
+    .garage-cell-badge.b-tesla {
+      background: rgba(255, 59, 48, 0.25) !important;
+      border: 1px solid #ff3b30 !important;
+      color: #fff !important;
+    }
+
+    .garage-cell-badge.b-tesla_lr {
+      background: rgba(255, 159, 10, 0.25) !important;
+      border: 1px solid #ff9f0a !important;
+      color: #fff !important;
+    }
+
+    .garage-cell-badge.b-ioniq5_58 {
+      background: rgba(90, 200, 250, 0.25) !important;
+      border: 1px solid #5ac8fa !important;
+      color: #fff !important;
+    }
+
+    .garage-cell-badge.b-ioniq5 {
+      background: rgba(50, 173, 230, 0.25) !important;
+      border: 1px solid #32ade6 !important;
+      color: #fff !important;
+    }
+
+    .garage-cell-badge.b-megane {
+      background: rgba(175, 82, 222, 0.25) !important;
+      border: 1px solid #af52de !important;
+      color: #fff !important;
+    }
+
+    .badge-title {
+      font-weight: 700 !important;
+      font-size: 7px !important;
+      display: block !important;
+      opacity: 0.85 !important;
+      line-height: 1 !important;
+    }
+
+    .badge-cost {
+      font-weight: 900 !important;
+      font-size: 8.5px !important;
+      color: #ffd60a !important;
+      background: rgba(0, 0, 0, 0.55) !important;
+      border: 1px solid rgba(255, 214, 10, 0.35) !important;
+      border-radius: 3px !important;
+      padding: 0px 3px !important;
+      line-height: 1.15 !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 1px !important;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    .badge-cost .unit {
+      font-size: 6px !important;
+      font-weight: 600 !important;
+      opacity: 0.85 !important;
+    }
+
+    .badge-km-w {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 2px !important;
+      width: 100% !important;
+      font-size: 6.5px !important;
+      line-height: 1 !important;
+    }
+
+    .badge-km {
+      font-size: 6.5px !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 1px !important;
+      line-height: 1 !important;
+      opacity: 0.95 !important;
+    }
+
+    .badge-w {
+      font-weight: 800 !important;
+      font-size: 6.5px !important;
+      line-height: 1 !important;
+      letter-spacing: -0.2px !important;
+    }
+
+    .km-dot {
+      display: inline-block !important;
+      width: 5px !important;
+      height: 5px !important;
+      border-radius: 50% !important;
+      flex-shrink: 0 !important;
+    }
+
+    .km-dot.km-low {
+      background: #30d158 !important;
+      box-shadow: 0 0 4px rgba(48, 209, 88, 0.8) !important;
+    }
+
+    .km-dot.km-med {
+      background: #ffd60a !important;
+      box-shadow: 0 0 4px rgba(255, 214, 10, 0.8) !important;
+    }
+
+    .km-dot.km-high {
+      background: #ff9f0a !important;
+      box-shadow: 0 0 4px rgba(255, 159, 10, 0.8) !important;
+    }
+
+    @media (max-width: 768px) {
+      .table-scroll-wrapper {
+        overflow-x: auto !important;
+        overflow-y: auto !important;
+        max-height: 580px !important;
+        margin-bottom: 20px !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+
+      .mega-table-compact {
+        width: max-content !important;
+        min-width: 1250px !important;
+        table-layout: auto !important;
+      }
+
+      .mega-table-compact tr {
+        height: auto !important;
+      }
+
+      .mega-table-compact th,
+      .mega-table-compact td {
+        height: auto !important;
+        max-height: none !important;
+        padding: 4px 3px !important;
+        min-width: 95px !important;
+      }
+
+      /* Sticky Eixo Y (Coluna de Preço à esquerda) */
+      .mega-table-compact td:first-child,
+      .mega-table-compact th:first-child {
+        position: sticky !important;
+        left: 0 !important;
+        z-index: 10 !important;
+        background: #0a0e14 !important;
+        min-width: 48px !important;
+        width: 48px !important;
+        box-shadow: 2px 0 6px rgba(0, 0, 0, 0.6) !important;
+        border-right: 1px solid rgba(48, 209, 88, 0.4) !important;
+      }
+
+      /* Sticky Eixo X (Cabeçalho de Custo no topo) */
+      .mega-table-compact thead th {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 9 !important;
+        background: #0a0e14 !important;
+        height: 32px !important;
+        font-size: 10px !important;
+        padding: 6px 4px !important;
+        border-bottom: 2px solid rgba(48, 209, 88, 0.4) !important;
+      }
+
+      .mega-table-compact thead th:first-child {
+        z-index: 11 !important;
+      }
+
+      .garage-cell-badge {
+        height: auto !important;
+        min-height: 54px !important;
+        max-height: none !important;
+        padding: 4px 4px !important;
+        border-radius: 6px !important;
+        gap: 2px !important;
+      }
+
+      .badge-title {
+        font-size: 10px !important;
+        line-height: 1.15 !important;
+        white-space: normal !important;
+      }
+
+      .badge-cost {
+        font-size: 11.5px !important;
+        padding: 1px 4px !important;
+        border-radius: 4px !important;
+      }
+
+      .badge-cost .unit {
+        font-size: 8px !important;
+      }
+
+      .badge-km-w {
+        gap: 3px !important;
+        font-size: 9px !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+      }
+
+      .badge-km {
+        font-size: 9px !important;
+      }
+
+      .badge-w {
+        font-size: 9px !important;
+      }
+
+      .km-dot {
+        width: 6px !important;
+        height: 6px !important;
+      }
+    }
+
+    .btn-highlight {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-highlight:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .btn-highlight.active {
+      background: rgba(48, 209, 88, 0.2);
+      border-color: #30d158;
+      color: #30d158;
+    }
+    .table-scroll-wrapper.hl-PT .garage-cell-badge:not(.origin-PT) {
+      opacity: 0.15 !important;
+      filter: grayscale(100%) !important;
+    }
+    .table-scroll-wrapper.hl-DE .garage-cell-badge:not(.origin-DE) {
+      opacity: 0.15 !important;
+      filter: grayscale(100%) !important;
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="top-bar">
-  <div>
-    <h1>&#128200; Comparativo da Garagem</h1>
-    <div class="sub">Ranking de Custo Mensal das Ofertas Guardadas</div>
+  <div id="appHubNav"></div>
+
+  <div class="top-bar">
+    <div>
+      <h1>&#128663; A Minha Garagem</h1>
+      <div class="sub">Ranking de Custo Mensal das Ofertas Guardadas</div>
+    </div>
   </div>
-  <div class="nav-links-row">
-    <a href="index.html" class="nav-link">&larr; Voltar à Garagem</a>
-    <a href="mega-matriz-todas-ofertas.html" class="nav-link">Destacar na Mega Matriz &rarr;</a>
+
+  <div style="max-width:1400px;width:100%;margin-top:20px" id="mainContent">
+    <!-- Content injected by JS -->
   </div>
-</div>
 
-<div style="max-width:1000px;width:100%;margin-top:20px" id="mainContent">
-  <!-- Content injected by JS -->
-</div>
+  <footer>
+    <a href="index.html" class="nav-link" style="margin-right:10px">&larr; Portal</a>
+    Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Motor Partilhado engine.js
+  </footer>
 
-<footer>
-  <a href="index.html" class="nav-link" style="margin-right:10px">&larr; Portal</a>
-  Consenso: tetoBot + Subagentes &middot; Jul/2026 &middot; Motor Partilhado engine.js
-</footer>
+  <script src="engine.js"></script>
+  <script>
+    (function () {
+      'use strict';
+      var E = CarEngine;
 
-<script src="engine.js"></script>
-<script>
-(function(){
-  'use strict';
-  var E = CarEngine;
-  
-  function getGarageOffers() {
-    var saved = localStorage.getItem('garageOffers');
-    if (saved) return JSON.parse(saved);
-    return [];
-  }
-
-  function renderComparative() {
-    var offers = getGarageOffers();
-    var container = document.getElementById('mainContent');
-    
-    if (offers.length === 0) {
-      container.innerHTML = '<div class="garage-empty"><h2>A tua Garagem está vazia!</h2><p>Vai ao <a href="index.html" style="color:#30d158">Portal</a> para adicionares ofertas reais (modelo, ano, km e preço).</p></div>';
-      return;
-    }
-
-    // Calcular custo mensal para cada oferta
-    var validOffers = [];
-    var invalidOffers = [];
-    
-    offers.forEach(function(o) {
-      var car = E.getCar(o.carId);
-      var r = E.aResale(car, o.km);
-      var m = E.moVal(o.price, r);
-      var wObj = E.getEffectiveWarranty(car, o.km);
-      
-      var data = {
-        orig: o,
-        car: car,
-        resale: r,
-        cost: m,
-        wObj: wObj
-      };
-      
-      if (m !== null) validOffers.push(data);
-      else invalidOffers.push(data);
-    });
-
-    // Ordenar da mais barata para a mais cara
-    validOffers.sort(function(a, b) { return a.cost - b.cost; });
-    
-    var html = '<div style="font-size:14px;font-weight:800;margin-bottom:8px">&#127942; Ranking de Oportunidades (Do menor custo para o maior)</div>';
-    html += '<div class="ranked-bar-container">';
-    
-    var maxCost = 0;
-    if (validOffers.length > 0) {
-      maxCost = Math.max.apply(null, validOffers.map(function(d){ return d.cost; }));
-      // Dar uma folga na escala
-      maxCost = Math.max(maxCost * 1.1, 400); 
-    }
-
-    validOffers.forEach(function(d, idx) {
-      var rank = idx + 1;
-      var rankCls = '';
-      if (rank === 1) rankCls = 'rank-1';
-      else if (rank === 2) rankCls = 'rank-2';
-      else if (rank === 3) rankCls = 'rank-3';
-      
-      var brandColor = '';
-      if(d.car.brand === 'tesla') brandColor = '#ff3b30';
-      if(d.car.brand === 'tesla_lr') brandColor = '#ff9f0a';
-      if(d.car.brand === 'ioniq5') brandColor = '#32ade6';
-      if(d.car.brand === 'ioniq5_58') brandColor = '#5ac8fa';
-      if(d.car.brand === 'megane') brandColor = '#af52de';
-      
-      var barPct = (d.cost / maxCost) * 100;
-      
-      html += '<div class="ranked-item" style="border-left: 4px solid ' + brandColor + '">';
-      
-      html += '<div class="ranked-item-header">';
-      html += '<div style="display:flex;align-items:center;gap:10px">';
-      html += '<span class="rank-badge ' + rankCls + '">#' + rank + '</span>';
-      html += '<span>' + d.car.n + ' (' + d.car.y + ')</span>';
-      html += '</div>';
-      html += '<div class="cost-value" style="color:' + E.col(d.cost) + '">€' + d.cost + '<span style="font-size:10px;font-weight:400;color:var(--text-muted)">/mês</span></div>';
-      html += '</div>';
-      
-      html += '<div class="ranked-item-details">';
-      html += '<span>Compra: <b>€' + d.orig.price.toLocaleString('pt-PT') + '</b></span>';
-      html += '<span>Km: <b>' + d.orig.km + 'k km</b></span>';
-      html += '<span>Revenda (2028): <b>€' + d.resale.toLocaleString('pt-PT') + '</b></span>';
-      html += '<span>Garantia: <b>' + d.wObj.effMonths + 'm</b> (Limite: ' + d.wObj.limitingFactor + ')</span>';
-      if (d.orig.url) {
-        html += '<a href="' + d.orig.url + '" target="_blank" class="btn-link">&#128279; Abrir Anúncio</a>';
+      async function getGarageOffers() {
+        return await E.getGarageOffers();
       }
-      html += '</div>';
-      
-      html += '<div class="bar-track">';
-      html += '<div class="bar-fill" style="width:' + barPct + '%;background:' + E.col(d.cost) + '"></div>';
-      html += '</div>';
-      
-      html += '</div>';
-    });
-    
-    html += '</div>';
-    
-    if (invalidOffers.length > 0) {
-      html += '<div style="margin-top:40px;font-size:14px;font-weight:800;color:#ff453a">⚠️ Ofertas Inválidas (Preço Irrealista)</div>';
-      html += '<div class="ranked-bar-container" style="opacity:0.6">';
-      invalidOffers.forEach(function(d) {
-        html += '<div class="ranked-item">';
-        html += '<div class="ranked-item-header">';
-        html += '<span>' + d.car.n + ' (' + d.car.y + ')</span>';
-        html += '<span style="color:#ff453a">Erro</span>';
-        html += '</div>';
-        html += '<div class="ranked-item-details">';
-        html += '<span>Compra: €' + d.orig.price.toLocaleString('pt-PT') + '</span>';
-        html += '<span>Revenda Estimada: €' + d.resale.toLocaleString('pt-PT') + ' (A compra não pode ser inferior ou igual à revenda)</span>';
-        if (d.orig.url) html += '<a href="' + d.orig.url + '" target="_blank" class="btn-link">&#128279; Abrir Anúncio</a>';
-        html += '</div>';
-        html += '</div>';
-      });
-      html += '</div>';
-    }
 
-    container.innerHTML = html;
-  }
+      async function renderComparative() {
+        var offers = await getGarageOffers();
+        var container = document.getElementById('mainContent');
 
-  renderComparative();
+        var validOffers = [];
+        var invalidOffers = [];
 
-})();
-</script>
+        offers.forEach(function (o) {
+          var car = E.getCar(o.carId);
+          var r = E.aResale(car, o.km);
+          var m = E.moVal(o.price, r);
+          var wObj = E.getEffectiveWarranty(car, o.km);
+
+          var data = {
+            orig: o,
+            car: car,
+            resale: r,
+            cost: m,
+            wObj: wObj
+          };
+
+          if (m !== null) validOffers.push(data);
+          else invalidOffers.push(data);
+        });
+
+        validOffers.sort(function (a, b) { return a.cost - b.cost; });
+
+        function getShortName(c) {
+          if (!c) return '';
+          var id = c.id || '';
+          var map = {
+            'tesla_2021': 'M3 LFP',
+            'tesla_2022': 'M3 LFP',
+            'tesla_2023': 'M3 LFP',
+            'tesla_2024': 'Highland',
+            'tesla_lr_2021': 'M3 LR',
+            'tesla_lr_2022': 'M3 LR',
+            'tesla_lr_2023': 'M3 LR',
+            'tesla_lr_2024': 'High. LR',
+            'ioniq5_58_2021': 'IONIQ 58',
+            'ioniq5_58_2022': 'IONIQ 58',
+            'ioniq_2021': 'IONIQ 72',
+            'ioniq_2022': 'IONIQ 72',
+            'ioniq_2023': 'IONIQ 77',
+            'ioniq_2024': 'IONIQ 84',
+            'megane_2021': 'Megane 60',
+            'megane_2022': 'Megane 60',
+            'megane_2023': 'Megane 60',
+            'megane_2024': 'Megane 60'
+          };
+          return map[id] || c.n || '';
+        }
+
+        var ALL_PRICES = [];
+        for (var p = 21000; p <= 35000; p += 1000) ALL_PRICES.push(p);
+
+        var COST_RANGES = [
+          { label: '<200', min: 0, max: 200 },
+          { label: '201-220', min: 201, max: 220 },
+          { label: '221-240', min: 221, max: 240 },
+          { label: '241-260', min: 241, max: 260 },
+          { label: '261-280', min: 261, max: 280 },
+          { label: '281-300', min: 281, max: 300 },
+          { label: '301-330', min: 301, max: 330 },
+          { label: '331-360', min: 331, max: 360 },
+          { label: '361-400', min: 361, max: 400 },
+          { label: '401-450', min: 401, max: 450 },
+          { label: '451-500', min: 451, max: 500 },
+          { label: '>500', min: 501, max: 9999 }
+        ];
+
+        var html = '<div style="width:100%;margin-bottom:32px;clear:both">';
+
+        html += '<div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px;margin-bottom:12px">';
+        html += '<div>';
+        html += '<div style="font-size:16px;font-weight:900;color:#ffd60a;display:flex;align-items:center;gap:6px"><span>📊</span> Matriz da Garagem (Vista Total Mobile)</div>';
+        html += '<div style="font-size:10px;color:rgba(255,255,255,0.6);margin-top:2px">Eixo Y = Preço (€21k–€35k) | Eixo X = Custo Mensal. Formato otimizado com eixos fixos no Galaxy S25 Ultra!</div>';
+        html += '</div>';
+
+        html += '<div style="display:flex;align-items:center;gap:8px;font-size:9px;flex-wrap:wrap">';
+        html += '<span style="display:flex;align-items:center;gap:3px"><span style="display:inline-block;width:8px;height:8px;background:#ff3b30;border-radius:2px"></span> Tesla LFP</span>';
+        html += '<span style="display:flex;align-items:center;gap:3px"><span style="display:inline-block;width:8px;height:8px;background:#ff9f0a;border-radius:2px"></span> Tesla LR</span>';
+        html += '<span style="display:flex;align-items:center;gap:3px"><span style="display:inline-block;width:8px;height:8px;background:#5ac8fa;border-radius:2px"></span> IONIQ 58k</span>';
+        html += '<span style="display:flex;align-items:center;gap:3px"><span style="display:inline-block;width:8px;height:8px;background:#32ade6;border-radius:2px"></span> IONIQ LR</span>';
+        html += '<span style="display:flex;align-items:center;gap:3px"><span style="display:inline-block;width:8px;height:8px;background:#af52de;border-radius:2px"></span> Megane</span>';
+        html += '<span style="color:rgba(255,255,255,0.25);margin:0 2px">|</span>';
+        html += '<span style="color:rgba(255,255,255,0.7);font-weight:700">Km:</span>';
+        html += '<span style="display:flex;align-items:center;gap:3px" title="Pouca rodagem (<60k km)"><span class="km-dot km-low"></span> &lt;60k</span>';
+        html += '<span style="display:flex;align-items:center;gap:3px" title="Rodagem média (60k-100k km)"><span class="km-dot km-med"></span> 60k–100k</span>';
+        html += '<span style="display:flex;align-items:center;gap:3px" title="Elevada rodagem (>100k km)"><span class="km-dot km-high"></span> &gt;100k</span>';
+        html += '<span style="color:rgba(255,255,255,0.25);margin:0 2px">|</span>';
+        html += '<span style="color:#ffd60a;font-weight:700" title="Meses e Km de margem de garantia de bateria restantes em 2028">⚡ Garantia 2028 (m·k km)</span>';
+        html += '</div>';
+
+        html += '<div style="display:flex;align-items:center;gap:8px;margin-top:10px;margin-bottom:4px;flex-wrap:wrap">';
+        html += '<button onclick="toggleHighlight(\'PT\')" class="btn-highlight pt-btn">🇵🇹 Highlight Portugal</button>';
+        html += '<button onclick="toggleHighlight(\'DE\')" class="btn-highlight de-btn">🇩🇪 Highlight Alemanha</button>';
+        html += '</div>';
+        
+        html += '</div>';
+
+        html += '<div class="table-scroll-wrapper" id="matrixWrapper">';
+        html += '<table class="mega-table-compact"><thead><tr>';
+        html += '<th style="width:30px;text-align:center;color:#32ade6;background:#0a0e14">€\\€/m</th>';
+
+        for (var ci = 0; ci < COST_RANGES.length; ci++) {
+          html += '<th>' + COST_RANGES[ci].label + '</th>';
+        }
+        html += '</tr></thead><tbody>';
+
+        ALL_PRICES.forEach(function (price) {
+          html += '<tr>';
+          html += '<td style="font-weight:900;color:#ffd60a;background:#0a0e14;text-align:center;padding:4px 1px">€' + (price / 1000).toFixed(0) + 'k</td>';
+
+          for (var ci = 0; ci < COST_RANGES.length; ci++) {
+            var rng = COST_RANGES[ci];
+
+            var matchedOffers = validOffers.filter(function (d) {
+              return Number(d.orig.price) === price && d.cost >= rng.min && d.cost <= rng.max;
+            });
+
+            if (matchedOffers.length > 0) {
+              var cellContent = matchedOffers.map(function (d) {
+                var shortName = getShortName(d.car) + " '" + String(d.car.y).slice(2);
+                var origin = E.getOfferOrigin(d.orig.url);
+                var linkIcon = origin ? origin.flag : '🔗';
+                var urlLink = d.orig.url ? ' <a href="' + d.orig.url + '" target="_blank" onclick="event.stopPropagation()" style="text-decoration:none;font-size:7.5px;margin-left:1px" title="Abrir Anúncio Directo (' + (origin ? origin.label : 'Anúncio Real') + ')">' + linkIcon + '</a>' : '';
+                var originClass = origin ? ' origin-' + origin.country : '';
+
+                var kmVal = Number(d.orig.km);
+                var kmTier = 'low';
+                if (kmVal > 100) kmTier = 'high';
+                else if (kmVal >= 60) kmTier = 'med';
+
+                var wM = d.wObj.effMonths;
+                var wK = Math.max(0, Math.round(d.wObj.kmLeft / 1000));
+                var wTag = '';
+                var wColor = '#30d158';
+                if (wM <= 0 || d.wObj.kmLeft <= 0) {
+                  wTag = '⚡0m';
+                  wColor = '#ff453a';
+                } else {
+                  wTag = '⚡' + wM + 'm·' + wK + 'k';
+                  if (wM < 12) wColor = '#ffd60a';
+                }
+
+                var titleText = d.car.n + ' (' + d.car.y + ') | Preço: €' + price.toLocaleString('pt-PT') + ' | Odómetro: ' + d.orig.km + 'k km' + (origin ? ' | Origem: ' + origin.label : '') + ' | Garantia em 2028: ' + (wM > 0 ? wM + 'm e ' + wK + 'k km restantes' : 'Expirada') + ' | Revenda 2028: €' + d.resale.toLocaleString('pt-PT') + ' | Custo: €' + d.cost + '/mês';
+                if (d.orig.url) titleText += ' | ' + linkIcon + ' Clique para abrir anúncio (' + (origin ? origin.site : 'Anúncio') + ')';
+
+                var clickAttr = d.orig.url ? ' onclick="window.open(\'' + d.orig.url.replace(/'/g, "\\'") + '\', \'_blank\')"' : '';
+                var keyAttr = d.orig.url ? ' tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();this.click()}"' : '';
+
+                return '<span class="garage-cell-badge b-' + d.car.brand + originClass + '"' + clickAttr + keyAttr + ' title="' + titleText + '">' +
+                  '<span class="badge-title">' + shortName + '</span>' +
+                  '<span class="badge-cost">€' + d.cost + '<span class="unit">/mês</span></span>' +
+                  '<span class="badge-km-w">' +
+                    '<span class="badge-km"><span class="km-dot km-' + kmTier + '"></span>' + d.orig.km + 'k' + urlLink + '</span>' +
+                    '<span class="badge-w" style="color:' + wColor + '" title="Garantia em 2028: ' + wM + 'm e ' + wK + 'k km restantes">' + wTag + '</span>' +
+                  '</span>' +
+                  '</span>';
+              }).join('<div style="margin-top:2px"></div>');
+
+              html += '<td style="padding:2px;vertical-align:middle;background:rgba(255,255,255,0.02)">' + cellContent + '</td>';
+            } else {
+              html += '<td style="padding:1px"><span class="cell-na" style="opacity:0.15">&mdash;</span></td>';
+            }
+          }
+
+          html += '</tr>';
+        });
+
+        html += '</tbody>mtable></div></div>';
+
+        // 2. Render Tabela Detalhada da Garagem
+        html += '<div style="margin-top:36px;width:100%;clear:both">';
+        html += '<div style="font-size:15px;font-weight:900;color:#30d158;margin-bottom:6px;display:flex;align-items:center;gap:8px"><span>📋</span> Tabela Detalhada das Ofertas na Garagem</div>';
+        html += '<div class="glass-card" style="padding:14px;overflow-x:auto">';
+        html += '<table style="width:100%;border-collapse:collapse;font-size:11px;text-align:center">';
+        html += '<thead><tr style="border-bottom:2px solid rgba(48,209,88,0.4);color:#32ade6;font-size:10px;text-transform:uppercase;letter-spacing:0.5px">';
+        html += '<th style="text-align:left;padding:8px">Veículo &amp; Ano</th>';
+        html += '<th style="padding:8px">Preço Compra</th>';
+        html += '<th style="padding:8px">Km Odómetro</th>';
+        html += '<th style="padding:8px">Revenda 2028</th>';
+        html += '<th style="padding:8px">Custo Mensal</th>';
+        html += '<th style="padding:8px">Garantia Bateria HV</th>';
+        html += '<th style="padding:8px">Anúncio</th>';
+        html += '<th style="padding:8px">Ação</th>';
+        html += '</tr></thead><tbody>';
+
+        if (validOffers.length === 0) {
+          html += '<tr><td colspan="8" style="padding:28px;text-align:center;color:rgba(255,255,255,0.5);font-style:italic">';
+          html += '🚗 A tua garagem ainda não possui ofertas guardadas.<br>';
+          html += '<span style="font-size:11px;color:#30d158">Vai ao <a href="index.html" style="color:#30d158;text-decoration:underline">Hub Principal</a> para adicionares ofertas reais com preço, km e link do anúncio!</span>';
+          html += '</td></tr>';
+        } else {
+          validOffers.forEach(function (d, idx) {
+            var badgeCls = 'b-' + d.car.brand;
+            var urlBtn = d.orig.url
+              ? '<a href="' + d.orig.url + '" target="_blank" class="btn-blue" style="font-size:10px;padding:4px 10px;height:26px;display:inline-flex;align-items:center;gap:4px">🔗 Ver Anúncio</a>'
+              : '<span style="color:rgba(255,255,255,0.3);font-style:italic">Sem link</span>';
+
+            var removeBtn = '<button onclick="removeGarageOffer(' + idx + ')" class="btn-remove" style="padding:4px 10px;font-size:10px">&#128465; Remover</button>';
+
+            html += '<tr style="border-bottom:1px solid rgba(255,255,255,0.06)">';
+            html += '<td style="text-align:left;padding:10px 8px"><span class="badge-car ' + badgeCls + '">' + d.car.n + ' (' + d.car.y + ')</span></td>';
+            html += '<td style="padding:10px 8px;font-size:12px;font-weight:800">€' + d.orig.price.toLocaleString('pt-PT') + '</td>';
+            html += '<td style="padding:10px 8px">' + d.orig.km + '.000 km</td>';
+            html += '<td style="padding:10px 8px;color:rgba(255,255,255,0.7)">€' + d.resale.toLocaleString('pt-PT') + '</td>';
+            html += '<td style="padding:10px 8px"><span class="cell-pill cell-garage-highlight" style="background:' + E.col(d.cost) + ';color:#000;font-size:12px;font-weight:900;padding:4px 10px">€' + d.cost + '/mês</span></td>';
+            html += '<td style="padding:10px 8px"><span style="color:#ffd60a;font-weight:700">' + d.wObj.effMonths + 'm restantes</span> (' + (d.wObj.kmLeft / 1000).toFixed(0) + 'k km margem)</td>';
+            html += '<td style="padding:10px 8px">' + urlBtn + '</td>';
+            html += '<td style="padding:10px 8px">' + removeBtn + '</td>';
+            html += '</tr>';
+          });
+        }
+
+        html += '</tbody></table></div></div>';
+
+        // 3. Render Ranking Bar Chart
+        if (validOffers.length > 0) {
+          html += '<div style="margin-top:28px;font-size:14px;font-weight:800;margin-bottom:8px">&#127942; Ranking de Oportunidades (Do menor custo para o maior)</div>';
+          html += '<div class="ranked-bar-container">';
+
+          var maxCost = Math.max.apply(null, validOffers.map(function (d) { return d.cost; }));
+          maxCost = Math.max(maxCost * 1.1, 500);
+
+          validOffers.forEach(function (d, idx) {
+            var rank = idx + 1;
+            var rankCls = '';
+            if (rank === 1) rankCls = 'rank-1';
+            else if (rank === 2) rankCls = 'rank-2';
+            else if (rank === 3) rankCls = 'rank-3';
+
+            var brandColor = E.BRAND_COLORS[d.car.brand] ? E.BRAND_COLORS[d.car.brand].fill : '#30d158';
+
+            var barPct = (d.cost / maxCost) * 100;
+
+            html += '<div class="ranked-item" style="border-left: 4px solid ' + brandColor + '">';
+            html += '<div class="ranked-item-header">';
+            html += '<div style="display:flex;align-items:center;gap:10px">';
+            html += '<span class="rank-badge ' + rankCls + '">#' + rank + '</span>';
+            html += '<span>' + d.car.n + ' (' + d.car.y + ')</span>';
+            html += '</div>';
+            html += '<div class="cost-value" style="color:' + E.col(d.cost) + '">€' + d.cost + '<span style="font-size:10px;font-weight:400;color:var(--text-muted)">/mês</span></div>';
+            html += '</div>';
+
+            html += '<div class="ranked-item-details">';
+            html += '<span>Compra: <b>€' + d.orig.price.toLocaleString('pt-PT') + '</b></span>';
+            html += '<span>Km: <b>' + d.orig.km + 'k km</b></span>';
+            html += '<span>Revenda (2028): <b>€' + d.resale.toLocaleString('pt-PT') + '</b></span>';
+            html += '<span>Garantia: <b>' + d.wObj.effMonths + 'm</b> (Limite: ' + d.wObj.limitingFactor + ')</span>';
+            if (d.orig.url) {
+              html += '<a href="' + d.orig.url + '" target="_blank" class="btn-link">&#128279; Abrir Anúncio</a>';
+            }
+            html += '</div>';
+
+            html += '<div class="bar-track">';
+            html += '<div class="bar-fill" style="width:' + barPct + '%;background:' + E.col(d.cost) + '"></div>';
+            html += '</div>';
+
+            html += '</div>';
+          });
+
+          html += '</div>';
+        }
+
+        container.innerHTML = html;
+      }
+
+      window.removeGarageOffer = async function (idx) {
+        var offers = await getGarageOffers();
+        if (idx >= 0 && idx < offers.length) {
+          offers.splice(idx, 1);
+          await E.saveGarageOffers(offers);
+          renderComparative();
+        }
+      };
+
+      window.toggleHighlight = function(country) {
+        var wrapper = document.getElementById('matrixWrapper');
+        if (!wrapper) return;
+        var isCurrentlyActive = wrapper.classList.contains('hl-' + country);
+        
+        wrapper.classList.remove('hl-PT', 'hl-DE');
+        
+        var btns = document.querySelectorAll('.btn-highlight');
+        btns.forEach(function(b) { b.classList.remove('active'); });
+
+        if (!isCurrentlyActive) {
+          wrapper.classList.add('hl-' + country);
+          var btn = document.querySelector('.btn-highlight.' + country.toLowerCase() + '-btn');
+          if (btn) btn.classList.add('active');
+        }
+      };
+
+      renderComparative();
+
+    })();
+  </script>
 
 </body>
+
 </html>
